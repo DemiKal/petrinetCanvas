@@ -65,7 +65,9 @@ jQuery(document).ready(function ($) {
 
     //pseudo interface
     class Istate {
-        canvasClick() {}
+        constructor() { }
+        canvasClick() { }
+        canvasDoubleClick() { }
         placeClick() { }
         transitionClick() { }
         AddnodeClick() { }
@@ -73,35 +75,61 @@ jQuery(document).ready(function ($) {
         SelectedButtonUpdate() { }
     }
 
-    class defaultState extends Istate {
-        constructor() {
-            super();
-
-        }
+    class DefaultState extends Istate {
+        constructor() { super(); }
+        canvasClick() { }
+        canvasDoubleClick() { }
+        placeClick() { }
+        transitionClick() { }
+        AddnodeClick() { }
+        AddEdgeClick() { }
+        SelectedButtonUpdate() { }
     }
 
-    class selectedState extends Istate {
-
+    class SelectionState extends Istate {
+        constructor() { super(); }
+        canvasDoubleClick() { }
+        canvasClick() { }
+        placeClick() { }
+        transitionClick() { }
+        AddnodeClick() { }
+        AddEdgeClick() { }
+        SelectedButtonUpdate() { }
     }
+
+    class ExecutionState extends Istate {
+        constructor() { super(); }
+        canvasClick() { }
+        placeClick() { }
+        transitionClick() { }
+        AddnodeClick() { }
+        AddEdgeClick() { }
+        SelectedButtonUpdate() { }
+    }
+    class EdgePendingState extends Istate {
+        constructor() { super(); }
+        canvasClick() { }
+        placeClick() { }
+        transitionClick() { }
+        AddnodeClick() { }
+        AddEdgeClick() { }
+        SelectedButtonUpdate() { }
+    }
+
     class State {
         constructor() {
-            defaultState = new defaultState(this);
-            selectedState = new selectedState(this)
+            var defaultState = new DefaultState();
+            var selectedState = new SelectionState();
+            var executionState = new ExecutionState();
+            var edgePendingState = new EdgePendingState();
             this.currentState = defaultState;
         }
     }
-
-
-
 
     var node = new Place(400, 400, 50, "P1", 1);
     var state = new State();
     console.log(state)
 
-    console.log(state.currentState.canvasClick())
-
-    console.log(state)
-    //nodes.push(node);
     function createEdge(nodeA, nodeB) {
         var line = canvas.display.line({
             start: { x: nodeA.x, y: nodeA.y },
@@ -418,10 +446,7 @@ jQuery(document).ready(function ($) {
                     easing: "ease-out-quint",
                     //callback: function () { ball.fadeOut("short", "linear") }
                 });
-
-
         });
-
     }
 
     function updateTokens(node) {
