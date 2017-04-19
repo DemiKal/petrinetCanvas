@@ -1,10 +1,16 @@
 
 jQuery(document).ready(function ($) {
+    var canvas;
+    var state;
     var nodes = []
     var transitions = []
     var edges = []
     var selected;
     var edgePending = null;
+
+    /**
+     * CLASSES
+     */
 
     class Place {
         constructor(x, y, radius, text, tokens) {
@@ -34,10 +40,6 @@ jQuery(document).ready(function ($) {
         }
         canvasDoubleClick() { }
         placeClick(node, event) {
-            console.log(' clicked on ');
-            console.log(node.name);
-            console.log(event);
-
             //set current place as selected
             selected.children[0].text = "Selected: " + node.name;
             selected.current = node;
@@ -125,10 +127,9 @@ jQuery(document).ready(function ($) {
             console.log('cant point to self!')
             return false;
         }
+
         if (selected.current.nodeType == node.nodeType) {
             console.log("same type!")
-            console.log(selected.current);
-            console.log(node);
             return false;
         }
 
@@ -141,11 +142,10 @@ jQuery(document).ready(function ($) {
 
         return true;
     }
+
     class EdgePendingState extends Istate {
         constructor() { super(); }
-        canvasClick() {
-            console.log("click on an object")
-        }
+        canvasClick() { console.log("click on an object") }
 
         placeClick(node, event) {
 
@@ -193,6 +193,11 @@ jQuery(document).ready(function ($) {
         }
     }
 
+    /**
+     * END OF CLASSES
+     */
+
+
     mycanvas = document.getElementById("canvas");
     context = mycanvas.getContext("2d");
     mycanvas.width = $(window).width();
@@ -201,21 +206,18 @@ jQuery(document).ready(function ($) {
     var canvasOffset = $canvas.offset();
     var scrollX = $canvas.scrollLeft();
     var scrollY = $canvas.scrollTop();
-
-    var canvas = oCanvas.create({
+    state = new State();
+    canvas = oCanvas.create({
         canvas: '#canvas',
         background: '#2c3e50',
         fps: 60,
     });
 
-    var state = new State();
 
-    $canvas.contextmenu(function () {
-        return false;
-    });
+
+    $canvas.contextmenu(function () { return false; });
 
     canvas.bind("click tap", function (event) { state.currentState.canvasClick(event); });
-
     canvas.bind("mousemove", function () {
         if (edgePending) {
             edgePending.end = { x: canvas.mouse.x, y: canvas.mouse.y };
@@ -271,15 +273,15 @@ jQuery(document).ready(function ($) {
     }
 
     function initMenu() {
-        var addNode = createButton(10, 10, 100, 50, "Add node");
-        addNode.bind("click tap", function () { nodes.push(createNode(canvas.width / 2, canvas.height / 2, 50, "new node", 1)) });
+        var addPlace = createButton(10, 10, 100, 50, "Add node (A)");
+        addPlace.bind("click tap", function () { nodes.push(createNode(canvas.width / 2, canvas.height / 2, 50, "new node", 1)) });
 
-        addNode.bind("mouseenter", function (event) { this.fill = "orange"; this.redraw() });
-        addNode.bind("mouseleave", function (event) { this.fill = "black"; this.redraw() });
-        addNode.bind("mousedown", function (event) { this.fill = "blue"; this.redraw() });
-        addNode.bind("mouseup", function (event) { this.fill = "orange"; this.redraw() });
+        addPlace.bind("mouseenter", function (event) { this.fill = "orange"; this.redraw() });
+        addPlace.bind("mouseleave", function (event) { this.fill = "black"; this.redraw() });
+        addPlace.bind("mousedown", function (event) { this.fill = "blue"; this.redraw() });
+        addPlace.bind("mouseup", function (event) { this.fill = "orange"; this.redraw() });
 
-        var addEdge = createButton(120, 10, 100, 50, "Add Edge");
+        var addEdge = createButton(120, 10, 100, 50, "Add Edge (E)");
         addEdge.bind("mouseenter", function (event) { this.fill = "orange"; this.redraw() });
         addEdge.bind("mouseleave", function (event) { this.fill = "black"; this.redraw() });
         addEdge.bind("mousedown", function (event) { this.fill = "blue"; this.redraw() });
@@ -360,53 +362,15 @@ jQuery(document).ready(function ($) {
             currentEdge.end.x -= subvec.x;
             currentEdge.end.y -= subvec.y;
 
-
-
-
-            // var offsetFromx = 0;
-            // var offsetFromy = 0;
-            // var offsetTox = 0;
-            // var offsetToy = 0;
-
-            // if (currentEdge.From.nodeType == "transition") {
-            //     console.log('ADDING OFFSET1')
-            //     offsetFromx = currentEdge.From.width / 2;
-            //     offsetFromy = currentEdge.From.width / 2;
-            //     console.log(offsetFromx);
-            // }
-            // if (currentEdge.To.nodeType == "transition") {
-            //     console.log('ADDING OFFSET2')
-            //     offsetTox = currentEdge.To.width / 2;
-            //     offsetToy = currentEdge.To.width / 2;
-            //     console.log();
-            // }
-
-            // var vx = (currentEdge.From.x - offsetFromx) - (currentEdge.To.x + offsetTox);
-            // var vy = (currentEdge.From.y - offsetFromy) - (currentEdge.To.y + offsetToy);
-
-            // //   console.log('fromtype: ' + currentEdge.From.nodeType)
-            // //   console.log('totype: ' + currentEdge.To.nodeType)
-
-            // var vector = new Victor(vx, vy);
-            // var subVector = vector.clone().normalize().multiply(new Victor(node.radius, node.radius));
-
-            // currentEdge.start.x = currentEdge.From.x - subVector.x;
-            // currentEdge.start.y = currentEdge.From.y - subVector.y;
-
-            // var sub2 = vector.clone().normalize().multiply(new Victor(triangle.radius, triangle.radius));
-            // currentEdge.end.x = currentEdge.To.x + subVector.x + sub2.x;
-            // currentEdge.end.y = currentEdge.To.y + subVector.y + sub2.y;
-
-            var v2 = new Victor(v2x - v1x, v2y - v1y);
-            triangle.rotation = v2.angleDeg();
-
             var vec = Victor(currentEdge.end.x - currentEdge.x, currentEdge.end.y - currentEdge.y);
             var vec3 = new Victor(currentEdge.To.strokeWidth + triangle.radius / 2, currentEdge.To.strokeWidth + triangle.radius / 2);
             var subVec = vec.clone().normalize().multiply(vec3);
             vec.subtract(subVec);
 
+            triangle.rotation = vector.angleDeg();
             triangle.x = vec.x;
             triangle.y = vec.y;
+
             currentEdge.end.x = triangle.abs_x;
             currentEdge.end.y = triangle.abs_y;
         });
