@@ -18,6 +18,10 @@ jQuery(document).ready(function ($) {
         }
     }
 
+    class Transition{
+        
+    }
+
     class Istate {
         constructor() { }
         canvasClick() { }
