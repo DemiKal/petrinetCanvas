@@ -1,16 +1,12 @@
 
 jQuery(document).ready(function ($) {
 
-    class dog {
-        constructor(a, b, c) {
-            this.a = a;
-            this.b = b;
-            this.c = c;
+    class Place {
+        constructor(x, y, radius, text, tokens) {
+            this.drawObject = createNode(x, y, radius, text, tokens)
         }
     }
 
-    var dawg = new dog(1,2,3);
-    console.log(dawg);
     mycanvas = document.getElementById("canvas");
     context = mycanvas.getContext("2d");
     mycanvas.width = $(window).width();
@@ -60,13 +56,52 @@ jQuery(document).ready(function ($) {
     var edgePending = null;
 
     initMenu();
-    var node = createNode(400, 400, 50, "P1", 1)
-    var node2 = createNode(600, 200, 50, "P2", 0)
+    //var node = createNode(400, 400, 50, "P1", 1)
+    //var node2 = createNode(600, 200, 50, "P2", 0)
     //  var edge = createEdge(node, node2);
-    var t1 = createTransition(700, 400, 75, "T1")
-    nodes.push(node, node2);
-    edges.push(edge);
+    //var t1 = createTransition(700, 400, 75, "T1")
+    //nodes.push(node, node2);
+    //edges.push(edge);
 
+    //pseudo interface
+    class Istate {
+        canvasClick() {}
+        placeClick() { }
+        transitionClick() { }
+        AddnodeClick() { }
+        AddEdgeClick() { }
+        SelectedButtonUpdate() { }
+    }
+
+    class defaultState extends Istate {
+        constructor() {
+            super();
+
+        }
+    }
+
+    class selectedState extends Istate {
+
+    }
+    class State {
+        constructor() {
+            defaultState = new defaultState(this);
+            selectedState = new selectedState(this)
+            this.currentState = defaultState;
+        }
+    }
+
+
+
+
+    var node = new Place(400, 400, 50, "P1", 1);
+    var state = new State();
+    console.log(state)
+
+    console.log(state.currentState.canvasClick())
+
+    console.log(state)
+    //nodes.push(node);
     function createEdge(nodeA, nodeB) {
         var line = canvas.display.line({
             start: { x: nodeA.x, y: nodeA.y },
