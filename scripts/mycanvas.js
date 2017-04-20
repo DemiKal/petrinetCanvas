@@ -32,7 +32,6 @@ jQuery(document).ready(function ($) {
         executionClick() { }
     }
 
-
     class DefaultState extends Istate {
         constructor() { super(); }
 
@@ -60,15 +59,14 @@ jQuery(document).ready(function ($) {
         }
 
         AddnodeClick(button) {
-            nodes.push(createNode(canvas.mouse.x, canvas.mouse.y, 50, "new node", Math.round(Math.random() * 10)));
+            nodes.push(createNode(canvas.mouse.x, canvas.mouse.y, 50, "P" + Math.round(Math.random() * 100), Math.round(Math.random() * 10)));
         }
         AddEdgeClick() { console.log("select node first!") }
         keydownEvent(event) {
             if (event.which == 84) //= key T
-                nodes.push(createTransition(canvas.mouse.x - 50, canvas.mouse.y - 50, 100, "cheeki breeki"));
+                nodes.push(createTransition(canvas.mouse.x - 50, canvas.mouse.y - 50, 100, "T" + Math.round(Math.random() * 100)));
             if (event.which == 65)
                 state.currentState.AddnodeClick(); //emulate clicking on add node
-
         }
 
         executionClick(button, event) {
@@ -80,7 +78,8 @@ jQuery(document).ready(function ($) {
         state.currentState = state.executionState;
         button.children[0].text = "Execution Mode";
         button.children[0].fill = "red";
-        //disable drag&drop
+
+        //disable drag & drop
         nodes.forEach(function (element) {
             element.dragAndDrop(false);
         })
@@ -91,8 +90,8 @@ jQuery(document).ready(function ($) {
                 satedCheck(node);
             else node.originalTokens = node.tokens;  //remember token amount b4 execution
         });
-
     }
+
     function satedCheck(node) {
         var sated = node.incomingEdges.length > 0;
         node.incomingEdges.forEach(function (element) { if (element.From.tokens < 1) sated = false; });
@@ -224,24 +223,24 @@ jQuery(document).ready(function ($) {
             if (!edgePlacementValidation(node)) return;
 
             var newEdge = createEdge(selected.current, node);
-            selected.current = null;
+            // selected.current = null;
             edgePending.remove();
             edgePending = null;
-
+            event.stopPropagation();
             //switch states
-            state.currentState = state.defaultState;
+            state.currentState = state.selectionState;
         }
 
         transitionClick(node, event) {
             if (!edgePlacementValidation(node)) return;
 
             var newEdge = createEdge(selected.current, node);
-            selected.current = null;
+            //selected.current = null;
             edgePending.remove();
             edgePending = null;
-
+            event.stopPropagation();
             //switch states
-            state.currentState = state.defaultState;
+            state.currentState = state.selectionState;
         }
 
         AddnodeClick() { }
@@ -283,17 +282,58 @@ jQuery(document).ready(function ($) {
         fps: 60,
     });
 
+    var dragging;
+    var selectionBox = canvas.display.rectangle({
+        x: 0,
+        y: 0,
+        width:  0,
+        height:  0,
+        fill: "#0aa",
+        opacity: 0
+    }).add();
 
 
     $canvas.contextmenu(function () { return false; });
 
     canvas.bind("click tap", function (event) { state.currentState.canvasClick(event); });
+
+    canvas.bind("mouseup", function () {
+        dragging = false;
+        selectionBox.opacity = 0;
+        selectionBox.x = 0;
+        selectionBox.y = 0;
+        selectionBox.width = 0;
+        selectionBox.height = 0;
+    });
+
     canvas.bind("mousemove", function () {
         if (edgePending) {
             edgePending.end = { x: canvas.mouse.x, y: canvas.mouse.y };
             edgePending.redraw();
         }
+
+        if (dragging) {
+            console.log(selectionBox.x);
+            selectionBox.opacity = 0.5;
+            selectionBox.width = canvas.mouse.x - selectionBox.x;
+            selectionBox.height = canvas.mouse.y - selectionBox.y;
+         //   selectionBox.redraw();
+        }
+
+
     });
+    canvas.bind("mousedown", function (event) {
+        dragging = true;
+        selectionBox.x = canvas.mouse.x;
+        selectionBox.y = canvas.mouse.y;
+        selectionBox.opacity = 0.5;
+
+    })
+
+
+
+
+
 
     canvas.bind("keydown", function (event) { state.currentState.keydownEvent(event); })
 
@@ -612,6 +652,5 @@ jQuery(document).ready(function ($) {
             end: function () { }
         });
     }
-
 });
 
