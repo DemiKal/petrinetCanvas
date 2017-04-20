@@ -59,11 +59,16 @@ jQuery(document).ready(function ($) {
             state.currentState = state.selectionState;
         }
 
-        AddnodeClick() { }
+        AddnodeClick(button) {
+            nodes.push(createNode(canvas.mouse.x, canvas.mouse.y, 50, "new node", Math.round(Math.random() * 10)));
+        }
         AddEdgeClick() { console.log("select node first!") }
         keydownEvent(event) {
             if (event.which == 84) //= key T
-                nodes.push(createTransition(300, 300, 100, "cheeki breeki"));
+                nodes.push(createTransition(canvas.mouse.x - 50, canvas.mouse.y - 50, 100, "cheeki breeki"));
+            if (event.which == 65)
+                state.currentState.AddnodeClick(); //emulate clicking on add node
+
         }
 
         executionClick(button, event) {
@@ -119,7 +124,9 @@ jQuery(document).ready(function ($) {
             event.stopPropagation();
         }
 
-        AddnodeClick() { }
+        AddnodeClick() {
+
+        }
         AddEdgeClick() {
             var line = canvas.display.line({
                 start: { x: selected.current.x, y: selected.current.y },
@@ -132,7 +139,12 @@ jQuery(document).ready(function ($) {
             //switch state
             state.currentState = state.edgePendingState;
         }
-        keydownEvent() { }
+        keydownEvent(event) {
+            if (event.which == 69) //simulate clicking on adding edge button by pressing E
+                state.currentState.AddEdgeClick();
+
+
+        }
         executionClick(button, event) {
             deselect();
             switchToExecState(button);
@@ -334,7 +346,7 @@ jQuery(document).ready(function ($) {
         var addPlace = createButton(10, 10, 100, 50, "Add node (A)");
 
         addPlace.bind("click tap", function () {
-            nodes.push(createNode(canvas.width / 2, canvas.height / 2, 50, "new node", Math.round(Math.random() * 10)));
+            state.currentState.AddnodeClick(addPlace);
         });
 
         addPlace.bind("mouseenter", function (event) { this.fill = "orange"; this.redraw() });
@@ -555,7 +567,7 @@ jQuery(document).ready(function ($) {
                 opacity: 0
             },
                 {
-                    duration: "short",
+                    duration: "normal",
                     easing: "ease-out-quint",
                 });
         });
