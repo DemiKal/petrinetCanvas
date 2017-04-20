@@ -1,4 +1,3 @@
-
 jQuery(document).ready(function ($) {
     var canvas;
     var state;
@@ -8,9 +7,9 @@ jQuery(document).ready(function ($) {
     var selected;
     var edgePending = null;
 
-    /**
-     * CLASSES
-     */
+    ///
+    /// CLASSES      
+    ///
 
     class Place {
         constructor(x, y, radius, text, tokens) {
@@ -18,9 +17,7 @@ jQuery(document).ready(function ($) {
         }
     }
 
-    class Transition{
-        
-    }
+    class Transition { }
 
     class Istate {
         constructor() { }
@@ -32,6 +29,7 @@ jQuery(document).ready(function ($) {
         AddEdgeClick() { }
         SelectedButtonUpdate() { }
         keydownEvent() { }
+        executionClick() { }
     }
 
 
@@ -42,6 +40,7 @@ jQuery(document).ready(function ($) {
             //clicked on empty spot -> deselect
             deselect();
         }
+
         canvasDoubleClick() { }
         placeClick(node, event) {
             //set current place as selected
@@ -59,15 +58,42 @@ jQuery(document).ready(function ($) {
             event.stopPropagation();
             state.currentState = state.selectionState;
         }
-        AddnodeClick() { }
-        AddEdgeClick() {
-            console.log("select node first!")
-        }
-        keydownEvent(event) {
 
-            if (event.which == 84)
+        AddnodeClick() { }
+        AddEdgeClick() { console.log("select node first!") }
+        keydownEvent(event) {
+            if (event.which == 84) //= key T
                 nodes.push(createTransition(300, 300, 100, "cheeki breeki"));
         }
+
+        executionClick(button, event) {
+            switchToExecState(button);
+        }
+    }
+
+    function switchToExecState(button) {
+        state.currentState = state.executionState;
+        button.children[0].text = "Execution Mode";
+        button.children[0].fill = "red";
+        //disable drag&drop
+        nodes.forEach(function (element) {
+            element.dragAndDrop(false);
+        })
+
+        //check each transition for fire eligibility (green = allowed to Fire())
+        nodes.forEach(function (node) {
+            if (node.nodeType == "transition")
+                satedCheck(node);
+            else node.originalTokens = node.tokens;  //remember token amount b4 execution
+        });
+
+    }
+    function satedCheck(node) {
+        var sated = node.incomingEdges.length > 0;
+        node.incomingEdges.forEach(function (element) { if (element.From.tokens < 1) sated = false; });
+        if (sated) node.stroke = "5px green";
+        else node.stroke = "5px red";
+        return sated;
     }
 
     class SelectionState extends Istate {
@@ -76,13 +102,9 @@ jQuery(document).ready(function ($) {
         canvasClick() {
             deselect();
             state.currentState = state.defaultState;
-            //console.log(state);
         }
 
         placeClick(node, event) {
-            //    console.log(' del event: ')
-            // console.log(event)
-
             //switch to selected
             selected.children[0].text = "Selected: " + node.name;
             selected.current = node;
@@ -94,13 +116,11 @@ jQuery(document).ready(function ($) {
             selected.children[0].text = "Selected: " + node.name;
             selected.current = node;
             selected.redraw();
-
-
             event.stopPropagation();
         }
+
         AddnodeClick() { }
         AddEdgeClick() {
-
             var line = canvas.display.line({
                 start: { x: selected.current.x, y: selected.current.y },
                 stroke: "11px #0aa",
@@ -111,19 +131,55 @@ jQuery(document).ready(function ($) {
 
             //switch state
             state.currentState = state.edgePendingState;
-
         }
         keydownEvent() { }
+        executionClick(button, event) {
+            deselect();
+            switchToExecState(button);
+        }
     }
 
     class ExecutionState extends Istate {
         constructor() { super(); }
-        canvasClick() { }
+        canvasClick() { } //nothing
         placeClick() { }
-        transitionClick() { }
-        AddnodeClick() { }
-        AddEdgeClick() { }
+
+        transitionClick(node, event) {
+            if (satedCheck(node))
+                fire(node);
+
+            nodes.forEach(function (elem) {
+                if (elem.nodeType == "transition") satedCheck(elem); //set color
+            })
+        }
+
+        AddnodeClick(node, event) { }
+        AddEdgeClick() { /* do nothing */ }
         keydownEvent() { }
+        executionClick(button, event) {
+            //go back to default mode;
+            button.children[0].text = "Execution";
+            button.children[0].fill = "#fff";
+            state.currentState = state.defaultState;
+            event.stopPropagation();
+
+            nodes.forEach(function (node) {
+                realignEdges(node);
+                node.stroke = "5px red"; //reset colors
+                console.log(node);
+                if (node.nodeType == "place") {
+                    console.log('resetting place tokens')
+                    console.log('originn: ' + node.originalTokens);
+                    console.log('during exec: ' + node.tokens);
+
+                    node.tokens = node.originalTokens;
+                    node.children[1].text = node.tokens; //reset token text
+
+                    console.log('after: ' + node.tokens);
+                }
+                node.redraw();
+            });
+        }
     }
 
     function edgePlacementValidation(node) {
@@ -174,7 +230,6 @@ jQuery(document).ready(function ($) {
 
             //switch states
             state.currentState = state.defaultState;
-
         }
 
         AddnodeClick() { }
@@ -182,7 +237,6 @@ jQuery(document).ready(function ($) {
         keydownEvent(event) {
             edgePending.remove();
             edgePending = null;
-
             state.currentState = state.selectionState;
         }
     }
@@ -205,7 +259,7 @@ jQuery(document).ready(function ($) {
     mycanvas = document.getElementById("canvas");
     context = mycanvas.getContext("2d");
     mycanvas.width = $(window).width();
-    mycanvas.height = $(window).height();;
+    mycanvas.height = $(window).height();
     var $canvas = $("#canvas");
     var canvasOffset = $canvas.offset();
     var scrollX = $canvas.scrollLeft();
@@ -278,7 +332,10 @@ jQuery(document).ready(function ($) {
 
     function initMenu() {
         var addPlace = createButton(10, 10, 100, 50, "Add node (A)");
-        addPlace.bind("click tap", function () { nodes.push(createNode(canvas.width / 2, canvas.height / 2, 50, "new node", 1)) });
+
+        addPlace.bind("click tap", function () {
+            nodes.push(createNode(canvas.width / 2, canvas.height / 2, 50, "new node", Math.round(Math.random() * 10)));
+        });
 
         addPlace.bind("mouseenter", function (event) { this.fill = "orange"; this.redraw() });
         addPlace.bind("mouseleave", function (event) { this.fill = "black"; this.redraw() });
@@ -302,18 +359,30 @@ jQuery(document).ready(function ($) {
 
         var coords = createButton(10, 70, 100, 50, "x/y");
         canvas.setLoop(function () {
-            coords.children[0].text = "X: " + canvas.mouse.x + " \\ " + "Y: " + canvas.mouse.y;;
+            coords.children[0].text = "X: " + canvas.mouse.x + " / Y: " + canvas.mouse.y;;
 
             //TODO STATE
             if (selected.current) {
                 var offset = 0;
                 if (selected.current.nodeType == "transition") offset = selected.current.width / 2;
+
                 selectionCircle.x = selected.current.x + offset;
                 selectionCircle.y = selected.current.y + offset;
                 selectionCircle.opacity = 100;
             }
             else selectionCircle.opacity = 0;
         }).start();
+
+        var executionButton = createButton(340, 10, 100, 50, "Execute");
+        executionButton.bind("mouseenter", function (event) { this.fill = "orange"; this.redraw() });
+        executionButton.bind("mouseleave", function (event) { this.fill = "black"; this.redraw() });
+        executionButton.bind("mousedown", function (event) { this.fill = "blue"; this.redraw() });
+        executionButton.bind("mouseup", function (event) { this.fill = "orange"; this.redraw() });
+        executionButton.bind("click tap", function (event) {
+            event.stopPropagation();
+            state.currentState.executionClick(this, event);
+        });
+
 
     }
 
@@ -404,11 +473,7 @@ jQuery(document).ready(function ($) {
             //fire(this);
         });
 
-        transition.dragAndDrop({
-            start: function () { },
-            move: function () { lineOnEdge(transition); },
-            end: function () { }
-        });
+        realignEdges(transition);
 
         transition.addChild(nodeText);
         transition.incomingEdges = []
@@ -462,17 +527,42 @@ jQuery(document).ready(function ($) {
         node.outgoingEdges = []
         node.add();
         node.tokens = tokens;
+        node.originalTokens = tokens;
         node.nodeType = "place";
         return node;
     }
 
-    function fire(node) {
-        if (node.tokens <= 0 || node.outgoingEdges.length == 0) return;
+    function fire(transition) {
+        //consume
+        transition.incomingEdges.forEach(function (edge) {
+            var adj = edge.From;
 
-        node.tokens -= 1;
-        updateTokens(node);
+            adj.tokens -= 1;
+            adj.children[1].text = adj.tokens;
 
-        node.outgoingEdges.forEach(function (element) {
+
+            var ball = canvas.display.ellipse({
+                x: edge.start.x, y: edge.start.y,
+                radius: 20,
+                fill: "red",
+            }).add();
+
+            //ball.fadeOut("long", "ease-out-quint")
+
+            ball.animate({
+                x: edge.end.x,
+                y: edge.end.y,
+                opacity: 0
+            },
+                {
+                    duration: "short",
+                    easing: "ease-out-quint",
+                });
+        });
+
+
+        //produce
+        transition.outgoingEdges.forEach(function (element) {
             var adj = element.To;
             adj.tokens++;
             updateTokens(adj);
@@ -502,5 +592,14 @@ jQuery(document).ready(function ($) {
         node.children[1].text = node.tokens;
         node.redraw();
     }
+
+    function realignEdges(node) {
+        node.dragAndDrop({
+            start: function () { },
+            move: function () { lineOnEdge(node); },
+            end: function () { }
+        });
+    }
+
 });
 
