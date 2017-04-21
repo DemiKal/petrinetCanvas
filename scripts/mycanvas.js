@@ -6,6 +6,7 @@ jQuery(document).ready(function ($) {
     var edges = []
     var selected;
     var edgePending = null;
+    var nodeIsMoving = false;
 
     ///
     /// CLASSES      
@@ -59,14 +60,15 @@ jQuery(document).ready(function ($) {
         }
 
         AddnodeClick(button) {
-            nodes.push(createNode(canvas.mouse.x, canvas.mouse.y, 50, "P" + Math.round(Math.random() * 100), Math.round(Math.random() * 10)));
+            nodes.push(createNode(canvas.width / 2, canvas.height / 2, 50, "P" + Math.round(Math.random() * 100), Math.round(Math.random() * 10)));
         }
         AddEdgeClick() { console.log("select node first!") }
+
         keydownEvent(event) {
             if (event.which == 84) //= key T
                 nodes.push(createTransition(canvas.mouse.x - 50, canvas.mouse.y - 50, 100, "T" + Math.round(Math.random() * 100)));
-            if (event.which == 65)
-                state.currentState.AddnodeClick(); //emulate clicking on add node
+            if (event.which == 65)  //key A
+                nodes.push(createNode(canvas.mouse.x, canvas.mouse.y, 50, "P" + Math.round(Math.random() * 100), Math.round(Math.random() * 10)));
         }
 
         executionClick(button, event) {
@@ -126,9 +128,11 @@ jQuery(document).ready(function ($) {
         AddnodeClick() {
 
         }
+
         AddEdgeClick() {
             var line = canvas.display.line({
                 start: { x: selected.current.x, y: selected.current.y },
+                end: { x: canvas.mouse.x, y: canvas.mouse.y },
                 stroke: "11px #0aa",
                 cap: "round"
             }).add();
@@ -141,9 +145,8 @@ jQuery(document).ready(function ($) {
         keydownEvent(event) {
             if (event.which == 69) //simulate clicking on adding edge button by pressing E
                 state.currentState.AddEdgeClick();
-
-
         }
+
         executionClick(button, event) {
             deselect();
             switchToExecState(button);
@@ -286,12 +289,11 @@ jQuery(document).ready(function ($) {
     var selectionBox = canvas.display.rectangle({
         x: 0,
         y: 0,
-        width:  0,
-        height:  0,
+        width: 0,
+        height: 0,
         fill: "#0aa",
         opacity: 0
     }).add();
-
 
     $canvas.contextmenu(function () { return false; });
 
@@ -312,12 +314,12 @@ jQuery(document).ready(function ($) {
             edgePending.redraw();
         }
 
-        if (dragging) {
+        if (dragging && !nodeIsMoving) {
             console.log(selectionBox.x);
             selectionBox.opacity = 0.5;
             selectionBox.width = canvas.mouse.x - selectionBox.x;
             selectionBox.height = canvas.mouse.y - selectionBox.y;
-         //   selectionBox.redraw();
+            //   selectionBox.redraw();
         }
 
 
@@ -345,8 +347,6 @@ jQuery(document).ready(function ($) {
         selected.current = null;
         selected.children[0].text = "None selected";
         selected.redraw();
-        console.log("currently selected: ");
-        console.log(selected.current)
     }
 
 
@@ -379,7 +379,6 @@ jQuery(document).ready(function ($) {
         canvas.addChild(line);
         line.zIndex = 0;
         triangle.zIndex = 3;    //doesnt work?
-
     }
 
     function initMenu() {
@@ -522,7 +521,10 @@ jQuery(document).ready(function ($) {
         transition.bind("click tap", function (event) { state.currentState.transitionClick(this, event); });
 
         transition.bind("dblclick ", function (event) {
-            //fire(this);
+            console.log('fusing children');
+            nodes[0].addChild(nodes[1]);
+            canvas.redraw();
+            console.log(nodes[0].children);
         });
 
         realignEdges(transition);
@@ -565,13 +567,15 @@ jQuery(document).ready(function ($) {
         node.bind("click tap", function (event) { state.currentState.placeClick(node, event); });
         node.bind("dblclick ", function (event) {            /*   fire(this);   */ });
 
-        node.dragAndDrop({
-            start: function () { },
-            move: function () {
-                lineOnEdge(node);
-            },
-            end: function () { }
-        });
+        realignEdges(node);
+
+        // node.dragAndDrop({
+        //     start: function () { },
+        //     move: function () {
+        //         lineOnEdge(node);
+        //     },
+        //     end: function () { }
+        // });
 
         node.addChild(nodeText);
         node.addChild(tokenText);
@@ -647,9 +651,15 @@ jQuery(document).ready(function ($) {
 
     function realignEdges(node) {
         node.dragAndDrop({
-            start: function () { },
+            start: function () {
+                nodeIsMoving = true;
+                console.log(nodeIsMoving)
+            },
             move: function () { lineOnEdge(node); },
-            end: function () { }
+            end: function () {
+                nodeIsMoving = false;
+                console.log(nodeIsMoving)
+            }
         });
     }
 });
