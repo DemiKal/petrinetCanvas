@@ -95,7 +95,7 @@ jQuery(document).ready(function ($) {
     }
 
     function satedCheck(node) {
-        var sated = node.incomingEdges.length > 0;
+        var sated = true;
         node.incomingEdges.forEach(function (element) { if (element.From.tokens < 1) sated = false; });
         if (sated) node.stroke = "5px green";
         else node.stroke = "5px red";
