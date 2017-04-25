@@ -12,14 +12,143 @@ jQuery(document).ready(function ($) {
     /// CLASSES      
     ///
 
-    class Place {
-        constructor(x, y, radius, text, tokens) {
-            this.drawObject = createNode(x, y, radius, text, tokens)
+    // function xState() {
+    //     this.Places;
+    //     this.Transitions;
+    //     this.From;
+    //     this.To;
+    // }
+
+    class xState {
+        constructor(nodes) {
+            this.places = this.getNodes("place");
+            this.transitions = this.getNodes("transition");
+            this.From;
+            this.To;
+        }
+
+        getNodes(type) {
+            var filteredNodes = [];
+            nodes.forEach(function (node) {
+                if (node.nodeType == type)
+                    filteredNodes.push(node);
+            });
+
+            return filteredNodes;
         }
     }
-//dsadsa test
-    class Transition { }
 
+    class Node {
+        constructor() { }
+
+    }
+
+    class Place extends Node {
+        constructor(x, y, radius, text, tokens) {
+            super();
+            this.x = x;
+            this.y = y;
+            this.radius = radius;
+            this.text = text;
+            this.drawObject = createNode(x, y, radius, text, tokens);
+            this.drawObject.classPointer = this;
+            this.namePlate = this.drawObject.children[0];
+            this.tokensPlate = this.drawObject.children[1];
+            this.tokenAmount = tokens;
+            this.originalTokens = this.tokenAmount;
+        }
+
+        get tokens() { return this.tokenAmount };
+        set tokens(amount) {
+            this.tokenAmount = amount;
+            this.tokensPlate.text = amount;
+        }
+
+        get incomingEdges() { return drawObject.incomingEdges; }
+        get outgoingEdges() { return drawObject.incomingEdges; }
+
+        get name() { return namePlate.text; }
+
+        set name(newname) {
+            if (namePlate) namePlate.text = newname;
+            else this.text = newname;
+        }
+        dragAndDrop(option) { this.drawObject.dragAndDrop(option) }
+    }
+
+    class Transition extends Node {
+        constructor(x, y, radius, text, tokens) {
+            super();
+            this.drawObject = createTransition(x, y, radius * 2, text, tokens)
+            this.drawObject.classPointer = this;
+
+            this.namePlate;
+        }
+        get incomingEdges() { return drawObject.incomingEdges; }
+        get outgoingEdges() { return drawObject.incomingEdges; }
+        get name() { return namePlate.text; }
+
+        set name(newname) {
+            if (namePlate) namePlate.text = newname;
+            else this.text = newname;
+        }
+
+        dragAndDrop(option) { this.drawObject.dragAndDrop(option) }
+
+        fire(transition) {
+
+            //consume
+            this.incomingEdges.forEach(function (edge) {
+                var adj = edge.From;
+                adj.tokens -= 1;
+                adj.children[1].text = adj.tokens;
+
+                var ball = canvas.display.ellipse({
+                    x: edge.start.x, y: edge.start.y,
+                    radius: 20,
+                    fill: "red",
+                }).add();
+
+                ball.animate({
+                    x: edge.end.x,
+                    y: edge.end.y,
+                    opacity: 0
+                },
+                    {
+                        duration: "normal",
+                        easing: "ease-out-quint",
+                    });
+            });
+
+            //produce
+            this.outgoingEdges.forEach(function (element) {
+                var adj = element.To;
+                adj.tokens++;
+                updateTokens(adj);
+
+                var ball = canvas.display.ellipse({
+                    x: element.start.x, y: element.start.y,
+                    radius: 20,
+                    fill: "red",
+                }).add();
+
+                //ball.fadeOut("long", "ease-out-quint")
+
+                ball.animate({
+                    x: element.end.x,
+                    y: element.end.y,
+                    opacity: 0
+                },
+                    {
+                        duration: "long",
+                        easing: "ease-out-quint",
+                        //callback: function () { ball.fadeOut("short", "linear") }
+                    });
+            });
+        }
+    }
+
+    //STATE DESIGN PATTERN
     class Istate {
         constructor() { }
         canvasClick() { }
@@ -60,15 +189,15 @@ jQuery(document).ready(function ($) {
         }
 
         AddnodeClick(button) {
-            nodes.push(createNode(canvas.width / 2, canvas.height / 2, 50, "P" + Math.round(Math.random() * 100), Math.round(Math.random() * 10)));
+            nodes.push(new Place(canvas.width / 2, canvas.height / 2, 50, "P" + Math.round(Math.random() * 100), Math.round(Math.random() * 10))); //createNode(canvas.width / 2, canvas.height / 2, 50, "P" + Math.round(Math.random() * 100), Math.round(Math.random() * 10)));
         }
         AddEdgeClick() { console.log("select node first!") }
 
         keydownEvent(event) {
             if (event.which == 84) //= key T
-                nodes.push(createTransition(canvas.mouse.x - 50, canvas.mouse.y - 50, 100, "T" + Math.round(Math.random() * 100)));
+                nodes.push(new Transition(canvas.mouse.x - 50, canvas.mouse.y - 50, 50, "T" + Math.round(Math.random() * 100), Math.round(Math.random() * 10)));//createTransition(canvas.mouse.x - 50, canvas.mouse.y - 50, 100, "T" + Math.round(Math.random() * 100)));
             if (event.which == 65)  //key A
-                nodes.push(createNode(canvas.mouse.x, canvas.mouse.y, 50, "P" + Math.round(Math.random() * 100), Math.round(Math.random() * 10)));
+                nodes.push(new Place(canvas.mouse.x, canvas.mouse.y, 50, "P" + Math.round(Math.random() * 100), Math.round(Math.random() * 10)));  //createNode(canvas.mouse.x, canvas.mouse.y, 50, "P" + Math.round(Math.random() * 100), Math.round(Math.random() * 10)));
         }
 
         executionClick(button, event) {
@@ -125,9 +254,7 @@ jQuery(document).ready(function ($) {
             event.stopPropagation();
         }
 
-        AddnodeClick() {
-
-        }
+        AddnodeClick() { }
 
         AddEdgeClick() {
             var line = canvas.display.line({
@@ -142,6 +269,7 @@ jQuery(document).ready(function ($) {
             //switch state
             state.currentState = state.edgePendingState;
         }
+
         keydownEvent(event) {
             if (event.which == 69) //simulate clicking on adding edge button by pressing E
                 state.currentState.AddEdgeClick();
@@ -160,7 +288,7 @@ jQuery(document).ready(function ($) {
 
         transitionClick(node, event) {
             if (satedCheck(node))
-                fire(node);
+                node.classPointer.fire();
 
             nodes.forEach(function (elem) {
                 if (elem.nodeType == "transition") satedCheck(elem); //set color
@@ -178,7 +306,7 @@ jQuery(document).ready(function ($) {
             event.stopPropagation();
 
             nodes.forEach(function (node) {
-                realignEdges(node);
+                AddDragAndDrop(node);
                 node.stroke = "5px red"; //reset colors
                 console.log(node);
                 if (node.nodeType == "place") {
@@ -255,12 +383,26 @@ jQuery(document).ready(function ($) {
         }
     }
 
+    class ReachabilityState extends Istate {
+        constructor() { super(); }
+        canvasClick() { }
+        canvasDoubleClick() { }
+        placeClick() { }
+        transitionClick() { }
+        AddnodeClick() { }
+        AddEdgeClick() { }
+        SelectedButtonUpdate() { }
+        keydownEvent() { }
+        executionClick() { }
+    }
+
     class State {
         constructor() {
             this.defaultState = new DefaultState();
             this.selectionState = new SelectionState();
             this.executionState = new ExecutionState();
             this.edgePendingState = new EdgePendingState();
+            this.reachabilityState = new ReachabilityState();
             this.currentState = this.defaultState;
         }
     }
@@ -285,6 +427,7 @@ jQuery(document).ready(function ($) {
         fps: 60,
     });
 
+
     var dragging;
     var selectionBox = canvas.display.rectangle({
         x: 0,
@@ -295,7 +438,12 @@ jQuery(document).ready(function ($) {
         opacity: 0
     }).add();
 
-    $canvas.contextmenu(function () { return false; });
+    $canvas.contextmenu(function () {
+        var state1 = new xState();
+        console.log(state1);
+
+        return false;
+    });
 
     canvas.bind("click tap", function (event) { state.currentState.canvasClick(event); });
 
@@ -331,10 +479,6 @@ jQuery(document).ready(function ($) {
         selectionBox.opacity = 0.5;
 
     })
-
-
-
-
 
 
     canvas.bind("keydown", function (event) { state.currentState.keydownEvent(event); })
@@ -521,18 +665,19 @@ jQuery(document).ready(function ($) {
         transition.bind("click tap", function (event) { state.currentState.transitionClick(this, event); });
 
         transition.bind("dblclick ", function (event) {
-            console.log('fusing children');
-            nodes[0].addChild(nodes[1]);
-            canvas.redraw();
-            console.log(nodes[0].children);
+            // console.log('fusing children');
+            // nodes[0].addChild(nodes[1]);
+            // canvas.redraw();
+            // console.log(nodes[0].children);
         });
 
-        realignEdges(transition);
+        AddDragAndDrop(transition);
 
         transition.addChild(nodeText);
         transition.incomingEdges = []
         transition.outgoingEdges = []
         transition.nodeType = "transition";
+        transition.classPointer = null;
         transition.add();
 
         return transition;
@@ -567,16 +712,7 @@ jQuery(document).ready(function ($) {
         node.bind("click tap", function (event) { state.currentState.placeClick(node, event); });
         node.bind("dblclick ", function (event) {            /*   fire(this);   */ });
 
-        realignEdges(node);
-
-        // node.dragAndDrop({
-        //     start: function () { },
-        //     move: function () {
-        //         lineOnEdge(node);
-        //     },
-        //     end: function () { }
-        // });
-
+        AddDragAndDrop(node);
         node.addChild(nodeText);
         node.addChild(tokenText);
         node.incomingEdges = []
@@ -585,63 +721,9 @@ jQuery(document).ready(function ($) {
         node.tokens = tokens;
         node.originalTokens = tokens;
         node.nodeType = "place";
+        node.classPointer = null;
+        console.log(node.children);
         return node;
-    }
-
-    function fire(transition) {
-        //consume
-        transition.incomingEdges.forEach(function (edge) {
-            var adj = edge.From;
-
-            adj.tokens -= 1;
-            adj.children[1].text = adj.tokens;
-
-
-            var ball = canvas.display.ellipse({
-                x: edge.start.x, y: edge.start.y,
-                radius: 20,
-                fill: "red",
-            }).add();
-
-            //ball.fadeOut("long", "ease-out-quint")
-
-            ball.animate({
-                x: edge.end.x,
-                y: edge.end.y,
-                opacity: 0
-            },
-                {
-                    duration: "normal",
-                    easing: "ease-out-quint",
-                });
-        });
-
-
-        //produce
-        transition.outgoingEdges.forEach(function (element) {
-            var adj = element.To;
-            adj.tokens++;
-            updateTokens(adj);
-
-            var ball = canvas.display.ellipse({
-                x: element.start.x, y: element.start.y,
-                radius: 20,
-                fill: "red",
-            }).add();
-
-            //ball.fadeOut("long", "ease-out-quint")
-
-            ball.animate({
-                x: element.end.x,
-                y: element.end.y,
-                opacity: 0
-            },
-                {
-                    duration: "long",
-                    easing: "ease-out-quint",
-                    //callback: function () { ball.fadeOut("short", "linear") }
-                });
-        });
     }
 
     function updateTokens(node) {
@@ -649,16 +731,14 @@ jQuery(document).ready(function ($) {
         node.redraw();
     }
 
-    function realignEdges(node) {
+    function AddDragAndDrop(node) {
         node.dragAndDrop({
             start: function () {
                 nodeIsMoving = true;
-                console.log(nodeIsMoving)
             },
             move: function () { lineOnEdge(node); },
             end: function () {
                 nodeIsMoving = false;
-                console.log(nodeIsMoving)
             }
         });
     }
