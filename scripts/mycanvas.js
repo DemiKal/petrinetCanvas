@@ -12,14 +12,7 @@ jQuery(document).ready(function ($) {
     /// CLASSES      
     ///
 
-    // function xState() {
-    //     this.Places;
-    //     this.Transitions;
-    //     this.From;
-    //     this.To;
-    // }
-
-    class xState {
+    class PetriNetState {
         constructor(nodes) {
             this.places = this.getNodes("place");
             this.transitions = this.getNodes("transition");
@@ -39,7 +32,23 @@ jQuery(document).ready(function ($) {
     }
 
     class Node {
-        constructor() { }
+        constructor() {
+            this.drawObject;
+            this.namePlate;
+        }
+        redraw() {
+            this.drawObject.redraw();
+        };
+        get incomingEdges() { return this.drawObject.incomingEdges; }
+        get outgoingEdges() { return this.drawObject.outgoingEdges; }
+        get name() { return namePlate.text; }
+        set name(newname) {
+            if (namePlate) namePlate.text = newname;
+            else this.text = newname;
+        }
+
+        dragAndDrop(option) { this.drawObject.dragAndDrop(option) }
+
 
     }
 
@@ -63,17 +72,6 @@ jQuery(document).ready(function ($) {
             this.tokenAmount = amount;
             this.tokensPlate.text = amount;
         }
-
-        get incomingEdges() { return drawObject.incomingEdges; }
-        get outgoingEdges() { return drawObject.incomingEdges; }
-
-        get name() { return namePlate.text; }
-
-        set name(newname) {
-            if (namePlate) namePlate.text = newname;
-            else this.text = newname;
-        }
-        dragAndDrop(option) { this.drawObject.dragAndDrop(option) }
     }
 
     class Transition extends Node {
@@ -84,18 +82,18 @@ jQuery(document).ready(function ($) {
 
             this.namePlate;
         }
-        get incomingEdges() { return drawObject.incomingEdges; }
-        get outgoingEdges() { return drawObject.incomingEdges; }
-        get name() { return namePlate.text; }
 
-        set name(newname) {
-            if (namePlate) namePlate.text = newname;
-            else this.text = newname;
+        //check if all incoming edges have > 0 tokens
+        readyCheck() {
+            var isSated = true;
+            this.incomingEdges.forEach(function (element) { if (element.From.tokens < 1) isSated = false; });
+            if (isSated) this.drawObject.stroke = "5px green";
+            else this.drawObject.stroke = "5px red";
+            return isSated;
         }
 
-        dragAndDrop(option) { this.drawObject.dragAndDrop(option) }
-
-        fire(transition) {
+        //consume a token from incoming edges, then distribute
+        fire() {
 
             //consume
             this.incomingEdges.forEach(function (edge) {
@@ -109,15 +107,8 @@ jQuery(document).ready(function ($) {
                     fill: "red",
                 }).add();
 
-                ball.animate({
-                    x: edge.end.x,
-                    y: edge.end.y,
-                    opacity: 0
-                },
-                    {
-                        duration: "normal",
-                        easing: "ease-out-quint",
-                    });
+                ball.animate({ x: edge.end.x, y: edge.end.y, opacity: 0 },
+                    { duration: "normal", easing: "ease-out-quint", });
             });
 
             //produce
@@ -132,8 +123,6 @@ jQuery(document).ready(function ($) {
                     fill: "red",
                 }).add();
 
-                //ball.fadeOut("long", "ease-out-quint")
-
                 ball.animate({
                     x: element.end.x,
                     y: element.end.y,
@@ -142,7 +131,6 @@ jQuery(document).ready(function ($) {
                     {
                         duration: "long",
                         easing: "ease-out-quint",
-                        //callback: function () { ball.fadeOut("short", "linear") }
                     });
             });
         }
@@ -217,18 +205,10 @@ jQuery(document).ready(function ($) {
 
         //check each transition for fire eligibility (green = allowed to Fire())
         nodes.forEach(function (node) {
-            if (node.nodeType == "transition")
-                satedCheck(node);
+            if (node instanceof Transition)
+                node.readyCheck();
             else node.originalTokens = node.tokens;  //remember token amount b4 execution
         });
-    }
-
-    function satedCheck(node) {
-        var sated = true;
-        node.incomingEdges.forEach(function (element) { if (element.From.tokens < 1) sated = false; });
-        if (sated) node.stroke = "5px green";
-        else node.stroke = "5px red";
-        return sated;
     }
 
     class SelectionState extends Istate {
@@ -287,11 +267,11 @@ jQuery(document).ready(function ($) {
         placeClick() { }
 
         transitionClick(node, event) {
-            if (satedCheck(node))
+            if (node.classPointer.readyCheck())
                 node.classPointer.fire();
 
             nodes.forEach(function (elem) {
-                if (elem.nodeType == "transition") satedCheck(elem); //set color
+                if (elem instanceof Transition) elem.readyCheck(); //set color
             })
         }
 
@@ -307,15 +287,15 @@ jQuery(document).ready(function ($) {
 
             nodes.forEach(function (node) {
                 AddDragAndDrop(node);
-                node.stroke = "5px red"; //reset colors
-                console.log(node);
-                if (node.nodeType == "place") {
+                node.drawObject.stroke = "5px red"; //reset colors
+
+                if (node instanceof Place) {
                     console.log('resetting place tokens')
                     console.log('originn: ' + node.originalTokens);
                     console.log('during exec: ' + node.tokens);
 
                     node.tokens = node.originalTokens;
-                    node.children[1].text = node.tokens; //reset token text
+                    node.tokensPlate.text = node.tokens; //reset token text
 
                     console.log('after: ' + node.tokens);
                 }
@@ -439,7 +419,7 @@ jQuery(document).ready(function ($) {
     }).add();
 
     $canvas.contextmenu(function () {
-        var state1 = new xState();
+        var state1 = new PetriNetState();
         console.log(state1);
 
         return false;
@@ -481,7 +461,7 @@ jQuery(document).ready(function ($) {
     })
 
 
-    canvas.bind("keydown", function (event) { state.currentState.keydownEvent(event); })
+    canvas.bind("keydown", function (event) { console.log(state.currentState); state.currentState.keydownEvent(event); })
 
 
     initMenu();
