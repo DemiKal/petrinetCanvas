@@ -12,24 +12,48 @@ jQuery(document).ready(function ($) {
     /// CLASSES      
     ///
 
+    var States = []
+    var currentState
+
     class PetriNetState {
-        constructor(nodes) {
-            this.places = this.getNodes("place");
-            this.transitions = this.getNodes("transition");
-            this.From;
-            this.To;
-        }
+        constructor() {
+            this.activeTransitions = []
+            this.name = ""
 
-        getNodes(type) {
-            var filteredNodes = [];
-            nodes.forEach(function (node) {
-                if (node.nodeType == type)
-                    filteredNodes.push(node);
-            });
+            for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i] instanceof Transition) {
+                    if (nodes[i].readyCheck(false))
+                        this.activeTransitions.push(nodes[i])
+                } else {
+                    if (nodes[i].tokens > 0)
+                        this.name += nodes[i].tokens + "*" + nodes[i].name + ";"
+                }
+            }
+            console.log(this.codeName)
 
-            return filteredNodes;
+
+
         }
     }
+
+    // class PetriNetState {
+    //     constructor(nodes) {
+    //         this.places = this.getNodes("place");
+    //         this.transitions = this.getNodes("transition");
+    //         this.From;
+    //         this.To;
+    //     }
+
+    //     getNodes(type) {
+    //         var filteredNodes = [];
+    //         nodes.forEach(function (node) {
+    //             if (node.nodeType == type)
+    //                 filteredNodes.push(node);
+    //         });
+
+    //         return filteredNodes;
+    //     }
+    // }
 
     class Node {
         constructor() {
@@ -41,15 +65,13 @@ jQuery(document).ready(function ($) {
         };
         get incomingEdges() { return this.drawObject.incomingEdges; }
         get outgoingEdges() { return this.drawObject.outgoingEdges; }
-        get name() { return namePlate.text; }
+        get name() { return this.namePlate.text; }
         set name(newname) {
-            if (namePlate) namePlate.text = newname;
+            if (this.namePlate) namePlate.text = newname;
             else this.text = newname;
         }
 
         dragAndDrop(option) { this.drawObject.dragAndDrop(option) }
-
-
     }
 
     class Place extends Node {
@@ -84,9 +106,12 @@ jQuery(document).ready(function ($) {
         }
 
         //check if all incoming edges have > 0 tokens
-        readyCheck() {
+        readyCheck(colorIndicator = true) {
             var isSated = true;
-            this.incomingEdges.forEach(function (element) { if (element.From.tokens < 1) isSated = false; });
+            this.incomingEdges.forEach(function (element) { if (element.From.classPointer.tokens < 1) isSated = false; });
+
+            if (!colorIndicator) return isSated
+
             if (isSated) this.drawObject.stroke = "5px green";
             else this.drawObject.stroke = "5px red";
             return isSated;
@@ -97,9 +122,9 @@ jQuery(document).ready(function ($) {
 
             //consume
             this.incomingEdges.forEach(function (edge) {
-                var adj = edge.From;
+                var adj = edge.From.classPointer;
                 adj.tokens -= 1;
-                adj.children[1].text = adj.tokens;
+                //adj.children[1].text = adj.tokens;
 
                 var ball = canvas.display.ellipse({
                     x: edge.start.x, y: edge.start.y,
@@ -113,9 +138,9 @@ jQuery(document).ready(function ($) {
 
             //produce
             this.outgoingEdges.forEach(function (element) {
-                var adj = element.To;
+                var adj = element.To.classPointer;
                 adj.tokens++;
-                updateTokens(adj);
+               // updateTokens(adj);
 
                 var ball = canvas.display.ellipse({
                     x: element.start.x, y: element.start.y,
@@ -290,15 +315,10 @@ jQuery(document).ready(function ($) {
                 node.drawObject.stroke = "5px red"; //reset colors
 
                 if (node instanceof Place) {
-                    console.log('resetting place tokens')
-                    console.log('originn: ' + node.originalTokens);
-                    console.log('during exec: ' + node.tokens);
-
                     node.tokens = node.originalTokens;
-                    node.tokensPlate.text = node.tokens; //reset token text
-
-                    console.log('after: ' + node.tokens);
+                   // node.tokensPlate.text = node.tokens; //reset token text
                 }
+
                 node.redraw();
             });
         }
