@@ -1,23 +1,25 @@
 <html>
 
 <head>
-    <script src="scripts/3rd party/jquery-3.2.1.min.js">
+    <script src="scripts/3rd party/LAB.min.js"></script>
 
-    </script>
-    <script src="scripts/3rd party/ocanvas-2.8.7.js">
-
-    </script>
-
-    <script src="scripts/3rd party/victor.js">
-
-    </script>
-    <script src="scripts/mycanvas.js">
-
+    <script>
+        $LAB
+            .script('scripts/3rd party/jquery-3.2.1.min.js').wait()
+            .script('scripts/3rd party/ocanvas-2.8.7.js').wait()
+            .script('scripts/3rd party/victor.js').wait()
+            .script('scripts/node.js').wait()
+            .script('scripts/place.js').wait()
+            .script('scripts/transition.js').wait()
+            .script('scripts/petrinetState.js').wait()
+            .script('scripts/mycanvas.js').wait(function () {
+                console.log('script loaded!');
+            });
     </script>
 </head>
 
 <body>
-    <!--<canvas id="canvas" width="1520" height="880">--> 
+    <!--<canvas id="canvas" width="1520" height="880">-->
     <canvas id="canvas">
 </body>
 
