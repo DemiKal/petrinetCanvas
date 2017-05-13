@@ -28,7 +28,7 @@
             event.stopPropagation();
             state.currentState = state.selectionState;
         }
-
+        
         transitionClick(node, event) {
             selected.children[0].text = "Selected: " + node.name;
             selected.current = node;

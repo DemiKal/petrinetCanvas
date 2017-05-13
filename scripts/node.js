@@ -1,32 +1,22 @@
 // abstract class representing nodes, the superclass of places, transitions, etc
 
-class Node {
-  constructor () {
-    // this.drawObject;
-    // this.namePlate;
-  }
+class Node extends DrawingObject {
+  constructor() { super(); }
 
-  get x () { return this.drawObject.x} // { return this.drawObject.x }
-  set x (amount) { this.drawObject.x = amount }
-
-  get y () { return this.drawObject.y }
-  set y (amount) { this.drawObject.y = amount }
-
-  redraw () { this.drawObject.redraw(); }
-  get incomingEdges () { return this.drawObject.incomingEdges; }
-  get outgoingEdges () { return this.drawObject.outgoingEdges; }
-  get name () { return this.namePlate.text; }
-  set name (newname) {
+  //change these
+  get incomingEdges() { return this.drawObject.incomingEdges; }
+  get outgoingEdges() { return this.drawObject.outgoingEdges; }
+  get name() { return this.namePlate.text; }
+  set name(newname) {
     if (this.namePlate) namePlate.text = newname
     else this.text = newname
   }
 
-  dragAndDrop (option) { this.drawObject.dragAndDrop(option) }
-  speak () { console.log('hi!') }
+  dragAndDrop(option) { this.drawObject.dragAndDrop(option) };
 }
 
 // OVERRIDE PER CLASS
-function lineOnEdge (node) {
+function lineOnEdge(node) {
   var adjEdges = node.outgoingEdges.concat(node.incomingEdges)
 
   adjEdges.forEach(function (currentEdge) {
@@ -65,7 +55,7 @@ function lineOnEdge (node) {
   })
 }
 
-function AddDragAndDrop (node) {
+function AddDragAndDrop(node) {
   node.dragAndDrop({
     start: function () {
       nodeIsMoving = true

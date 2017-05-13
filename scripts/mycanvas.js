@@ -1,4 +1,3 @@
-
 jQuery(document).ready(function ($) {
     //global vars
     $nodes = []
@@ -10,7 +9,9 @@ jQuery(document).ready(function ($) {
     nodeIsMoving = false;
     petrinetStates = [];
     currentState = null;
- 
+
+    var aa = new DrawingObject();
+
     mycanvas = document.getElementById("canvas");
     context = mycanvas.getContext("2d");
     mycanvas.width = $(window).width();
@@ -37,6 +38,7 @@ jQuery(document).ready(function ($) {
         opacity: 0
     }).add();
 
+    //right click on canvas override
     $canvasDOM.contextmenu(function () {
         return false;
     });
@@ -62,10 +64,7 @@ jQuery(document).ready(function ($) {
             selectionBox.opacity = 0.5;
             selectionBox.width = $canvas.mouse.x - selectionBox.x;
             selectionBox.height = $canvas.mouse.y - selectionBox.y;
-            //   selectionBox.redraw();
         }
-
-
     });
 
     $canvas.bind("mousedown", function (event) {
@@ -81,7 +80,8 @@ jQuery(document).ready(function ($) {
 
     function initMenu() {
         var addPlace = createButton(10, 10, 100, 50, "Add node (A)");
-
+        var sa = 12;
+         
         addPlace.bind("click tap", function () {
             state.currentState.AddnodeClick(addPlace);
         });
@@ -131,7 +131,6 @@ jQuery(document).ready(function ($) {
             event.stopPropagation();
             state.currentState.executionClick(this, event);
         });
-
     }
 
     function createButton(x, y, width, height, text) {
