@@ -9,6 +9,7 @@ class Transition extends Node {
         this.AddDragAndDrop();
     }
     get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 } }
+    
     //check if all incoming edges have > 0 tokens
     readyCheck(colorIndicator = true) {
         var isSated = true;
@@ -20,7 +21,7 @@ class Transition extends Node {
         else this.drawObject.stroke = "5px red";
         return isSated;
     }
-    speak() { console.log('hi from transition') }
+
     //consume a token from incoming edges, then distribute
     fire() {
         //consume

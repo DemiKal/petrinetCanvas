@@ -72,7 +72,7 @@ function switchToExecState(button) {
     $nodes.forEach(function (node) {
         if (node instanceof Transition)
             node.readyCheck();
-        else node.originalTokens = node.tokens;  //remember token amount b4 execution
+        else node.originalTokens = node.tokens;  //remember token amount before execution
     });
 }
 
@@ -154,7 +154,7 @@ class ExecutionState extends Istate {
         }
         $nodes.forEach(function (elem) { if (elem instanceof Transition) elem.readyCheck(); /*set color */ })
     }
-
+    
     AddnodeClick(node, event) { }
     AddEdgeClick() { /* do nothing */ }
     keydownEvent() { }
@@ -287,12 +287,8 @@ function createEdge(nodeA, nodeB) {
     line.redraw();
 
     var triangle = $canvas.display.polygon({
-        x: 0,
-        y: 0,
-        sides: 3,
-        radius: 20,
-        rotation: 0,
-        fill: "#0da"
+        x: 0, y: 0, sides: 3, radius: 20,
+        rotation: 0, fill: "#0da"
     });
 
     line.addChild(triangle);
