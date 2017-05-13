@@ -13,15 +13,10 @@ class PetriNetState {
                     this.activeTransitions.push(node)
             }
 
-            else {
-                if (node.tokens > 0)
-                    this.id.push(node.tokens + "*" + node.name)
-            }
+            else if (node.tokens > 0) this.id.push(node.tokens + "*" + node.name)
         }
-
     }
 }
-
 
     // class PetriNetState {
     //     constructor(nodes) {

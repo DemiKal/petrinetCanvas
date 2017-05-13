@@ -30,6 +30,8 @@ class DrawingObject {
     this.SelectionState.parent = this;
     this.ExecutionState.parent = this;
     this.currentState.parent = this;
+    this.width = 0;
+    this.height = 0;
   }
 
   get x() { return this.drawObject.x }

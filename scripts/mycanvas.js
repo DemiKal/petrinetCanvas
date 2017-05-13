@@ -74,14 +74,14 @@ jQuery(document).ready(function ($) {
         selectionBox.opacity = 0.5;
     })
 
-    $canvas.bind("keydown", function (event) { console.log(state.currentState); state.currentState.keydownEvent(event); })
+    $canvas.bind("keydown", function (event) { state.currentState.keydownEvent(event); })
 
     initMenu();
 
     function initMenu() {
         var addPlace = createButton(10, 10, 100, 50, "Add node (A)");
         var sa = 12;
-         
+
         addPlace.bind("click tap", function () {
             state.currentState.AddnodeClick(addPlace);
         });
@@ -112,11 +112,10 @@ jQuery(document).ready(function ($) {
 
             //TODO STATE
             if (selected.current) {
-                var offset = 0;
-                if (selected.current.nodeType == "transition") offset = selected.current.width / 2; //todo: turn into instanceOf instead of string
 
-                selectionCircle.x = selected.current.x + offset;
-                selectionCircle.y = selected.current.y + offset;
+                //get center
+                selectionCircle.x = selected.current.center.x;
+                selectionCircle.y = selected.current.center.y;
                 selectionCircle.opacity = 100;
             }
             else selectionCircle.opacity = 0;

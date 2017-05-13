@@ -1,15 +1,18 @@
 class Transition extends Node {
-    constructor(x, y, radius, text, tokens) {
+    constructor(x, y, width, height, text, tokens) {
         super();
-        this.drawObject = this.createTransition(x, y, radius * 2, text, tokens)
+        this.drawObject = this.createTransition(x, y, width, height, text, tokens) //make width/heigth independent
         this.drawObject.classPointer = this;
-        this.namePlate = this.drawObject.children[1];;
+        this.namePlate = this.drawObject.children[0];
+        this.width = width;
+        this.height = height;
+        this.AddDragAndDrop();
     }
-
+    get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 } }
     //check if all incoming edges have > 0 tokens
     readyCheck(colorIndicator = true) {
         var isSated = true;
-        this.incomingEdges.forEach(function (element) { if (element.From.classPointer.tokens < 1) isSated = false; });
+        this.incomingEdges.forEach(function (element) { if (element.From.tokens < 1) isSated = false; });
 
         if (!colorIndicator) return isSated
 
@@ -22,7 +25,7 @@ class Transition extends Node {
     fire() {
         //consume
         this.incomingEdges.forEach(function (edge) {
-            var adj = edge.From.classPointer;
+            var adj = edge.From;
             adj.tokens -= 1;
             //adj.children[1].text = adj.tokens;
 
@@ -60,34 +63,28 @@ class Transition extends Node {
         });
     }
 
-    createTransition(x, y, radius, text) {
+    createTransition(x, y, width, height, text) {
         var transition = $canvas.display.rectangle({
             x: x, y: y,
-            width: radius,
-            height: radius,
+            width: width,
+            height: height,
             stroke: "5px red",
             name: text
         });
 
         var nodeText = $canvas.display.text({
-            x: radius / 2,
-            y: radius,
+            x: width / 2,
+            y: height,
             origin: { x: "center", y: "top" },
             font: "bold 30px sans-serif",
             text: text,
             fill: "#0ba"
         });
 
-        transition.bind("click tap", function (event) { state.currentState.transitionClick(this, event); });
-
+        transition.bind("click tap", function (event) { state.currentState.transitionClick(this.classPointer, event); });
         transition.bind("dblclick ", function (event) { });
 
-        AddDragAndDrop(transition);
-
         transition.addChild(nodeText);
-        transition.incomingEdges = []
-        transition.outgoingEdges = []
-        transition.nodeType = "transition";
         transition.classPointer = null;
         transition.add();
 
