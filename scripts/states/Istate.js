@@ -9,6 +9,12 @@ class Istate {
     SelectedButtonUpdate() { }
     keydownEvent() { }
     executionClick() { }
+    placeMouseEnter() { };
+    placeDoubleClick() { };
+    placeMouseLeave() { };
+    TransitionMouseEnter() { };
+    TransitionMouseLeave() { };
+    TransitionDoubleClick() { };
 }
 
 function switchToExecState(button) {

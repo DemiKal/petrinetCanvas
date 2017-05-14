@@ -47,4 +47,6 @@ class SelectionState extends Istate {
         deselect();
         switchToExecState(button);
     }
+
+    transitionDoubleClick(){}
 }

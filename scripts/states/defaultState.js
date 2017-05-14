@@ -1,7 +1,7 @@
 class DefaultState extends Istate {
     constructor() { super(); }
 
-    canvasClick(node, event) {
+    canvasClick(event) {
         //clicked on empty spot -> deselect
         deselect();
     }
@@ -25,16 +25,35 @@ class DefaultState extends Istate {
     }
 
     AddnodeClick(button) {
-        $nodes.push(new Place($canvas.width / 2, $canvas.height / 2, 50, "P" + Math.round(Math.random() * 100), Math.round(Math.random() * 10)));
+        AddPlace();
     }
-    AddEdgeClick() { console.log("select node first!") }
+
+    AddEdgeClick() { console.log("select  a node first!") }
 
     keydownEvent(event) {
-        if (event.which == 84) //= key T
-            $nodes.push(new Transition($canvas.mouse.x - 50, $canvas.mouse.y - 50, 100, 100, "T" + Math.round(Math.random() * 100), Math.round(Math.random() * 10)));//createTransition($canvas.mouse.x - 50, $canvas.mouse.y - 50, 100, "T" + Math.round(Math.random() * 100)));
-        if (event.which == 65)  //key A
-            $nodes.push(new Place($canvas.mouse.x, $canvas.mouse.y, 50, "P" + Math.round(Math.random() * 100), Math.round(Math.random() * 10)));
+        var pos = { x: $canvas.mouse.x, y: $canvas.mouse.y };
+        // key T
+        if (event.which == 84) AddTransition(pos)
+
+        //key A
+        if (event.which == 65) AddPlace(pos);
     }
 
     executionClick(button, event) { switchToExecState(button); }
+
+    placeMouseEnter(node, event) {
+        node.drawObject.stroke = "5px white"
+        node.drawObject.children[2].opacity = 1;    //set plus sign opacity to 0
+    };
+
+    placeMouseLeave(node, event) {
+        node.drawObject.stroke = "5px red"
+        node.drawObject.children[2].opacity = 0;    //set plus sign opacity to 0
+    };
+    TransitionMouseEnter(node, event) { node.drawObject.stroke = "5px white" };
+    TransitionMouseLeave(node, event) { node.drawObject.stroke = "5px red" };
+    transitionDoubleClick(node, event) { console.log('dbl clicked on transition in default state') };
+
 }
+
+

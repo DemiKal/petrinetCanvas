@@ -5,14 +5,10 @@ class Node extends DrawingObject {
     super();
     this.incomingEdges = [];
     this.outgoingEdges = [];
-
+    
   }
 
-  //change these
-  // get incomingEdges() { return this.drawObject.incomingEdges; }
-  // get outgoingEdges() { return this.drawObject.outgoingEdges; }
   get edges() { return this.outgoingEdges.concat(this.incomingEdges); }
-  get center() { }
   get name() { return this.namePlate.text; }
   set name(newname) {
     if (this.namePlate) namePlate.text = newname;

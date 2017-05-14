@@ -10,3 +10,4 @@ class ReachabilityState extends Istate {
     keydownEvent() { }
     executionClick() { }
 }
+

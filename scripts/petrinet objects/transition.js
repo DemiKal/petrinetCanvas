@@ -1,7 +1,7 @@
 class Transition extends Node {
-    constructor(x, y, width, height, text, tokens) {
+    constructor(x, y, width, height, text) {
         super();
-        this.drawObject = this.createTransition(x, y, width, height, text, tokens) //make width/heigth independent
+        this.drawObject = this.createTransition(x, y, width, height, text) //make width/heigth independent
         this.drawObject.classPointer = this;
         this.namePlate = this.drawObject.children[0];
         this.width = width;
@@ -82,7 +82,9 @@ class Transition extends Node {
         });
 
         transition.bind("click tap", function (event) { state.currentState.transitionClick(this.classPointer, event); });
-        transition.bind("dblclick ", function (event) { });
+        transition.bind("dblclick ", function (event) {state.currentState.transitionDoubleClick(this.classPointer, event); });
+        transition.bind("MouseEnter ", function (event) { state.currentState.TransitionMouseEnter(this.classPointer, event); });
+        transition.bind("MouseLeave ", function (event) { state.currentState.TransitionMouseLeave(this.classPointer, event); });
 
         transition.addChild(nodeText);
         transition.classPointer = null;

@@ -12,6 +12,11 @@ class Place extends Node {
     this.tokenAmount = tokens;
     this.originalTokens = this.tokenAmount;
     this.AddDragAndDrop();
+    this.extraButtons();
+
+
+    // this.selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: 55, stroke: "3px orange", opacity: 1});
+    //this.drawObject.add(this.selectionCircle)
   }
 
   get center() { return { x: this.x, y: this.y } }
@@ -20,10 +25,36 @@ class Place extends Node {
     this.tokenAmount = amount;
     this.tokensPlate.text = amount;
   }
+
+
+  extraButtons() {
+    //set plus sign
+    var stroke = "2px yellow";
+    var length = 10;
+    var line = $canvas.display.line({
+      start: { x: this.drawObject.radius * 1.2, y: 0 },
+      end: { x: this.drawObject.radius * 1.2 + length, y: 0 },
+      stroke: stroke,
+      cap: "round"
+    })
+
+    var line2 = $canvas.display.line({
+      start: { x: 0, y: - length / 2 },
+      end: { x: 0, y: length / 2 },
+      stroke: stroke,
+      cap: "round"
+    });
+
+    line.addChild(line2);
+    this.drawObject.addChild(line) //child  index 2
+    line.opacity = 0;
+
+    line.bind('click tap', function (event) { this.parent.classPointer.tokens++ });
+  }
 }
 
 function createNode(x, y, radius, text, tokens) {
-  var node = $canvas.display.ellipse({ x: x, y: y, radius: radius, stroke: '5px red', name: text });
+  var place = $canvas.display.ellipse({ x: x, y: y, radius: radius, stroke: '5px red', name: text });
   var nodeText = $canvas.display.text({
     x: 0, y: radius, origin: { x: 'center', y: 'top' },
     font: 'bold 30px sans-serif', text: text, fill: '#0ba'
@@ -35,18 +66,19 @@ function createNode(x, y, radius, text, tokens) {
   });
 
   //refer to state!
-  node.bind('click tap', function (event) { state.currentState.placeClick(node.classPointer, event); });
-  node.bind('dblclick ', function (event) { /*   fire(this);   */ });
+  place.bind('click tap', function (event) { state.currentState.placeClick(place.classPointer, event); });
+  place.bind('dblclick', function (event) { /*   fire(this);   */ });
+  place.bind('mouseenter', function (event) { state.currentState.placeMouseEnter(place.classPointer, event) });
+  place.bind('mouseleave', function (event) { state.currentState.placeMouseLeave(place.classPointer, event) });
 
-  node.addChild(nodeText);
-  node.addChild(tokenText);
-  node.add();
+  place.addChild(nodeText);
+  place.addChild(tokenText);
+  place.add();
   //remove!
-  node.tokens = tokens;
-  node.originalTokens = tokens;
-  node.nodeType = 'place';
+  place.tokens = tokens;
+  place.originalTokens = tokens;
+  place.nodeType = 'place';
 
-  node.classPointer = null;
-
-  return node;
+  place.classPointer = null;
+  return place;
 }
