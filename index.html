@@ -13,7 +13,14 @@
             .script('scripts/petrinet objects/place.js').wait()
             .script('scripts/petrinet objects/transition.js').wait()
             .script('scripts/petrinetState.js').wait()
-            .script('scripts/states.js').wait()
+            .script('scripts/states/Istate.js').wait()
+            .script('scripts/states/defaultState.js').wait()
+            .script('scripts/states/selectionState.js').wait()
+            .script('scripts/states/executionState.js').wait()
+            .script('scripts/states/edgePendingState.js').wait()
+            .script('scripts/states/reachabilityState.js').wait()
+            .script('scripts/states/state.js').wait()
+
             .script('scripts/mycanvas.js').wait(function () {
                 console.log('script loaded!');
             });

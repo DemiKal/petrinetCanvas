@@ -10,8 +10,6 @@ jQuery(document).ready(function ($) {
     petrinetStates = [];
     currentState = null;
 
-    var aa = new DrawingObject();
-
     mycanvas = document.getElementById("canvas");
     context = mycanvas.getContext("2d");
     mycanvas.width = $(window).width();
