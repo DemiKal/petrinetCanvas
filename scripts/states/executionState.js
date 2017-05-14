@@ -23,9 +23,9 @@ class ExecutionState extends Istate {
             console.log(currentState)
             console.log(currentState.id)
         }
-        $nodes.forEach(function (elem) { if (elem instanceof Transition) elem.readyCheck(); /*set color */ })
+        $transitions.forEach(function (elem) { elem.readyCheck(); /*set color */ })
     }
-    
+
     AddnodeClick(node, event) { }
     AddEdgeClick() { /* do nothing */ }
     keydownEvent() { }

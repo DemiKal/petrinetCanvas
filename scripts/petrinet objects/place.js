@@ -29,7 +29,7 @@ class Place extends Node {
 
   extraButtons() {
     //set plus sign
-    var stroke = "2px yellow";
+    var stroke = "4px yellow";
     var length = 10;
     var line = $canvas.display.line({
       start: { x: this.drawObject.radius * 1.2, y: 0 },
