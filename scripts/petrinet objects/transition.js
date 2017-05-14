@@ -9,7 +9,7 @@ class Transition extends Node {
         this.AddDragAndDrop();
     }
     get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 } }
-    
+
     //check if all incoming edges have > 0 tokens
     readyCheck(colorIndicator = true) {
         var isSated = true;
@@ -32,8 +32,7 @@ class Transition extends Node {
 
             var ball = $canvas.display.ellipse({
                 x: edge.start.x, y: edge.start.y,
-                radius: 20,
-                fill: "red",
+                radius: 20, fill: "red",
             }).add();
 
             ball.animate({ x: edge.end.x, y: edge.end.y, opacity: 0 },
@@ -42,7 +41,7 @@ class Transition extends Node {
 
         //produce
         this.outgoingEdges.forEach(function (element) {
-            var adj = element.To.classPointer;
+            var adj = element.To;
             adj.tokens++;
             // updateTokens(adj);
 

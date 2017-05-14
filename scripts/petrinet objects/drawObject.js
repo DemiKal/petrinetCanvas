@@ -36,17 +36,21 @@ class DrawingObject {
 
   get x() { return this.drawObject.x }
   set x(amount) { this.drawObject.x = amount }
- // get center() { return { x: this.x + this.width, y: this.y + this.width } }
+  // get center() { return { x: this.x + this.width, y: this.y + this.width } }
   get y() { return this.drawObject.y }
   set y(amount) { this.drawObject.y = amount }
   // Click = event => this.currentState.Click(event);
   // DoubleClick = event => this.currentState(event);
   // Keydown = event => this.currentState.Keydown(event);
   redraw() { this.drawObject.redraw(); }
+  
   initEventHandler() {
     this.DefaulState = new DefaultStateA();
     this.SelectionState = new SelectionStateA();
     this.ExecutionState = new ExecutionStateA();
     this.currentState = this.DefaulState;
   }
+
+  dragAndDrop(opt) { this.drawObject.dragAndDrop(opt); }
+   
 }

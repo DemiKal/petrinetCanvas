@@ -1,13 +1,13 @@
 class PetriNetState {
     constructor(fromState) {
         //from which state/node did it come from?
-        this.from = fromState
-        this.nextStates = []
-        this.activeTransitions = []
-        this.id = []
+        this.from = fromState;
+        this.nextStates = [];
+        this.activeTransitions = [];
+        this.id = [];
 
         for (var i = 0; i < $nodes.length; i++) {
-            var node = $nodes[i]
+            var node = $nodes[i];
             if (node instanceof Transition) {
                 if (node.readyCheck(false))
                     this.activeTransitions.push(node)
