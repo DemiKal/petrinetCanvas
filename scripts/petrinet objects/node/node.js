@@ -5,8 +5,11 @@ class Node extends DrawingObject {
     super();
     this.incomingEdges = [];
     this.outgoingEdges = [];
-    
+    this.selectionCircle = null;
   }
+
+  get selected() { return selectionCircle.opacity > 0 }
+  set selected(bool) { if (bool == true) selectionCircle.opacity = 1 }
 
   get edges() { return this.outgoingEdges.concat(this.incomingEdges); }
   get name() { return this.namePlate.text; }
@@ -53,7 +56,7 @@ class Node extends DrawingObject {
   }
 
   // RemoveDragAndDrop() { this.drawObject.dragAndDrop(false) }
-  
+
   AddDragAndDrop(opt) {
     this.drawObject.dragAndDrop({
       start: function () { nodeIsMoving = true },

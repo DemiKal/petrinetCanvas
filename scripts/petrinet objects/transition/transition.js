@@ -7,6 +7,13 @@ class Transition extends Node {
         this.width = width;
         this.height = height;
         this.AddDragAndDrop();
+
+        this.defaultState = new TransitionDefaultState(this);
+        this.edgePendingState = new TransitionEdgePendingState(this);
+        this.selectionState = new TransitionSelectionState(this);
+        this.executionState = new TransitionExecutionState(this);
+        this.currentState = this.defaultState;
+
     }
     get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 } }
 
@@ -81,10 +88,15 @@ class Transition extends Node {
             fill: "#0ba"
         });
 
-        transition.bind("click tap", function (event) { state.currentState.transitionClick(this.classPointer, event); });
-        transition.bind("dblclick ", function (event) {state.currentState.transitionDoubleClick(this.classPointer, event); });
-        transition.bind("MouseEnter ", function (event) { state.currentState.TransitionMouseEnter(this.classPointer, event); });
-        transition.bind("MouseLeave ", function (event) { state.currentState.TransitionMouseLeave(this.classPointer, event); });
+        // place.bind('click tap', function (event) { place.classPointer.currentState.Click(place.classPointer, event); });
+        // place.bind('dblclick', function (event) { /*   fire(this);   */ });
+        // place.bind('mouseenter', function (event) { place.classPointer.currentState.MouseEnter(place.classPointer, event) });
+        // place.bind('mouseleave', function (event) { place.classPointer.currentState.MouseLeave(place.classPointer, event) });
+
+        transition.bind("click tap", function (event) { transition.classPointer.currentState.Click(this.classPointer, event); });
+        transition.bind("dblclick", function (event) { transition.classPointer.currentState.DoubleClick(this.classPointer, event); });
+        transition.bind("mouseenter", function (event) { transition.classPointer.currentState.MouseEnter(this.classPointer, event); });
+        transition.bind("mouseleave", function (event) { transition.classPointer.currentState.MouseLeave(this.classPointer, event); });
 
         transition.addChild(nodeText);
         transition.classPointer = null;

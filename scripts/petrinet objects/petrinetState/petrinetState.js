@@ -11,7 +11,6 @@ class PetriNetState extends DrawingObject {
         this.readyTransitions();
         // this.drawObject = this.createStateNode();
 
-
         this.drawObject = this.createTransitionObject();
     }
 

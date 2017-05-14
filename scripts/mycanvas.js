@@ -9,6 +9,8 @@ jQuery(document).ready(function ($) {
     nodeIsMoving = false;
     petrinetStates = [];
     currentState = null;
+    $selectedNodes = [];
+    $stateManager = new StateManager();
 
     mycanvas = document.getElementById("canvas");
     context = mycanvas.getContext("2d");

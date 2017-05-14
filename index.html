@@ -8,11 +8,35 @@
             .script('scripts/3rd party/jquery-3.2.1.min.js').wait()
             .script('scripts/3rd party/ocanvas-2.8.7.js').wait()
             .script('scripts/3rd party/victor.js').wait()
-            .script('scripts/petrinet objects/drawObject.js').wait()
-            .script('scripts/petrinet objects/node.js').wait()
-            .script('scripts/petrinet objects/place.js').wait()
-            .script('scripts/petrinet objects/transition.js').wait()
-            .script('scripts/petrinet objects/petrinetState.js').wait()
+
+            .script('scripts/petrinet objects/drawObject/drawObject.js').wait()
+            .script('scripts/petrinet objects/drawObject/eventHandler.js').wait()
+
+            .script('scripts/petrinet objects/node/node.js').wait()
+            .script('scripts/petrinet objects/node/nodeHandler.js').wait()
+
+            .script('scripts/petrinet objects/petrinetState/petrinetState.js').wait()
+            .script('scripts/petrinet objects/petrinetState/states/PS_defaultState.js').wait()
+            .script('scripts/petrinet objects/petrinetState/states/PS_edgePendingState.js').wait()
+            .script('scripts/petrinet objects/petrinetState/states/PS_executionState.js').wait()
+            .script('scripts/petrinet objects/petrinetState/states/PS_selectionState.js').wait()
+            .script('scripts/petrinet objects/petrinetState/states/PS_simulationState.js').wait()
+
+            .script('scripts/petrinet objects/place/place.js').wait()
+            .script('scripts/petrinet objects/place/states/placeDefaultState.js').wait()
+            .script('scripts/petrinet objects/place/states/placeEdgePendingState.js').wait()
+            .script('scripts/petrinet objects/place/states/placeExecutionState.js').wait()
+            .script('scripts/petrinet objects/place/states/placeSelectionState.js').wait()
+            .script('scripts/petrinet objects/place/states/placeSimulationState.js').wait()
+
+            .script('scripts/petrinet objects/transition/transition.js').wait()
+            .script('scripts/petrinet objects/transition/states/transitionEdgePendingState.js').wait()
+            .script('scripts/petrinet objects/transition/states/transitionExecutionState.js').wait()
+            .script('scripts/petrinet objects/transition/states/transitionSelectionState.js').wait()
+            .script('scripts/petrinet objects/transition/states/transitionDefaultState.js').wait()
+            .script('scripts/petrinet objects/transition/states/transitionSimulationState.js').wait()
+
+            //old state vars soon to be deleted
             .script('scripts/states/Istate.js').wait()
             .script('scripts/states/defaultState.js').wait()
             .script('scripts/states/selectionState.js').wait()
@@ -20,6 +44,7 @@
             .script('scripts/states/edgePendingState.js').wait()
             .script('scripts/states/reachabilityState.js').wait()
             .script('scripts/states/state.js').wait()
+            .script('scripts/states/stateManager.js').wait()
 
             .script('scripts/mycanvas.js').wait(function () {
                 console.log('script loaded!');

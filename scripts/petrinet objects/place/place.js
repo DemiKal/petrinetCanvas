@@ -14,7 +14,11 @@ class Place extends Node {
     this.AddDragAndDrop();
     this.extraButtons();
 
-
+    this.defaultState = new placeDefaultState(this);
+    this.edgePending = new placeEdgePendingState(this);
+    this.selectionState = new placeSelectionState(this);
+    this.executionState = new placeExecutionState(this);
+    this.currentState = this.defaultState;
     // this.selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: 55, stroke: "3px orange", opacity: 1});
     //this.drawObject.add(this.selectionCircle)
   }
@@ -35,7 +39,8 @@ class Place extends Node {
       start: { x: this.drawObject.radius * 1.2, y: 0 },
       end: { x: this.drawObject.radius * 1.2 + length, y: 0 },
       stroke: stroke,
-      cap: "round"
+      cap: "round",
+      opacity: 0
     })
 
     var line2 = $canvas.display.line({
@@ -47,8 +52,9 @@ class Place extends Node {
 
     line.addChild(line2);
     this.drawObject.addChild(line) //child  index 2
-    line.opacity = 0;
+   
 
+    //TODO MAKE OWN CLASS WITH STATE
     line.bind('click tap', function (event) { this.parent.classPointer.tokens++ });
   }
 }
@@ -65,12 +71,6 @@ function createNode(x, y, radius, text, tokens) {
     font: 'bold 30px sans-serif', text: tokens, fill: '#0ba'
   });
 
-  //refer to state!
-  place.bind('click tap', function (event) { state.currentState.placeClick(place.classPointer, event); });
-  place.bind('dblclick', function (event) { /*   fire(this);   */ });
-  place.bind('mouseenter', function (event) { state.currentState.placeMouseEnter(place.classPointer, event) });
-  place.bind('mouseleave', function (event) { state.currentState.placeMouseLeave(place.classPointer, event) });
-
   place.addChild(nodeText);
   place.addChild(tokenText);
   place.add();
@@ -80,5 +80,19 @@ function createNode(x, y, radius, text, tokens) {
   place.nodeType = 'place';
 
   place.classPointer = null;
+
+  //refer to state!
+  place.bind('click tap', function (event) { place.classPointer.currentState.Click(place.classPointer, event); });
+  place.bind('dblclick', function (event) { /*   fire(this);   */ });
+  place.bind('mouseenter', function (event) { place.classPointer.currentState.MouseEnter(place.classPointer, event) });
+  place.bind('mouseleave', function (event) { place.classPointer.currentState.MouseLeave(place.classPointer, event) });
+
+  var selectionCircleColor = "3px orange"
+  selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: radius * 1.1, stroke: selectionCircleColor, opacity: 0 });
+
+  place.addChild(selectionCircle);
+
+
+
   return place;
 }

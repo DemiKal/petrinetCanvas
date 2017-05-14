@@ -8,6 +8,11 @@ class DrawingObject {
     this.width = 0;
     this.height = 0;
 
+    this.defaultState = null;
+    this.edgePending = null;
+    this.selectionState = null;
+    this.executionState = null;
+    this.currentState = null;
   }
 
   get x() { return this.drawObject.x }
@@ -16,7 +21,10 @@ class DrawingObject {
   set y(amount) { this.drawObject.y = amount; }
 
   redraw() { this.drawObject.redraw(); }
-
   dragAndDrop(opt) { this.drawObject.dragAndDrop(opt); }
 
+  Click(classPointer, event) { this.currentState.Click(); }
+  DoubleClick(classPointer, event) { this.currentState.DoubleClick(); }
+  MouseEnter(classPointer, event) { this.currentState.MouseEnter(); }
+  MouseLeave(classPointer, event) { this.currentState.MouseLeave(); }
 }
