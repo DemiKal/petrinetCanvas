@@ -15,12 +15,13 @@ class Transition extends Node {
         this.currentState = this.defaultState;
 
         this.selectionCircle = $canvas.display.rectangle({
-            x: -0.05* this.width  ,
-            y: -0.05*this.height   ,
+            x: -0.05 * this.width,
+            y: -0.05 * this.height,
             width: this.width * 1.1,
-            height:this.height * 1.1,
+            height: this.height * 1.1,
             stroke: "3px orange",
-            opacity: 0});
+            opacity: 0
+        });
 
         this.drawObject.addChild(this.selectionCircle);
     }
@@ -62,11 +63,7 @@ class Transition extends Node {
             adj.tokens++;
             // updateTokens(adj);
 
-            var ball = $canvas.display.ellipse({
-                x: element.start.x, y: element.start.y,
-                radius: 20,
-                fill: "red",
-            }).add();
+            var ball = $canvas.display.ellipse({ x: element.start.x, y: element.start.y, radius: 20, fill: "red", }).add();
 
             ball.animate({
                 x: element.end.x,
@@ -97,11 +94,6 @@ class Transition extends Node {
             text: text,
             fill: "#0ba"
         });
-
-        // place.bind('click tap', function (event) { place.classPointer.currentState.Click(place.classPointer, event); });
-        // place.bind('dblclick', function (event) { /*   fire(this);   */ });
-        // place.bind('mouseenter', function (event) { place.classPointer.currentState.MouseEnter(place.classPointer, event) });
-        // place.bind('mouseleave', function (event) { place.classPointer.currentState.MouseLeave(place.classPointer, event) });
 
         transition.bind("click tap", function (event) { transition.classPointer.currentState.Click(event); });
         transition.bind("dblclick", function (event) { transition.classPointer.currentState.DoubleClick(event); });

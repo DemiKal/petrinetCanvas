@@ -8,20 +8,17 @@ class Node extends DrawingObject {
     this.selectionCircle = null;
   }
 
-  Select(){
-      selected.children[0].text = "Selected: " + this.name;
-      if (selected.current)
-      {  selected.current.selected = false;}
+  Select() {
+    selected.name = "Selected: " + this.name;
+    if (selected.current) { selected.current.selected = false; }
 
-      selected.current = this; //is wrapper class
-
-      $selectedNodes = this;
-
-      this.selected = true;
-
+    selected.current = this;
+    $selectedNodes = this;
+    this.selected = true;
   }
+
   get selected() { return this.selectionCircle.opacity > 0 }
-  set selected(bool) { bool ? this.selectionCircle.opacity = 1 : this.selectionCircle.opacity = 0 ;  this.redraw();}
+  set selected(bool) { bool ? this.selectionCircle.opacity = 1 : this.selectionCircle.opacity = 0; this.redraw(); }
 
   get edges() { return this.outgoingEdges.concat(this.incomingEdges); }
   get name() { return this.namePlate.text; }

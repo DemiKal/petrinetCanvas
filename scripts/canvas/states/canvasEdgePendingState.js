@@ -1,4 +1,4 @@
-class canvasSelectionState {
+class canvasEdgePendingState {
     constructor() { }
 
     Click(event) {
@@ -10,7 +10,7 @@ class canvasSelectionState {
         });
 
         selected.current = null;
-        selected.name = "None selected";
+        selected.children[0].text = "None selected";
         selected.redraw();
 
     }
@@ -19,11 +19,17 @@ class canvasSelectionState {
     MouseUp(event) { }
     MouseMove(event) { }
     KeyDown(event) {
-        if (event.which == 69) //simulate clicking on adding edge button by pressing E
-        //TODO: add edge 
-        { }
+        //press any button to remove the pending edge
+
+        edgePending.remove();
+        edgePending = null;
+
+        $stateManager.SwitchToSelectionState();
+
     }
-    KeyPress(event) { }
+
+    KeyPress(event) {
+    }
+
     KeyUp(event) { }
 }
-

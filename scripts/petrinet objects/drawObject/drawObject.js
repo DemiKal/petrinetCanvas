@@ -7,11 +7,13 @@ class DrawingObject {
     this.selectionCircle = null;
     this.width = 0;
     this.height = 0;
-
+    this.namePlate = null;
     this.defaultState = null;
     this.selectionState = null;
     this.executionState = null;
     this.currentState = null;
+
+    //refer in drawobject to this?
   }
 
   get x() { return this.drawObject.x }
@@ -22,8 +24,8 @@ class DrawingObject {
   redraw() { this.drawObject.redraw(); }
   dragAndDrop(opt) { this.drawObject.dragAndDrop(opt); }
 
-  Click(classPointer, event) { this.currentState.Click(); }
-  DoubleClick(classPointer, event) { this.currentState.DoubleClick(); }
-  MouseEnter(classPointer, event) { this.currentState.MouseEnter(); }
-  MouseLeave(classPointer, event) { this.currentState.MouseLeave(); }
+  // Click(classPointer, event) { this.currentState.Click(); }
+  // DoubleClick(classPointer, event) { this.currentState.DoubleClick(); }
+  // MouseEnter(classPointer, event) { this.currentState.MouseEnter(); }
+  // MouseLeave(classPointer, event) { this.currentState.MouseLeave(); }
 }

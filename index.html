@@ -5,12 +5,47 @@
 
     <script>
         $LAB
+            //3rd party
             .script('scripts/3rd party/jquery-3.2.1.min.js').wait()
             .script('scripts/3rd party/ocanvas-2.8.7.js').wait()
             .script('scripts/3rd party/victor.js').wait()
 
+            //canvas
+            .script('scripts/canvas/states/canvasDefaultState.js').wait()
+            .script('scripts/canvas/states/canvasEdgePendingState.js').wait()
+            .script('scripts/canvas/states/canvasExecutionState.js').wait()
+            .script('scripts/canvas/states/canvasSelectionState.js').wait()
+            .script('scripts/canvas/canvas.js').wait()
+
+            //petri net objects
             .script('scripts/petrinet objects/drawObject/drawObject.js').wait()
             .script('scripts/petrinet objects/drawObject/eventHandler.js').wait()
+            .script('scripts/petrinet objects/button/button.js').wait()
+
+            //buttons
+            .script('scripts/petrinet objects/button/add edge button/states/addEdgeDefaultState.js').wait()
+            .script('scripts/petrinet objects/button/add edge button/states/addEdgeEdgePendingState.js').wait()
+            .script('scripts/petrinet objects/button/add edge button/states/addEdgeExecutionState.js').wait()
+            .script('scripts/petrinet objects/button/add edge button/states/addEdgeSelectionState.js').wait()
+            .script('scripts/petrinet objects/button/add edge button/addEdgeButton.js').wait()
+
+            .script('scripts/petrinet objects/button/add place button/states/addPlaceDefaultState.js').wait()
+            .script('scripts/petrinet objects/button/add place button/states/addPlaceEdgePendingState.js').wait()
+            .script('scripts/petrinet objects/button/add place button/states/addPlaceExecutionState.js').wait()
+            .script('scripts/petrinet objects/button/add place button/states/addPlaceSelectionState.js').wait()
+            .script('scripts/petrinet objects/button/add place button/addPlaceButton.js').wait()
+
+            .script('scripts/petrinet objects/button/add transition button/states/addTransitionDefaultState.js').wait()
+            .script('scripts/petrinet objects/button/add transition button/states/addTransitionEdgePendingState.js').wait()
+            .script('scripts/petrinet objects/button/add transition button/states/addTransitionExecutionState.js').wait()
+            .script('scripts/petrinet objects/button/add transition button/states/addTransitionSelectionState.js').wait()
+            .script('scripts/petrinet objects/button/add transition button/addTransitionButton.js').wait()
+
+            .script('scripts/petrinet objects/button/execution button/states/executionButtonDefaultState.js').wait()
+            .script('scripts/petrinet objects/button/execution button/states/executionButtonEdgePendingState.js').wait()
+            .script('scripts/petrinet objects/button/execution button/states/executionButtonExecutionState.js').wait()
+            .script('scripts/petrinet objects/button/execution button/states/executionButtonSelectionState.js').wait()
+            .script('scripts/petrinet objects/button/execution button/executionButton.js').wait()
 
             .script('scripts/petrinet objects/node/node.js').wait()
             .script('scripts/petrinet objects/node/nodeHandler.js').wait()
@@ -37,18 +72,18 @@
             .script('scripts/petrinet objects/transition/states/transitionSimulationState.js').wait()
 
             //old state vars soon to be deleted
-            .script('scripts/states/Istate.js').wait()
-            .script('scripts/states/defaultState.js').wait()
-            .script('scripts/states/selectionState.js').wait()
-            .script('scripts/states/executionState.js').wait()
-            .script('scripts/states/edgePendingState.js').wait()
-            .script('scripts/states/reachabilityState.js').wait()
-            .script('scripts/states/state.js').wait()
-            .script('scripts/canvas/states/canvasDefaultState.js').wait()
-            .script('scripts/canvas/states/canvasExecutionState.js').wait()
-            .script('scripts/canvas/states/canvasSelectionState.js').wait()
+            // .script('scripts/states/Istate.js').wait()
+            // .script('scripts/states/defaultState.js').wait()
+            // .script('scripts/states/selectionState.js').wait()
+            // .script('scripts/states/executionState.js').wait()
+            // .script('scripts/states/edgePendingState.js').wait()
+            // .script('scripts/states/reachabilityState.js').wait()
+            // .script('scripts/states/state.js').wait()
+            // .script('scripts/canvas/states/canvasDefaultState.js').wait()
+            // .script('scripts/canvas/states/canvasExecutionState.js').wait()
+            // .script('scripts/canvas/states/canvasSelectionState.js').wait()
 
-             .script('scripts/states/stateManager.js').wait()
+            .script('scripts/states/stateManager.js').wait()
 
             .script('scripts/mycanvas.js').wait(function () {
                 console.log('script loaded!');
