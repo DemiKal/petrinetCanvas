@@ -1,12 +1,15 @@
 class TransitionSelectionState extends IEventHandler {
     constructor(parent) { super(parent); }
-    Click() { console.log('clicked on transition from selectionstate') }
-    DoubleClick() { }
+    Click(event) {
+        this.parent.Select();
+        event.stopPropagation();
+    }
+    DoubleClick(event) { }
    
-    MouseEnter() {
+    MouseEnter(event) {
         this.parent.drawObject.stroke = "5px white"
     }
-    MouseLeave() {
+    MouseLeave(event) {
         this.parent.drawObject.stroke = "5px red"
     }
 }

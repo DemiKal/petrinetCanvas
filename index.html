@@ -44,7 +44,11 @@
             .script('scripts/states/edgePendingState.js').wait()
             .script('scripts/states/reachabilityState.js').wait()
             .script('scripts/states/state.js').wait()
-            .script('scripts/states/stateManager.js').wait()
+            .script('scripts/canvas/states/canvasDefaultState.js').wait()
+            .script('scripts/canvas/states/canvasExecutionState.js').wait()
+            .script('scripts/canvas/states/canvasSelectionState.js').wait()
+
+             .script('scripts/states/stateManager.js').wait()
 
             .script('scripts/mycanvas.js').wait(function () {
                 console.log('script loaded!');

@@ -1,7 +1,7 @@
 class Transition extends Node {
     constructor(x, y, width, height, text) {
         super();
-        this.drawObject = this.createTransition(x, y, width, height, text) //make width/heigth independent
+        this.drawObject = this.createTransition(x, y, width, height, text); //make width/heigth independent
         this.drawObject.classPointer = this;
         this.namePlate = this.drawObject.children[0];
         this.width = width;
@@ -14,7 +14,17 @@ class Transition extends Node {
         this.executionState = new TransitionExecutionState(this);
         this.currentState = this.defaultState;
 
+        this.selectionCircle = $canvas.display.rectangle({
+            x: -0.05* this.width  ,
+            y: -0.05*this.height   ,
+            width: this.width * 1.1,
+            height:this.height * 1.1,
+            stroke: "3px orange",
+            opacity: 0});
+
+        this.drawObject.addChild(this.selectionCircle);
     }
+
     get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 } }
 
     //check if all incoming edges have > 0 tokens
@@ -22,7 +32,7 @@ class Transition extends Node {
         var isSated = true;
         this.incomingEdges.forEach(function (element) { if (element.From.tokens < 1) isSated = false; });
 
-        if (!colorIndicator) return isSated
+        if (!colorIndicator) return isSated;
 
         if (isSated) this.drawObject.stroke = "5px green";
         else this.drawObject.stroke = "5px red";
@@ -93,10 +103,10 @@ class Transition extends Node {
         // place.bind('mouseenter', function (event) { place.classPointer.currentState.MouseEnter(place.classPointer, event) });
         // place.bind('mouseleave', function (event) { place.classPointer.currentState.MouseLeave(place.classPointer, event) });
 
-        transition.bind("click tap", function (event) { transition.classPointer.currentState.Click(this.classPointer, event); });
-        transition.bind("dblclick", function (event) { transition.classPointer.currentState.DoubleClick(this.classPointer, event); });
-        transition.bind("mouseenter", function (event) { transition.classPointer.currentState.MouseEnter(this.classPointer, event); });
-        transition.bind("mouseleave", function (event) { transition.classPointer.currentState.MouseLeave(this.classPointer, event); });
+        transition.bind("click tap", function (event) { transition.classPointer.currentState.Click(event); });
+        transition.bind("dblclick", function (event) { transition.classPointer.currentState.DoubleClick(event); });
+        transition.bind("mouseenter", function (event) { transition.classPointer.currentState.MouseEnter(event); });
+        transition.bind("mouseleave", function (event) { transition.classPointer.currentState.MouseLeave(event); });
 
         transition.addChild(nodeText);
         transition.classPointer = null;

@@ -1,21 +1,21 @@
 class TransitionDefaultState extends IEventHandler {
     constructor(parent) { super(parent); }
-    Click() {
-        selected.children[0].text = "Selected: " + this.parent.name;
-        selected.current = this.parent;
-        selected.redraw();
+    Click(event) {
+        this.parent.Select();
         event.stopPropagation();
 
         $stateManager.SwitchToSelectionState();
+
+
     }
 
-    DoubleClick() {
+    DoubleClick(event) {
         console.log('DOUBLEclicked on transition in default state')
     }
-    MouseEnter() {
+    MouseEnter(event) {
         this.parent.drawObject.stroke = "5px white"
     }
-    MouseLeave() {
+    MouseLeave(event) {
         this.parent.drawObject.stroke = "5px red"
     }
 }

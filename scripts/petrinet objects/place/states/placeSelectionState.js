@@ -1,11 +1,16 @@
 class placeSelectionState extends IEventHandler {
     constructor(parent) { super(parent); }
-    Click() { console.log('clicked on place from selectionstate') }
-    DoubleClick() { }
-    MouseEnter() {
+    Click(event) {
+        //switch to selected
+        this.parent.Select();
+
+         event.stopPropagation();
+    }
+    DoubleClick(event) { }
+    MouseEnter(event) {
         this.parent.drawObject.stroke = "5px white"
     }
-    MouseLeave() {
+    MouseLeave(event) {
         this.parent.drawObject.stroke = "5px red"
     }
 }

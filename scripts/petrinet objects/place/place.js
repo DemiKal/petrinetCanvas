@@ -19,7 +19,11 @@ class Place extends Node {
     this.selectionState = new placeSelectionState(this);
     this.executionState = new placeExecutionState(this);
     this.currentState = this.defaultState;
-    // this.selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: 55, stroke: "3px orange", opacity: 1});
+
+    this.selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: this.radius * 1.1, stroke: "3px orange", opacity: 0});
+    this.drawObject.addChild(this.selectionCircle);
+
+      // this.selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: 55, stroke: "3px orange", opacity: 1});
     //this.drawObject.add(this.selectionCircle)
   }
 
@@ -57,6 +61,8 @@ class Place extends Node {
     //TODO MAKE OWN CLASS WITH STATE
     line.bind('click tap', function (event) { this.parent.classPointer.tokens++ });
   }
+
+
 }
 
 function createNode(x, y, radius, text, tokens) {
@@ -82,10 +88,10 @@ function createNode(x, y, radius, text, tokens) {
   place.classPointer = null;
 
   //refer to state!
-  place.bind('click tap', function (event) { place.classPointer.currentState.Click(place.classPointer, event); });
+  place.bind('click tap', function (event) { place.classPointer.currentState.Click(event); });
   place.bind('dblclick', function (event) { /*   fire(this);   */ });
-  place.bind('mouseenter', function (event) { place.classPointer.currentState.MouseEnter(place.classPointer, event) });
-  place.bind('mouseleave', function (event) { place.classPointer.currentState.MouseLeave(place.classPointer, event) });
+  place.bind('mouseenter', function (event) { place.classPointer.currentState.MouseEnter(event) });
+  place.bind('mouseleave', function (event) { place.classPointer.currentState.MouseLeave(event) });
 
   var selectionCircleColor = "3px orange"
   selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: radius * 1.1, stroke: selectionCircleColor, opacity: 0 });

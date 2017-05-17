@@ -9,7 +9,6 @@ class DrawingObject {
     this.height = 0;
 
     this.defaultState = null;
-    this.edgePending = null;
     this.selectionState = null;
     this.executionState = null;
     this.currentState = null;

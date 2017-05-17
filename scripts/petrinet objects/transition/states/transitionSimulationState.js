@@ -1,7 +1,7 @@
 class TransitionSimulationState extends IEventHandler {
     constructor(parent) { super(parent); }
-    Click() { }
-    DoubleClick() { }
-    MouseEnter() { }
-    MouseLeave() { }
+    Click(event) { }
+    DoubleClick(event) { }
+    MouseEnter(event) { }
+    MouseLeave(event) { }
 }

@@ -9,15 +9,15 @@ class EdgePendingState extends Istate {
         var newEdge = createEdge(selected.current, node);
 
         // selected.current = null;
-        edgePending.remove();
-        edgePending = null;
-        event.stopPropagation();
-        //switch states
-        state.currentState = state.selectionState;
+        // edgePending.remove();
+        // edgePending = null;
+        // event.stopPropagation();
+        // //switch states
+        // state.currentState = state.selectionState;
     }
 
     transitionClick(node, event) {
-        if (!edgePlacementValidation(node)) return;
+       /* if (!edgePlacementValidation(node)) return;
 
         var newEdge = createEdge(selected.current, node);
         //selected.current = null;
@@ -25,7 +25,7 @@ class EdgePendingState extends Istate {
         edgePending = null;
         event.stopPropagation();
         //switch states
-        state.currentState = state.selectionState;
+        state.currentState = state.selectionState;*/
     }
 
     AddnodeClick() { }

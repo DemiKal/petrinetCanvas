@@ -7,18 +7,18 @@ class SelectionState extends Istate {
     }
 
     placeClick(node, event) {
-        //switch to selected
-        selected.children[0].text = "Selected: " + node.name;
-        selected.current = node;
-        selected.redraw();
-        event.stopPropagation();
+        // //switch to selected
+        // selected.children[0].text = "Selected: " + node.name;
+        // selected.current = node;
+        // selected.redraw();
+        // event.stopPropagation();
     }
 
     transitionClick(node, event) {
-        selected.children[0].text = "Selected: " + node.name;
-        selected.current = node;
-        selected.redraw();
-        event.stopPropagation();
+        // selected.children[0].text = "Selected: " + node.name;
+        // selected.current = node;
+        // selected.redraw();
+        // event.stopPropagation();
     }
 
     AddnodeClick() { }

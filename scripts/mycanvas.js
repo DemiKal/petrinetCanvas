@@ -1,4 +1,7 @@
 jQuery(document).ready(function ($) {
+
+
+
     //global vars
     $nodes = [];
     $transitions = [];   //not used yet
@@ -27,6 +30,11 @@ jQuery(document).ready(function ($) {
         fps: 60,
     });
 
+    $canvas.defaultState = new canvasDefaultState();
+    $canvas.selectionState = new canvasSelectionState;
+    $canvas.executionState = new canvasExecutionState;
+    $canvas.currentState = $canvas.defaultState;
+
     //bool for selection box display
     var dragging;
     var selectionBox = $canvas.display.rectangle({
@@ -39,42 +47,41 @@ jQuery(document).ready(function ($) {
     }).add();
 
     //right click on canvas override
-    $canvasDOM.contextmenu(function () {
-        return false;
+    $canvasDOM.contextmenu(function () { return false; });
+
+    $canvas.bind("click tap", function (event) {        this.currentState.Click(event);    });
+    $canvas.bind("mouseup", function (event) {
+        this.currentState.MouseUp(event);
+
+        // dragging = false;
+        // selectionBox.opacity = 0;
+        // selectionBox.x = 0;
+        // selectionBox.y = 0;
+        // selectionBox.width = 0;
+        // selectionBox.height = 0;
     });
 
-    $canvas.bind("click tap", function (event) { state.currentState.canvasClick(event); });
+    $canvas.bind("mousemove", function (event) {
+        this.currentState.MouseMove(event);
 
-    $canvas.bind("mouseup", function () {
-        dragging = false;
-        selectionBox.opacity = 0;
-        selectionBox.x = 0;
-        selectionBox.y = 0;
-        selectionBox.width = 0;
-        selectionBox.height = 0;
+
+        // if (edgePending) {
+        //     edgePending.end = { x: $canvas.mouse.x, y: $canvas.mouse.y };
+        //     edgePending.redraw();
+        // }
+        //
+        // if (dragging && !nodeIsMoving) {
+        //     selectionBox.opacity = 0.5;
+        //     selectionBox.width = $canvas.mouse.x - selectionBox.x;
+        //     selectionBox.height = $canvas.mouse.y - selectionBox.y;
+        // }
     });
 
-    $canvas.bind("mousemove", function () {
-        if (edgePending) {
-            edgePending.end = { x: $canvas.mouse.x, y: $canvas.mouse.y };
-            edgePending.redraw();
-        }
+    $canvas.bind("mousedown", function (event) {this.currentState.MouseDown(event);});
+    $canvas.bind("keydown", function (event) { this.currentState.KeyDown(event); });
+    $canvas.bind("keypress", function (event) { this.currentState.KeyPress(event); });
+    $canvas.bind("keyup", function (event) { this.currentState.KeyUp(event); });
 
-        if (dragging && !nodeIsMoving) {
-            selectionBox.opacity = 0.5;
-            selectionBox.width = $canvas.mouse.x - selectionBox.x;
-            selectionBox.height = $canvas.mouse.y - selectionBox.y;
-        }
-    });
-
-    $canvas.bind("mousedown", function (event) {
-        dragging = true;
-        selectionBox.x = $canvas.mouse.x;
-        selectionBox.y = $canvas.mouse.y;
-        selectionBox.opacity = 0.5;
-    })
-
-    $canvas.bind("keydown", function (event) { state.currentState.keydownEvent(event); })
 
     initMenu();
 
@@ -104,22 +111,6 @@ jQuery(document).ready(function ($) {
 
         selected = createButton(230, 10, 100, 50, "None selected");
         selected.current = null
-        var selectionCircle = $canvas.display.ellipse({ x: 5, y: 50, radius: 55, stroke: "3px orange", }).add();
-
-        var coords = createButton(10, 70, 100, 50, "x/y");
-        $canvas.setLoop(function () {
-            coords.children[0].text = "X: " + $canvas.mouse.x + " / Y: " + $canvas.mouse.y;;
-
-            //TODO STATE
-            if (selected.current) {
-
-                //get center
-                selectionCircle.x = selected.current.center.x;
-                selectionCircle.y = selected.current.center.y;
-                selectionCircle.opacity = 100;
-            }
-            else selectionCircle.opacity = 0;
-        }).start();
 
         var executionButton = createButton(340, 10, 100, 50, "Execute");
         executionButton.bind("mouseenter", function (event) { this.fill = "orange"; this.redraw() });
