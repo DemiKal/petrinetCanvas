@@ -4,6 +4,7 @@ jQuery(document).ready(function ($) {
     $nodes = [];
     $transitions = [];   //not used yet
     $edges = [];      //not used yet
+    $PNstates = [];
     $places = [];
     selected = null;
     edgePending = null;
@@ -35,7 +36,7 @@ jQuery(document).ready(function ($) {
     $canvas.edgePendingState = new canvasEdgePendingState();
     $canvas.currentState = $canvas.defaultState;
 
-    //bool for selection box display
+    //bool for selection box display. NYI
     $dragging = false;
     $selectionBox = $canvas.display.rectangle({
         x: 0, y: 0, width: 0, height: 0, fill: "#0aa", opacity: 0

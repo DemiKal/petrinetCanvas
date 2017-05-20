@@ -3,10 +3,12 @@ class canvasExecutionState{
 
     Click(event) {
         /// /set current place as selected
-        console.log('clicked canvas in execution');
+      //  console.log('clicked canvas in execution');
 
     }
-    DoubleClick(event){ console.log('DOUBLEclicked canvas') }
+    DoubleClick(event){ 
+        //console.log('DOUBLEclicked canvas')
+     }
 
     MouseDown(event){
  

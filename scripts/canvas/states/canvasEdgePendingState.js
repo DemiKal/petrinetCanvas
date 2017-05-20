@@ -2,7 +2,7 @@ class canvasEdgePendingState {
     constructor() { }
 
     Click(event) {
-        console.log('clicked canvas in edgepending state');
+       // console.log('clicked canvas in edgepending state');
         // $stateManager.SwitchToDefaultState();
 
         // $nodes.forEach(function (item) {
@@ -13,10 +13,14 @@ class canvasEdgePendingState {
         // selected.name = "None selected";
         // selected.redraw();
 
-        console.log('click on a node to create an edge')
+       // console.log('click on a node to create an edge')
     }
-    DoubleClick(event) { console.log('DOUBLEclicked canvas ss') }
-    MouseDown(event) { console.log('mousedown canvas ss'); }
+    DoubleClick(event) { 
+        //console.log('DOUBLEclicked canvas ss') 
+    }
+    MouseDown(event) {
+        // console.log('mousedown canvas ss');
+     }
     MouseUp(event) { }
     MouseMove(event) {
         edgePending.end = { x: $canvas.mouse.x, y: $canvas.mouse.y };

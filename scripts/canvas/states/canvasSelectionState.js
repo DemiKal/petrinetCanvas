@@ -2,14 +2,18 @@ class canvasSelectionState {
     constructor() { }
 
     Click(event) {
-        console.log('clicked canvas in selectState');
+        // console.log('clicked canvas in selectState');
         $stateManager.SwitchToDefaultState();
 
         deselect();
 
     }
-    DoubleClick(event) { console.log('DOUBLEclicked canvas ss') }
-    MouseDown(event) { console.log('mousedown canvas ss'); }
+    DoubleClick(event) {
+        //console.log('DOUBLEclicked canvas ss') 
+    }
+    MouseDown(event) {
+        //console.log('mousedown canvas ss'); 
+    }
     MouseUp(event) { }
     MouseMove(event) { }
     KeyDown(event) {

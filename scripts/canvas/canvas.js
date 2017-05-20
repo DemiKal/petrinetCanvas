@@ -19,6 +19,17 @@ function SpawnTransition(pos) {
     $transitions.push(trans);
 }
 
+function SpawnPNState(pos) {
+    position = { x: $canvas.width / 2, y: $canvas.height / 2 };
+    if (pos) position = pos;
+    var width = 200;
+    var height = 100
+
+    var pnstate = new PetriNetState(pos.x - width / 2, pos.y - height / 2, width, height)
+    $nodes.push(pnstate);
+    $PNstates.push(pnstate);
+}
+
 function TryEdge(node) {
     if (!edgePlacementValidation(node)) return;
 

@@ -1,7 +1,7 @@
-class petrinetExecutionState extends IEventHandler {
+class PS_ExecutionState extends IEventHandler {
     constructor(parent) { super(parent); }
-        Click(){}
-    DoubleClick(){}
-    MouseEnter(){}
-    MouseLeave(){}
+    Click() { }
+    DoubleClick() { }
+    MouseEnter() { }
+    MouseLeave() { }
 }

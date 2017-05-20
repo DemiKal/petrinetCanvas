@@ -11,6 +11,7 @@ class ExecutionButtonDefaultState extends IEventHandler {
         this.parent.namePlate.fill = "red";
         this.parent.namePlate.redraw();
 
+       // currentState = new PetriNetState(null);
     }
 
     DoubleClick(event) {
@@ -23,6 +24,7 @@ class ExecutionButtonDefaultState extends IEventHandler {
     MouseLeave(event) {
 
     }
+
     readyCheckTransitions() {
         $nodes.forEach(function (node) {
             if (node instanceof Transition)

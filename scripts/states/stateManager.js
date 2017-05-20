@@ -51,6 +51,7 @@ class StateManager {
         });
     }
 
+    //old code
     petriNetSimulation() {
         state.currentState = state.executionState;
         button.children[0].text = "Execution Mode";
@@ -64,4 +65,4 @@ class StateManager {
     }
 
 
-    }
+}

@@ -8,14 +8,14 @@ class canvasDefaultState {
 
     DoubleClick(event) { }
     MouseDown(event) {
-       // this.initSelectionBox();
+        // this.initSelectionBox();
 
     }
     MouseUp(event) {
-       // this.hideSelectionBox()
+        // this.hideSelectionBox()
     }
     MouseMove(event) {
-       // this.selectionBoxDragging()
+        // this.selectionBoxDragging()
     }
 
     KeyDown(event) {
@@ -26,6 +26,10 @@ class canvasDefaultState {
 
         //key A
         if (event.which === 65) AddPlace(pos);
+
+        //Q
+        if (event.which === 81) SpawnPNState(pos)
+
     }
     KeyPress(event) { }
     KeyUp(event) { }
