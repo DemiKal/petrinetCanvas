@@ -9,8 +9,7 @@ class canvasExecutionState{
     DoubleClick(event){ console.log('DOUBLEclicked canvas') }
 
     MouseDown(event){
-        console.log('mousedown canvas');
-
+ 
     }
 
     MouseUp(event){

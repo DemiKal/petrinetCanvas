@@ -4,22 +4,28 @@ class ExecutionButtonExecutionState extends IEventHandler {
 
         //go back to default mode;  TODO: FIX
         deselect();
-        // button.children[0].text = "Execution";
-        // button.children[0].fill = "#fff";
+        console.log('clicked on exec button in exec state');
+
+        //  this.parent.children[0].text = "Execution";
+        //  this.parent.children[0].fill = "#fff";
         // state.currentState = state.defaultState;
         // event.stopPropagation();
 
-        // $nodes.forEach(function (node) {
-        //     node.AddDragAndDrop();
-        //     node.drawObject.stroke = "5px red"; //reset colors
+        $nodes.forEach(function (node) {
+            node.AddDragAndDrop();
+            node.drawObject.stroke = "5px red"; //reset colors
 
-        //     if (node instanceof Place) {
-        //         node.tokens = node.originalTokens;
-        //         // node.tokensPlate.text = node.tokens; //reset token text
-        //     }
+            if (node instanceof Place) {
+                node.tokens = node.originalTokens;
+            }
 
-        //     node.redraw();
-        // });
+            node.redraw();
+        });
+
+        this.parent.namePlate.fill = "white";
+        this.parent.namePlate.redraw();
+
+        $stateManager.SwitchToDefaultState();
     }
 
     DoubleClick(event) { }

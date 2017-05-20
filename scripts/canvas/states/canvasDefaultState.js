@@ -8,14 +8,14 @@ class canvasDefaultState {
 
     DoubleClick(event) { }
     MouseDown(event) {
-        this.initSelectionBox();
+       // this.initSelectionBox();
 
     }
     MouseUp(event) {
-        this.hideSelectionBox()
+       // this.hideSelectionBox()
     }
     MouseMove(event) {
-        this.selectionBoxDragging()
+       // this.selectionBoxDragging()
     }
 
     KeyDown(event) {

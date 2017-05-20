@@ -22,6 +22,7 @@ class Place extends Node {
 
     this.selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: this.radius * 1.1, stroke: "3px orange", opacity: 0 });
     this.drawObject.addChild(this.selectionCircle);
+    this.initEventHandlers();
 
     // this.selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: 55, stroke: "3px orange", opacity: 1});
     //this.drawObject.add(this.selectionCircle)
@@ -88,10 +89,10 @@ function createNode(x, y, radius, text, tokens) {
   place.classPointer = null;
 
   //refer to state!
-  place.bind('click tap', function (event) { place.classPointer.currentState.Click(event); });
-  place.bind('dblclick', function (event) { /*   fire(this);   */ });
-  place.bind('mouseenter', function (event) { place.classPointer.currentState.MouseEnter(event) });
-  place.bind('mouseleave', function (event) { place.classPointer.currentState.MouseLeave(event) });
+  // place.bind('click tap', function (event) { place.classPointer.currentState.Click(event); });
+  // place.bind('dblclick', function (event) { /*   fire(this);   */ });
+  // place.bind('mouseenter', function (event) { place.classPointer.currentState.MouseEnter(event) });
+  // place.bind('mouseleave', function (event) { place.classPointer.currentState.MouseLeave(event) });
 
   var selectionCircleColor = "3px orange"
   selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: radius * 1.1, stroke: selectionCircleColor, opacity: 0 });

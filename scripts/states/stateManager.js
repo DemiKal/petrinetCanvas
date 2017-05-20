@@ -1,5 +1,8 @@
 class StateManager {
     constructor() { }
+    get allDrawObjects() {
+        return $nodes.concat([$canvas], $buttons)
+    }
 
     get currentState() {
         if (!nodes) return null;
@@ -8,26 +11,29 @@ class StateManager {
     }
 
     SwitchToDefaultState() {
-        ($nodes.concat([$canvas])).forEach(function (element) { element.currentState = element.defaultState; })
+        this.allDrawObjects.forEach(function (element) { element.currentState = element.defaultState; })
         console.log('switched to default')
     };
     SwitchToSelectionState() {
-        ($nodes.concat([$canvas])).forEach(function (element) { element.currentState = element.selectionState; });
+        this.allDrawObjects.forEach(function (element) { element.currentState = element.selectionState; });
         console.log('switched to selection')
     };
     SwitchToExecutionState() {
-        ($nodes.concat([$canvas])).forEach(function (element) { element.currentState = element.executionState; });
-        this.readyCheckTransitions();
+        this.allDrawObjects.forEach(function (element) { element.currentState = element.executionState; });
+        console.log('switched to exec')
+
     };
 
     SwitchToEdgePendingState() {
-        var drawObjects = ($nodes.concat([$canvas]));
-        drawObjects.forEach(function (element) { element.currentState = element.edgePendingState; });
+        this.allDrawObjects.forEach(function (element) { element.currentState = element.edgePendingState; });
 
         console.log('switched to edgepending');
     };
 
-    SwitchToSimulationState() { ($nodes.concat([$canvas])).forEach(function (element) { element.currentState = element.simulationState; }); console.log('switched to simulation'); };
+    SwitchToSimulationState() {
+        this.allDrawObjects.forEach(function (element) { element.currentState = element.simulationState; });
+        console.log('switched to ');
+    };
 
 
     switchToExecState(button) {
@@ -56,12 +62,6 @@ class StateManager {
         console.log(currentState)
         console.log(currentState.id)
     }
-    readyCheckTransitions() {
-        $nodes.forEach(function (node) {
-            if (node instanceof Transition)
-                node.readyCheck();
-            else node.originalTokens = node.tokens;  //remember token amount before execution
-        });
+
 
     }
-}
