@@ -3,7 +3,7 @@ class ExecutionButtonEdgePendingState extends IEventHandler {
     Click(event) {
         //adds a place in the middle of the screen.
         var pos = { x: $canvas.width / 2, y: $canvas.height / 2 };
-        this.parent.AddPlace(pos);
+        //this.parent.AddPlace(pos);//?
 
     }
 

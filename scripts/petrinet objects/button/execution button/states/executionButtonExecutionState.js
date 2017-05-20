@@ -3,22 +3,23 @@ class ExecutionButtonExecutionState extends IEventHandler {
     Click(event) {
 
         //go back to default mode;  TODO: FIX
-        button.children[0].text = "Execution";
-        button.children[0].fill = "#fff";
-        state.currentState = state.defaultState;
-        event.stopPropagation();
+        deselect();
+        // button.children[0].text = "Execution";
+        // button.children[0].fill = "#fff";
+        // state.currentState = state.defaultState;
+        // event.stopPropagation();
 
-        $nodes.forEach(function (node) {
-            node.AddDragAndDrop();
-            node.drawObject.stroke = "5px red"; //reset colors
+        // $nodes.forEach(function (node) {
+        //     node.AddDragAndDrop();
+        //     node.drawObject.stroke = "5px red"; //reset colors
 
-            if (node instanceof Place) {
-                node.tokens = node.originalTokens;
-                // node.tokensPlate.text = node.tokens; //reset token text
-            }
+        //     if (node instanceof Place) {
+        //         node.tokens = node.originalTokens;
+        //         // node.tokensPlate.text = node.tokens; //reset token text
+        //     }
 
-            node.redraw();
-        });
+        //     node.redraw();
+        // });
     }
 
     DoubleClick(event) { }

@@ -2,9 +2,11 @@ class Button extends DrawingObject {
     constructor(x, y, width, height, text) {
         super(x, y);
         this.drawObject = this.createButton(x, y, width, height, text);
+        this.drawObject.classPointer = this;
+
     }
     get name() { return this.namePlate.text; }
-    
+
     set name(newname) {
         if (this.namePlate) this.namePlate.text = newname;
         else this.text = newname;

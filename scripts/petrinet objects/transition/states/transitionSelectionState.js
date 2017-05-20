@@ -7,9 +7,9 @@ class TransitionSelectionState extends IEventHandler {
     DoubleClick(event) { }
    
     MouseEnter(event) {
-        this.parent.drawObject.stroke = "5px white"
+        //this.parent.drawObject.stroke = "5px white"
     }
     MouseLeave(event) {
-        this.parent.drawObject.stroke = "5px red"
+       // this.parent.drawObject.stroke = "5px red"
     }
 }

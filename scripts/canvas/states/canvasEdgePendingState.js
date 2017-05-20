@@ -2,22 +2,27 @@ class canvasEdgePendingState {
     constructor() { }
 
     Click(event) {
-        console.log('clicked canvas in selectState');
-        $stateManager.SwitchToDefaultState();
+        console.log('clicked canvas in edgepending state');
+        // $stateManager.SwitchToDefaultState();
 
-        $nodes.forEach(function (item) {
-            item.selected = false;
-        });
+        // $nodes.forEach(function (item) {
+        //     item.selected = false;
+        // });
 
-        selected.current = null;
-        selected.children[0].text = "None selected";
-        selected.redraw();
+        // selected.current = null;
+        // selected.name = "None selected";
+        // selected.redraw();
 
+        console.log('click on a node to create an edge')
     }
     DoubleClick(event) { console.log('DOUBLEclicked canvas ss') }
     MouseDown(event) { console.log('mousedown canvas ss'); }
     MouseUp(event) { }
-    MouseMove(event) { }
+    MouseMove(event) {
+        edgePending.end = { x: $canvas.mouse.x, y: $canvas.mouse.y };
+        edgePending.redraw();
+    }
+
     KeyDown(event) {
         //press any button to remove the pending edge
 
@@ -25,7 +30,7 @@ class canvasEdgePendingState {
         edgePending = null;
 
         $stateManager.SwitchToSelectionState();
-
+        console.log('edge is deleted')
     }
 
     KeyPress(event) {

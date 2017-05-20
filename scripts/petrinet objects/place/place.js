@@ -15,15 +15,15 @@ class Place extends Node {
     this.extraButtons();
 
     this.defaultState = new placeDefaultState(this);
-    this.edgePending = new placeEdgePendingState(this);
+    this.edgePendingState = new placeEdgePendingState(this);
     this.selectionState = new placeSelectionState(this);
     this.executionState = new placeExecutionState(this);
     this.currentState = this.defaultState;
 
-    this.selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: this.radius * 1.1, stroke: "3px orange", opacity: 0});
+    this.selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: this.radius * 1.1, stroke: "3px orange", opacity: 0 });
     this.drawObject.addChild(this.selectionCircle);
 
-      // this.selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: 55, stroke: "3px orange", opacity: 1});
+    // this.selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: 55, stroke: "3px orange", opacity: 1});
     //this.drawObject.add(this.selectionCircle)
   }
 
@@ -56,7 +56,7 @@ class Place extends Node {
 
     line.addChild(line2);
     this.drawObject.addChild(line) //child  index 2
-   
+
 
     //TODO MAKE OWN CLASS WITH STATE
     line.bind('click tap', function (event) { this.parent.classPointer.tokens++ });

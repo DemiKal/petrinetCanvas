@@ -5,4 +5,6 @@ class IEventHandler {
     DoubleClick(){}
     MouseEnter(){}
     MouseLeave(){}
+    MouseDown(){}
+    MouseUp(){}
 }

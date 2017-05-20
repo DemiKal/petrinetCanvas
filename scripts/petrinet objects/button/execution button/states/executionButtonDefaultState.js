@@ -4,7 +4,8 @@ class ExecutionButtonDefaultState extends IEventHandler {
         
         //deselect
         //switch to execution state
-        
+        deselect();
+        $stateManager.SwitchToExecutionState();
          
 
     }

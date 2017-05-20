@@ -1,17 +1,18 @@
 class TransitionEdgePendingState extends IEventHandler {
     constructor(parent) { super(parent); }
-
     Click(event) {
-        if (!edgePlacementValidation(node)) return;
+        // if (!edgePlacementValidation(node)) return;
 
-        var newEdge = createEdge(selected.current, node);
-        //selected.current = null;
-        edgePending.remove();
-        edgePending = null;
+        // var newEdge = createEdge(selected.current, node);
+        // //selected.current = null;
+        // edgePending.remove();
+        // edgePending = null;
+        // event.stopPropagation();
+
+        // $stateManager.SwitchToSelectionState();
+
+        TryEdge(this.parent);
         event.stopPropagation();
-
-        //switch states
-        $stateManager.SwitchToSelectionState();
     }
     DoubleClick(event) { }
     MouseEnter(event) { }

@@ -24,6 +24,12 @@ class DrawingObject {
   redraw() { this.drawObject.redraw(); }
   dragAndDrop(opt) { this.drawObject.dragAndDrop(opt); }
 
+  initEventHandlers() {
+    this.drawObject.bind("click tap", function (event, classPointer) { this.classPointer.currentState.Click(event); });
+    this.drawObject.bind("dblclick", function (event, classPointer) { this.classPointer.currentState.DoubleClick(event); });
+    this.drawObject.bind("mouseenter", function (event, classPointer) { this.classPointer.currentState.MouseEnter(event); });
+    this.drawObject.bind("mouseleave", function (event, classPointer) { this.classPointer.currentState.MouseLeave(event); });
+  }
   // Click(classPointer, event) { this.currentState.Click(); }
   // DoubleClick(classPointer, event) { this.currentState.DoubleClick(); }
   // MouseEnter(classPointer, event) { this.currentState.MouseEnter(); }

@@ -24,6 +24,7 @@ class Transition extends Node {
         });
 
         this.drawObject.addChild(this.selectionCircle);
+        this.initEventHandlers();
     }
 
     get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 } }
@@ -37,6 +38,7 @@ class Transition extends Node {
 
         if (isSated) this.drawObject.stroke = "5px green";
         else this.drawObject.stroke = "5px red";
+        this.redraw();
         return isSated;
     }
 
@@ -95,10 +97,10 @@ class Transition extends Node {
             fill: "#0ba"
         });
 
-        transition.bind("click tap", function (event) { transition.classPointer.currentState.Click(event); });
-        transition.bind("dblclick", function (event) { transition.classPointer.currentState.DoubleClick(event); });
-        transition.bind("mouseenter", function (event) { transition.classPointer.currentState.MouseEnter(event); });
-        transition.bind("mouseleave", function (event) { transition.classPointer.currentState.MouseLeave(event); });
+        // transition.bind("click tap", function (event) { transition.classPointer.currentState.Click(event); });
+        // transition.bind("dblclick", function (event) { transition.classPointer.currentState.DoubleClick(event); });
+        // transition.bind("mouseenter", function (event) { transition.classPointer.currentState.MouseEnter(event); });
+        // transition.bind("mouseleave", function (event) { transition.classPointer.currentState.MouseLeave(event); });
 
         transition.addChild(nodeText);
         transition.classPointer = null;
