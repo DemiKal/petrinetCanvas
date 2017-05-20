@@ -12,11 +12,12 @@ class PetriNetState extends Node {
         this.drawObject.classPointer = this;
 
         this.defaultState = new PS_DefaultState(this);
-        this.selectionState = new PS_EdgePendingState(this);
+        this.selectionState = new PS_SelectionState(this);
         this.executionState = new PS_ExecutionState(this);
-        this.currentState = new PS_SelectionState(this);
+        this.edgePendingState = new PS_EdgePendingState(this);
         this.currentState = this.defaultState;
 
+ 
         this.width = width;
         this.height = height;
 
@@ -98,6 +99,7 @@ class PetriNetState extends Node {
     set selected(bool) {
         if (bool) {
             this.selectionCircle.opacity = 1;
+            this.selectionCircle.redraw();
             this.CreatePopupMenu();
         }
         else {

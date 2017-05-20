@@ -3,7 +3,7 @@ class PS_DefaultState extends IEventHandler {
     Click(event) {
         this.parent.Select();
         event.stopPropagation();
-
+        
         $stateManager.SwitchToSelectionState();
         console.log('clicked on ps');
     }
