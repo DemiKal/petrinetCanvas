@@ -6,7 +6,8 @@ jQuery(document).ready(function ($) {
     $edges = [];      //not used yet
     $PNstates = [];
     $places = [];
-    selected = null;
+    $selected = null;
+    $selectedButton = null;
     edgePending = null;
     nodeIsMoving = false;
     petrinetStates = [];
@@ -58,10 +59,10 @@ jQuery(document).ready(function ($) {
     function initMenu() {
         $addPlaceButton = new AddPlaceButton(10, 10, 100, 50, "Add node (A)");
         $addEdgeButton = new AddEdgeButton(120, 10, 100, 50, "Add Edge (E)");
-        selected = new Button(230, 10, 100, 50, "None selected");
-        selected.current = null
+        $selectedButton = new Button(230, 10, 100, 50, "None selected");
+        $selected  = null;
         $executionButton = new ExecutionButton(340, 10, 100, 50, "Execute");
-        $buttons.push($addPlaceButton, $addEdgeButton, selected, $executionButton);
+        $buttons.push($addPlaceButton, $addEdgeButton, $selectedButton, $executionButton);
     }
 
 

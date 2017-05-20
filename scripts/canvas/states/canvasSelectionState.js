@@ -27,7 +27,7 @@ class canvasSelectionState {
 
     spawnPendingEdge() {
         var line = $canvas.display.line({
-            start: selected.current.center,
+            start: $selected.center,
             end: { x: $canvas.mouse.x, y: $canvas.mouse.y },
             stroke: "11px #0aa",
             cap: "round"

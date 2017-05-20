@@ -9,10 +9,10 @@ class Node extends DrawingObject {
   }
 
   Select() {
-    selected.name = "Selected: " + this.name;
-    if (selected.current) { selected.current.selected = false; }
+    $selectedButton.name = "Selected: " + this.name;
+    if ($selected) { $selected.selected = false; }
 
-    selected.current = this;
+    $selected = this;
     $selectedNodes = this;
     this.selected = true;
   }

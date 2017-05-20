@@ -3,13 +3,12 @@ class AddEdgeSelectionState extends IEventHandler {
     Click(event) {
 
         var line = $canvas.display.line({
-            start: { x: selected.current.center.x, y: selected.current.center.y },
+            start: { x: $selected.center.x, y: $selected.center.y },
             end: { x: $canvas.mouse.x, y: $canvas.mouse.y },
             stroke: "11px #0aa",
             cap: "round"
         }).add();
 
-        selected.current;
         edgePending = line;
 
         //switch state
