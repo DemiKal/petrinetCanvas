@@ -6,7 +6,7 @@ class PetriNetState extends Node {
         // this.from = fromState;
         this.nextStates = [];
         this.activeTransitions = [];
-        this.activePlaces = [];
+        this.activePlaces = {};
         this.id = this.CreateId();
         this.drawObject = this.createStateNode(x, y, width, height);
         this.drawObject.classPointer = this;
@@ -17,19 +17,29 @@ class PetriNetState extends Node {
         this.edgePendingState = new PS_EdgePendingState(this);
         this.currentState = this.defaultState;
 
- 
-        this.width = width;
-        this.height = height;
-
         this.selectionCircle = this.createSelectionCircle()
 
         console.log($nodes)
 
         this.initEventHandlers();
         this.popupMenu = this.CreatePopupAnchor();
-        // this.CreatePopupMenu();
-
+        this.placeAnchor = this.CreatePlaceAnchor();
     }
+
+    CreatePlaceAnchor() {
+        var anchor = $canvas.display.rectangle({
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
+            opacity: 1,
+        });
+
+        anchor.name = "place anchor";
+        this.drawObject.addChild(anchor);
+        return anchor;
+    }
+
     CreatePopupAnchor() {
         var anchor = $canvas.display.rectangle({
             x: this.width + this.drawObject.strokeWidth,
@@ -39,15 +49,33 @@ class PetriNetState extends Node {
             opacity: 1,
 
         });
-
+        //use name to access easier
+        anchor.name = "popup anchor";
         this.drawObject.addChild(anchor);
         return anchor;
     }
+
     CreatePopupMenu() {
-        for (var index = 0; index < $places.length; index++) {
-            var element = $places[index];
+        this.popupMenu.remove();
+        this.popupMenu = null;
+        this.popupMenu = this.CreatePopupAnchor();
+
+        var nonActivePlaces = []
+        for (var i = 0; i < $places.length; i++) {
+            var element = $places[i];
             var name = element.name;
 
+            if (!(name in this.activePlaces))
+                nonActivePlaces.push(element);
+        }
+
+        for (var index = 0; index < nonActivePlaces.length; index++) {
+            var element = nonActivePlaces[index];
+            var name = element.name;
+
+            if (name in this.activePlaces) { index--; continue; }
+
+            var anchorX = this.width;
             var popup = $canvas.display.rectangle({
                 x: 0,
                 y: 50 * index,
@@ -66,9 +94,11 @@ class PetriNetState extends Node {
                 fill: "#0ba"
             });
 
-            popup.bind("click tap", function (event, classPointer) {
-                console.log('adding ' + this.children[0].text + ' to this state');
+            popup.classPointer = this;
+            popup.bind("click tap", function (event) {
+                this.classPointer.addPlaceToState(event, this);
                 event.stopPropagation();
+
             });
 
             popup.addChild(nodeText);
@@ -77,15 +107,114 @@ class PetriNetState extends Node {
 
     }
 
+    addPlaceToState(event, button) {
+
+        var placename = button.children[0].text;
+
+        //if it already is an active place to the state, then dont add.
+        if (!(placename in this.activePlaces)) {
+            this.activePlaces[placename] = 1;
+            this.redraw();
+        }
+        this.CreatePopupMenu();
+    }
+
+    redraw() {
+
+
+        var parent = this;
+
+        this.placeAnchor.remove();
+        this.placeAnchor = null;
+        this.placeAnchor = this.CreatePlaceAnchor();
+
+        var i = 0;
+        $.each(this.activePlaces, function (key, value) {
+            var obj = parent.createPlaceBoard(i, key, value);
+            parent.placeAnchor.addChild(obj);
+            i++;
+
+            console.log(parent.width);
+        });
+
+        var width = 50 * i + this.drawObject.strokeWidth * 2;
+        if (width < 200) this.width = 200;
+        else this.width = width;
+
+        this.CreatePopupMenu();
+
+
+
+    }
+
+    createPlaceBoard(i, key, value) {
+        var h = this.height / 2 - this.height / 4;
+        var parent = this;
+        var obj = $canvas.display.rectangle({
+            x: 50 * i + this.drawObject.strokeWidth,
+            y: h,
+            width: 50,
+            height: 50,
+            stroke: "2px blue",
+            opacity: 1
+        });
+        var text = value + '*' + key;
+        var objText = $canvas.display.text({
+            x: obj.width / 2,
+            y: obj.height / 2,
+            origin: { x: "center", y: "center" },
+            font: "15px sans-serif",
+            text: text,
+            fill: "#0ba"
+        });
+
+        obj.addChild(objText);
+        obj.zIndex = "front";
+        obj.name = text;
+        obj.bind("click tap", function (event) {
+            var val = 0;
+            event.stopPropagation();
+
+            if (event.which === 1)
+                val = 1;
+            else if (event.which === 2)
+                val = -1;
+
+            else if (val === 0)
+                return;
+
+            var split = this.name.split("*");
+            var value = split[0];
+            var key = split[1];
+
+            value = parseInt(value) + val;
+            var newval = value + "*" + key;
+            this.name = newval;
+            this.children[0].text = newval;
+            this.children[0].redraw();
+            parent.activePlaces[key] = value;
+
+            if (value <= 0) {
+                delete parent.activePlaces[key];
+                parent.redraw();
+            }
+
+
+
+
+
+        }); return obj;
+
+    }
+
     createSelectionCircle() {
-        var ratio = this.height / this.width;
-        var margin = 0.1;
+        this.margin = 0.1;
 
         var sc = $canvas.display.rectangle({
-            x: (- (margin * ratio) / 2) * this.width,
-            y: -margin / 2 * this.height,
-            width: this.width * (1 + margin * ratio),
-            height: this.height * (1 + margin),
+            x: (- (this.margin * this.ratio) / 2) * this.width,
+            y: -this.margin / 2 * this.height,
+            width: this.width * (1 + this.margin * this.ratio),
+            height: this.height * (1 + this.margin),
             stroke: "3px red",
             opacity: 0
         });
@@ -95,6 +224,47 @@ class PetriNetState extends Node {
 
     }
 
+    set width(val) {
+        //     var oldval = this.drawObject.width;
+        //    // this.popupMenu.x = val;
+
+        this.drawObject.width = val;
+        this.popupMenu.width = val;
+
+
+        this.selectionCircle.width = this.drawObject.width * (1 + this.margin * this.ratio)
+
+
+        for (var i = 0; i < this.popupMenu.children.length; i++) {
+            this.popupMenu.children[i].x = 0;
+            this.popupMenu.children[i].redraw();
+        }
+
+        this.popupMenu.redraw();
+        this.drawObject.redraw();
+        this.selectionCircle.redraw();
+
+    }
+
+    get signature() {
+        var keys = [];
+        $.each(this.activePlaces, function (key, value) { keys.push(key); });
+
+        keys.sort();
+
+        var result = "";
+        keys.forEach(function (key) {
+            var value = this.activePlaces[key];
+            result += value + "*" + key + " ";
+        }, this);
+        result = result.slice(0, -1);
+
+        return result;
+
+    }
+    get width() { return this.drawObject.width; }
+    get ratio() { return this.drawObject.height / this.drawObject.width; }
+
     get selected() { return this.selectionCircle.opacity > 0 }
     set selected(bool) {
         if (bool) {
@@ -102,6 +272,7 @@ class PetriNetState extends Node {
             this.selectionCircle.redraw();
             this.CreatePopupMenu();
         }
+
         else {
             this.selectionCircle.opacity = 0;
             this.popupMenu.remove();
@@ -126,6 +297,7 @@ class PetriNetState extends Node {
             if (place.tokens > 0) {
                 id.push(place.tokens + "*" + place.name);
                 this.activePlaces.push(place);
+
             }
         }
 

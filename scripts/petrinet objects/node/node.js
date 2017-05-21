@@ -13,7 +13,6 @@ class Node extends DrawingObject {
     if ($selected) { $selected.selected = false; }
 
     $selected = this;
-    $selectedNodes = this;
     this.selected = true;
   }
 

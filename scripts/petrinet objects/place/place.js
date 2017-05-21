@@ -7,8 +7,6 @@ class Place extends Node {
     this.drawObject.classPointer = this;
     this.namePlate = this.drawObject.children[0];
     this.tokensPlate = this.drawObject.children[1];
-    this.width = radius;
-    this.height = radius;
     this.tokenAmount = tokens;
     this.originalTokens = this.tokenAmount;
     this.AddDragAndDrop();

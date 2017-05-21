@@ -12,7 +12,6 @@ jQuery(document).ready(function ($) {
     nodeIsMoving = false;
     petrinetStates = [];
     currentState = null;
-    $selectedNodes = [];
     $stateManager = new StateManager();
     $buttons = [];
 
@@ -39,9 +38,7 @@ jQuery(document).ready(function ($) {
 
     //bool for selection box display. NYI
     $dragging = false;
-    $selectionBox = $canvas.display.rectangle({
-        x: 0, y: 0, width: 0, height: 0, fill: "#0aa", opacity: 0
-    }).add();
+    $selectionBox = $canvas.display.rectangle({ x: 0, y: 0, width: 0, height: 0, fill: "#0aa", opacity: 0 }).add();
 
     //right click on canvas override
     $canvasDOM.contextmenu(function () { return false; });
@@ -60,7 +57,7 @@ jQuery(document).ready(function ($) {
         $addPlaceButton = new AddPlaceButton(10, 10, 100, 50, "Add node (A)");
         $addEdgeButton = new AddEdgeButton(120, 10, 100, 50, "Add Edge (E)");
         $selectedButton = new Button(230, 10, 100, 50, "None selected");
-        $selected  = null;
+        $selected = null;
         $executionButton = new ExecutionButton(340, 10, 100, 50, "Execute");
         $buttons.push($addPlaceButton, $addEdgeButton, $selectedButton, $executionButton);
     }
