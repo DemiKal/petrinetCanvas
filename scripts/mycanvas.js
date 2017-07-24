@@ -5,6 +5,7 @@ jQuery(document).ready(function ($) {
     $transitions = [];   //not used yet
     $edges = [];      //not used yet
     $PNstates = [];
+    $simulationStates = [];
     $places = [];
     $selected = null;
     $selectedButton = null;
@@ -43,7 +44,7 @@ jQuery(document).ready(function ($) {
     //right click on canvas override
     $canvasDOM.contextmenu(function () { return false; });
 
-    $canvas.bind("click tap", function (event) { $canvas.currentState.Click(event); });
+    $canvas.bind("click tap", function (event) { $canvas.currentState.Click(event); console.log('places',$places)});
     $canvas.bind("mouseup", function (event) { $canvas.currentState.MouseUp(event); });
     $canvas.bind("mousemove", function (event) { $canvas.currentState.MouseMove(event); });
     $canvas.bind("mousedown", function (event) { $canvas.currentState.MouseDown(event); });
@@ -59,7 +60,13 @@ jQuery(document).ready(function ($) {
         $selectedButton = new Button(230, 10, 100, 50, "None selected");
         $selected = null;
         $executionButton = new ExecutionButton(340, 10, 100, 50, "Execute");
-        $buttons.push($addPlaceButton, $addEdgeButton, $selectedButton, $executionButton);
+        $validationButton = new Button(450, 10, 100, 50, "Validate");
+        
+        //this should later be implemented in its own class
+        $validationButton.drawObject.bind("click tap", function (event) { event.stopPropagation(); initSimulation(); console.log('Clicked on validation button'); });
+        
+        
+        $buttons.push($addPlaceButton, $addEdgeButton, $selectedButton, $executionButton, $validationButton);
     }
 
 

@@ -68,7 +68,10 @@ class Node extends DrawingObject {
   AddDragAndDrop(opt) {
     this.drawObject.dragAndDrop({
       start: function () { nodeIsMoving = true },
-      move: function () { this.classPointer.lineOnEdge() },
+      move: function () { 
+        console.log('dragging'); 
+        this.classPointer.lineOnEdge()
+      },
       end: function () { nodeIsMoving = false }
     })
   }

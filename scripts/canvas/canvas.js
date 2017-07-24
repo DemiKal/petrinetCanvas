@@ -2,7 +2,7 @@ function AddPlace(pos) {
     var position = { x: $canvas.width / 2, y: $canvas.height / 2 };
     if (pos) position = pos;
     var name = "P" + ($places.length + 1);
-    var newPlace = new Place(position.x, position.y, 50, name, 0);
+    var newPlace = new Place(position.x, position.y, 50, name, 1);
     $nodes.push(newPlace);
     $places.push(newPlace);
 }
@@ -41,10 +41,15 @@ function TryEdge(node) {
     $stateManager.SwitchToSelectionState();
 }
 
+//this can be decomposed to each node to handle their own edge placement validation
 function edgePlacementValidation(node) {
+    var selectedClass = $selected.constructor;
+    var nodeClass = node.constructor;
     if ($selected === node) { console.log('cant point to self!'); return false; }
-    if ($selected.constructor == node.constructor) { console.log("same type!"); return false; }
-
+    if ($selected.constructor == node.constructor && node.constructor != PetriNetState) { console.log("same type!"); return false; }
+    if ($selected.constructor == PetriNetState && node.constructor != PetriNetState) { console.log("cant link state to node!"); return false; }
+    if ($selected.constructor != PetriNetState && node.constructor == PetriNetState) { console.log("cant link state to node!"); return false; }
+    
     var mapped = node.incomingEdges.map(function (item) { return item.From; });
     if ($.inArray($selected, mapped) != -1) { console.log("edge already exists"); return false; }
 

@@ -10,6 +10,7 @@ class PetriNetState extends Node {
         this.id = this.CreateId();
         this.drawObject = this.createStateNode(x, y, width, height);
         this.drawObject.classPointer = this;
+        //this.AddDragAndDrop();
 
         this.defaultState = new PS_DefaultState(this);
         this.selectionState = new PS_SelectionState(this);
@@ -24,14 +25,13 @@ class PetriNetState extends Node {
         this.initEventHandlers();
         this.popupMenu = this.CreatePopupAnchor();
         this.placeAnchor = this.CreatePlaceAnchor();
+        this.AddDragAndDrop();
     }
 
     CreatePlaceAnchor() {
         var anchor = $canvas.display.rectangle({
-            x: 0,
-            y: 0,
-            width: 0,
-            height: 0,
+            x: 0, y: 0,
+            width: 0, height: 0,
             opacity: 1,
         });
 
@@ -65,8 +65,7 @@ class PetriNetState extends Node {
             var element = $places[i];
             var name = element.name;
 
-            if (!(name in this.activePlaces))
-                nonActivePlaces.push(element);
+            if (!(name in this.activePlaces)) nonActivePlaces.push(element);
         }
 
         for (var index = 0; index < nonActivePlaces.length; index++) {
@@ -104,7 +103,6 @@ class PetriNetState extends Node {
             popup.addChild(nodeText);
             this.popupMenu.addChild(popup);
         }
-
     }
 
     addPlaceToState(event, button) {
@@ -120,10 +118,7 @@ class PetriNetState extends Node {
     }
 
     redraw() {
-
-
         var parent = this;
-
         this.placeAnchor.remove();
         this.placeAnchor = null;
         this.placeAnchor = this.CreatePlaceAnchor();
@@ -133,8 +128,6 @@ class PetriNetState extends Node {
             var obj = parent.createPlaceBoard(i, key, value);
             parent.placeAnchor.addChild(obj);
             i++;
-
-            console.log(parent.width);
         });
 
         var width = 50 * i + this.drawObject.strokeWidth * 2;
@@ -142,9 +135,6 @@ class PetriNetState extends Node {
         else this.width = width;
 
         this.CreatePopupMenu();
-
-
-
     }
 
     createPlaceBoard(i, key, value) {
@@ -172,6 +162,8 @@ class PetriNetState extends Node {
         obj.zIndex = "front";
         obj.name = text;
         obj.bind("click tap", function (event) {
+            if (!this.parent.parent.classPointer.selected)
+                return;
             var val = 0;
             event.stopPropagation();
 
@@ -198,11 +190,6 @@ class PetriNetState extends Node {
                 delete parent.activePlaces[key];
                 parent.redraw();
             }
-
-
-
-
-
         }); return obj;
 
     }
@@ -225,14 +212,9 @@ class PetriNetState extends Node {
     }
 
     set width(val) {
-        //     var oldval = this.drawObject.width;
-        //    // this.popupMenu.x = val;
-
         this.drawObject.width = val;
         this.popupMenu.width = val;
-
-
-        this.selectionCircle.width = this.drawObject.width * (1 + this.margin * this.ratio)
+        this.selectionCircle.width = this.drawObject.width * (1 + this.margin * this.ratio);
 
 
         for (var i = 0; i < this.popupMenu.children.length; i++) {
@@ -243,7 +225,6 @@ class PetriNetState extends Node {
         this.popupMenu.redraw();
         this.drawObject.redraw();
         this.selectionCircle.redraw();
-
     }
 
     get signature() {
@@ -260,8 +241,8 @@ class PetriNetState extends Node {
         result = result.slice(0, -1);
 
         return result;
-
     }
+
     get width() { return this.drawObject.width; }
     get ratio() { return this.drawObject.height / this.drawObject.width; }
 
@@ -296,7 +277,7 @@ class PetriNetState extends Node {
             var place = $places[i];
             if (place.tokens > 0) {
                 id.push(place.tokens + "*" + place.name);
-                this.activePlaces.push(place);
+                //this.activePlaces[place.name] = place.tokens;
 
             }
         }
@@ -312,12 +293,9 @@ class PetriNetState extends Node {
             stroke: "5px #f46e42",
             name: this.id
         }).add();
-        obj.dragAndDrop();
 
         return obj;
-
     }
-
 
     // old code
     createStateNodeOLD() {
@@ -385,23 +363,3 @@ class PetriNetState extends Node {
     }
 
 }
-
-
-    // class PetriNetState {
-    //     constructor(nodes) {
-    //         this.places = this.getNodes("place");
-    //         this.transitions = this.getNodes("transition");
-    //         this.From;
-    //         this.To;
-    //     }
-
-    //     getNodes(type) {
-    //         var filteredNodes = [];
-    //         nodes.forEach(function (node) {
-    //             if (node.nodeType == type)
-    //                 filteredNodes.push(node);
-    //         });
-
-    //         return filteredNodes;
-    //     }
-    // }
