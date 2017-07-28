@@ -1,6 +1,7 @@
+//this is the class that denotes a (simulated) state of a petrinet
 class petriStateSim {
-    constructor(activePlaces, prevState, transitionName) {
-        this.places = activePlaces;
+    constructor(_places, prevState, transitionName) {
+        this.places = _places;
         this.from = {};
         this.to = {};
         if (prevState) {

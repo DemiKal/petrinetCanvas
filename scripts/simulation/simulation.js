@@ -24,7 +24,6 @@ function initSimulation() {
         simulationStates = initialState;
         console.log('no transition to fire, only 1 state to reach');
     }
-    
     verifyUserPetrinet(simulationStates);
 }
 
