@@ -25,7 +25,28 @@ function initSimulation() {
         simulationStates = state;
         console.log('no transition to fire, only 1 state to reach');
     }
-    var mm = simulationStates.map(function (x) { return x.places; });
+    simulationStates.map(function (x) { return x.places; });
+
+    var PNstateEdges = [];
+    var simulationStateEdges = [];
+
+    //for some reason the $variable is not inspectable, copy to a locala array/list
+    var PNStates = $.extend([], $PNstates);
+
+    for (var index = 0; index < PNStates.length; index++) {
+
+        var element = PNStates[index];
+        var fromState = element.activePlaces;
+        for (var j = 0; j < element.outgoingEdges.length; j++) {
+            var nextPlaces = element.outgoingEdges[j].To.activePlaces;
+            PNstateEdges.push("from state" + JSON.stringify(fromState) + " to state " + JSON.stringify(nextPlaces));
+        }
+    }
+
+    console.log('at end')
+    console.log($PNstates);
+
+    console.log(pncopy.length)
     //then compare simstates to the user created states
 }
 
@@ -53,7 +74,7 @@ function FireSim(state, transition) {
     var readyToFire = true;
 
     //make > 0 variable later!  
-    $.each(transition.incomingEdges, function (i, v) { if (state.places[i] <= 0) readyToFire = false; });     
+    $.each(transition.incomingEdges, function (i, v) { if (state.places[i] <= 0) readyToFire = false; });
 
     if (!readyToFire) return new petriStateSim(newPlaces, state); //return same state -> break recursion
 
