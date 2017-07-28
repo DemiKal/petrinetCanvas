@@ -3,13 +3,15 @@ class placeDefaultState extends IEventHandler {
     Click(event) {
         /// /set current place as selected
         this.parent.Select();
-
+        
         event.stopPropagation();
 
         $stateManager.SwitchToSelectionState();
 
     }
-    DoubleClick(event) { console.log('DOUBLEclicked on place in default state') }
+    DoubleClick(event) {
+         
+    }
 
     MouseEnter(event) {
         //this.parent.drawObject.stroke = "5px white"
