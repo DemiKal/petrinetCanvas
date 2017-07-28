@@ -34,7 +34,6 @@ function initSimulation() {
     var PNStates = $.extend([], $PNstates);
 
     for (var index = 0; index < PNStates.length; index++) {
-
         var element = PNStates[index];
         var fromState = element.activePlaces;
         for (var j = 0; j < element.outgoingEdges.length; j++) {
@@ -45,21 +44,19 @@ function initSimulation() {
 
     console.log('at end')
     console.log($PNstates);
-
-    console.log(pncopy.length)
-    //then compare simstates to the user created states
 }
 
 //this is the simulation algorithm. Per node this will check each transition in the graph and try to 'fire'
 //the transition. If there is a change in teh network/graph, it is a new state. Then recurse again in that new state.
 //recurse until there are no new states to discover.
 function Simulate(state, transitions, transition, simulationStates, depth) {
+    console.log(depth);
     if (!stateAlreadySeen(state, simulationStates)) simulationStates.push(state);
-
+    
     var newState = FireSim(state, transition);
     if (dictEq(newState.places, state.places)) return;
     if (stateAlreadySeen(newState, simulationStates)) {
-        UpdateDuplicateState(state, newState, simulationStates)
+        UpdateDuplicateState(state, newState, transition.name, simulationStates)
         return;
     }
     $.each(transitions, function (i, trans) {
@@ -76,23 +73,23 @@ function FireSim(state, transition) {
     //make > 0 variable later!  
     $.each(transition.incomingEdges, function (i, v) { if (state.places[i] <= 0) readyToFire = false; });
 
-    if (!readyToFire) return new petriStateSim(newPlaces, state); //return same state -> break recursion
+    if (!readyToFire) return state//new petriStateSim(newPlaces, state); //return same state -> break recursion
 
     $.each(transition.incomingEdges, function (i, v) { newPlaces[i] -= 1; });     //make > 0 variable later!  
     $.each(transition.outgoingEdges, function (i, v) { newPlaces[i] += 1; });
     //if nothing has changed, return 0
 
-    var newstate = new petriStateSim(newPlaces, state);
-    newstate.transition = transition.name;
+    var newstate = new petriStateSim(newPlaces, state, transition.name);
+    //newstate.transition = transition.name;
     return newstate;
 
 }
-function UpdateDuplicateState(oldState, newState, simulationStates) {
+function UpdateDuplicateState(oldState, newState, transitionName, simulationStates) {
     for (var index = 0; index < simulationStates.length; index++) {
         var element = simulationStates[index];
         if (dictEq(newState.places, element.places)) {
-            element.from[JSON.stringify(oldState.places)] = 0;
-            oldState.to[JSON.stringify(newState.places)] = 0;
+            element.from[JSON.stringify(oldState.places)] = transitionName;
+            oldState.to[JSON.stringify(newState.places)] = transitionName;
             return;
         }
     }
