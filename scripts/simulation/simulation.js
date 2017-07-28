@@ -14,36 +14,18 @@ function initSimulation() {
         transitions.push(new TransSim(value));
     });
 
-    var state = new petriStateSim(simulationPlaces);
-
+    var initialState = new petriStateSim(simulationPlaces);
 
     if (transitions != [])
         $.each(transitions, function (i, trans) {
-            Simulate(state, transitions, trans, simulationStates, 0);
+            Simulate(initialState, transitions, trans, simulationStates, 0);
         });
     else {
-        simulationStates = state;
+        simulationStates = initialState;
         console.log('no transition to fire, only 1 state to reach');
     }
-    simulationStates.map(function (x) { return x.places; });
-
-    var PNstateEdges = [];
-    var simulationStateEdges = [];
-
-    //for some reason the $variable is not inspectable, copy to a locala array/list
-    var PNStates = $.extend([], $PNstates);
-
-    for (var index = 0; index < PNStates.length; index++) {
-        var element = PNStates[index];
-        var fromState = element.activePlaces;
-        for (var j = 0; j < element.outgoingEdges.length; j++) {
-            var nextPlaces = element.outgoingEdges[j].To.activePlaces;
-            PNstateEdges.push("from state" + JSON.stringify(fromState) + " to state " + JSON.stringify(nextPlaces));
-        }
-    }
-
-    console.log('at end')
-    console.log($PNstates);
+    
+    verifyUserPetrinet(simulationStates);
 }
 
 //this is the simulation algorithm. Per node this will check each transition in the graph and try to 'fire'
@@ -52,7 +34,7 @@ function initSimulation() {
 function Simulate(state, transitions, transition, simulationStates, depth) {
     console.log(depth);
     if (!stateAlreadySeen(state, simulationStates)) simulationStates.push(state);
-    
+
     var newState = FireSim(state, transition);
     if (dictEq(newState.places, state.places)) return;
     if (stateAlreadySeen(newState, simulationStates)) {

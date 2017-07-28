@@ -31,6 +31,7 @@ class Place extends Node {
   set tokens(amount) {
     this.tokenAmount = amount;
     this.tokensPlate.text = amount;
+    this.redraw();
   }
 
 

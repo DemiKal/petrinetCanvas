@@ -63,8 +63,6 @@ class Transition extends Node {
         this.outgoingEdges.forEach(function (element) {
             var adj = element.To;
             adj.tokens++;
-            // updateTokens(adj);
-
             var ball = $canvas.display.ellipse({ x: element.start.x, y: element.start.y, radius: 20, fill: "red", }).add();
 
             ball.animate({
