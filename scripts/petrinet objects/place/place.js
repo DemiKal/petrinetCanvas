@@ -25,6 +25,22 @@ class Place extends Node {
     // this.selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: 55, stroke: "3px orange", opacity: 1});
     //this.drawObject.add(this.selectionCircle)
   }
+  //override since the centerpoint is in the middle and not in the topleft like most objects
+  get BoundingBox() {
+    var rect = {
+      left: this.x - this.width,
+      top: this.y - this.height,
+      right: this.x + this.width,
+      bottom: this.y + this.height
+    };
+
+    return rect;
+  }
+  get width() { return this.radius; }
+  set width(val) { this.drawObject.radius = val; }
+
+  get height() { return this.radius; }
+  set height(val) { this.drawObject.radius = val; }
 
   get center() { return { x: this.x, y: this.y } }
   get tokens() { return this.tokenAmount; }

@@ -10,9 +10,48 @@ class DrawingObject {
     this.selectionState = null;
     this.executionState = null;
     this.currentState = null;
-
-    //refer in drawobject to this?
   }
+
+  //check collisions with adjacent nodes.
+  //not necessary, may omit if buggy or performance issues
+  checkCollision(otherNodes) {
+    for (var index = 0; index < otherNodes.length; index++) {
+      var otherNode = otherNodes[index].To.name == this.name ? otherNode = otherNodes[index].From : otherNode = otherNodes[index].To;
+      var otherBB = otherNode.BoundingBox;
+      var collision = this.intersect(otherBB);
+
+      if (collision) {
+        console.log('collison!!', collision);
+        this.drawObject.dragging = false;
+        var vec = Victor.fromObject(otherNode.center).subtract(Victor.fromObject(this.center)).normalize();
+        this.x -= 13 * vec.x;
+        this.y -= 13 * vec.y;
+      }
+    }
+  }
+
+  get BoundingBox() {
+    var rect = {
+      left: this.x,
+      top: this.y,
+      right: this.x + this.width,
+      bottom: this.y + this.height
+    };
+
+    return rect;
+  }
+
+  intersect(b) {
+    var a = this.BoundingBox;
+    return (a.left <= b.right &&
+      b.left <= a.right &&
+      a.top <= b.bottom &&
+      b.top <= a.bottom)
+  }
+
+  get dragging() { return this.drawObject.dragging; }
+  set dragging(val) { this.drawObject.dragging = val; }
+
   get width() { return this.drawObject.width; }
   set width(val) { this.drawObject.width = val; }
 

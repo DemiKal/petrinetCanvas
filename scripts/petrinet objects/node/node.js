@@ -19,14 +19,16 @@ class Node extends DrawingObject {
   get selected() { return this.selectionCircle.opacity > 0 }
   set selected(bool) { bool ? this.selectionCircle.opacity = 1 : this.selectionCircle.opacity = 0; this.redraw(); }
 
-
   get edges() { return this.outgoingEdges.concat(this.incomingEdges); }
   get name() { return this.namePlate.text; }
   set name(newname) {
     if (this.namePlate) namePlate.text = newname;
     else this.text = newname;
   }
+  createBoundingBox() {
+    var boundingBox = new Rectangle(Victor.fromObject(this.center).subtract(new Victor(this.width, this.height)));
 
+  }
   //assuming rectangular shape. override if not the case
   edgePosition(endPos) {
     var upperLeft = { x: this.center.x - this.width / 2, y: this.center.y - this.height / 2 };
@@ -53,9 +55,12 @@ class Node extends DrawingObject {
     }
 
     //this shouldnt happen, NODES SHOULD NOT OVERLAP!
-    alert('INTERSECTION ERROR!')
-    return false;
+    //alert('INTERSECTION ERROR!')
+    return endPos;
   }
+
+
+
   alignEdge(edge, from, to, direction) {
     edge.start = from;
     edge.end = to;
@@ -70,6 +75,9 @@ class Node extends DrawingObject {
   }
 
   lineOnEdge() {
+    //make sure the nodes dont collidge and if they do push them back a little
+    this.checkCollision(this.edges);
+
     var center = Victor.fromObject(this.center);
     for (var index = 0; index < this.outgoingEdges.length; index++) {
       var edge = this.outgoingEdges[index];
@@ -87,104 +95,15 @@ class Node extends DrawingObject {
       var direction = targetCenter.clone().subtract(from);
       this.alignEdge(edge, from, to, direction);
     }
-    //   var edge = this.outgoingEdges[index];
-    //   var targetCenter = Victor.fromObject(edge.To.center)
-
-
-    //   var from = this.edgePosition(targetCenter); //diff
-    //   var to = edge.To.edgePosition(center);      //diff
-
-    //   edge.end = to;
-    //   edge.start = from;
-
-    //   var direction = targetCenter.clone().subtract(center);  //diff
-    //   var triangle = edge.children[0];
-    //   var edgepos = Victor.fromObject({ x: edge.x, y: edge.y });
-    //   var triangleAnchor = edgepos.clone().subtract(Victor.fromObject(from));
-
-    //   triangle.rotation = direction.angleDeg();
-    //   triangle.x = triangleAnchor.x;
-    //   triangle.y = triangleAnchor.y;
-    // }
-
-    // for (var index = 0; index < this.incomingEdges.length; index++) {
-    //   var edge = this.incomingEdges[index];
-    //   var targetCenter = Victor.fromObject(edge.To.center)
-    //   var from = edge.From.edgePosition(targetCenter);
-    //   var to = edge.To.edgePosition(from);
-
-    //   edge.end = to;
-    //   edge.start = from;
-
-    //   var direction = targetCenter.clone().subtract(from);  //diff
-    //   var triangle = edge.children[0];
-    //   var edgepos = Victor.fromObject({ x: edge.x, y: edge.y });
-    //   var triangleAnchor = edgepos.clone().subtract(Victor.fromObject(from));
-
-    //   triangle.rotation = direction.angleDeg();
-    //   triangle.x = triangleAnchor.x;
-    //   triangle.y = triangleAnchor.y;
-
-    // }
-    // this.edges.forEach(function (currentEdge) {
-    //   var midpoint = center + currentEdge.To.center / 2;
-    //   var to = currentEdge.To.edgePosition(center);
-    //   var from = originalNode.edgePosition(currentEdge.to.center);
-    //   currentEdge.end.x = to.x;
-    //   currentEdge.end.y = to.y;
-    //   currentEdge.start.x = from.x;
-    //   currentEdge.start.y = from.y;
-
-
-    // });
   }
-
-
-  // lineOnEdge() {
-  //   this.edges.forEach(function (currentEdge) {
-  //     var rectWidthFrom = currentEdge.From.width / 2;
-  //     var rectWidthTo = currentEdge.To.width / 2;
-
-  //     var subtractionRadius = Math.max(rectWidthFrom, rectWidthTo)
-
-  //     var v1x = currentEdge.start.x = currentEdge.From.center.x;
-  //     var v1y = currentEdge.start.y = currentEdge.From.center.y;
-  //     var v2x = currentEdge.end.x = currentEdge.To.center.x
-  //     var v2y = currentEdge.end.y = currentEdge.To.center.y
-
-  //     var triangle = currentEdge.children[0];
-
-  //     var vector = new Victor(v2x - v1x, v2y - v1y);
-
-  //     var subvec = vector.clone().normalize().multiply(new Victor(subtractionRadius, subtractionRadius));
-
-  //     currentEdge.start.x += subvec.x;
-  //     currentEdge.start.y += subvec.y;
-  //     currentEdge.end.x -= subvec.x;
-  //     currentEdge.end.y -= subvec.y;
-
-  //     var vec = Victor(currentEdge.end.x - currentEdge.x, currentEdge.end.y - currentEdge.y);
-  //     var vec3 = new Victor(currentEdge.To.strokeWidth + triangle.radius / 2, currentEdge.To.strokeWidth + triangle.radius / 2);
-  //     var subVec = vec.clone().normalize().multiply(vec3);
-  //     vec.subtract(subVec);
-
-  //     triangle.rotation = vector.angleDeg();
-  //     triangle.x = vec.x;
-  //     triangle.y = vec.y;
-
-  //     currentEdge.end.x = triangle.abs_x;
-  //     currentEdge.end.y = triangle.abs_y;
-  //   })
-  // }
-
-  // RemoveDragAndDrop() { this.drawObject.dragAndDrop(false) }
 
   AddDragAndDrop(opt) {
     this.drawObject.dragAndDrop({
       start: function () { nodeIsMoving = true },
       move: function () {
         console.log('dragging');
-        this.classPointer.lineOnEdge()
+        this.classPointer.lineOnEdge();
+
       },
       end: function () { nodeIsMoving = false }
     })

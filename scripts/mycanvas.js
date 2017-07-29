@@ -50,10 +50,13 @@ jQuery(document).ready(function ($) {
     $canvas.bind("mousedown", function (event) { $canvas.currentState.MouseDown(event); });
     $canvas.bind("keydown", function (event) { $canvas.currentState.KeyDown(event); });
     $canvas.bind("keypress", function (event) { $canvas.currentState.KeyPress(event); });
-    $canvas.bind("keyup", function (event) { $canvas.currentState.KeyUp(event); });
+    $canvas.bind("keyup", function (event) { $canvas.currentState.KeyUp(event); drawbbox(event); });
 
     initMenu();
-    
+
+
+
+
     function initMenu() {
         $addPlaceButton = new AddPlaceButton(10, 10, 100, 50, "Add node (A)");
         $addEdgeButton = new AddEdgeButton(120, 10, 100, 50, "Add Edge (E)");
@@ -68,7 +71,13 @@ jQuery(document).ready(function ($) {
         $buttons.push($addPlaceButton, $addEdgeButton, $selectedButton, $executionButton, $validationButton);
     }
 
+    function drawbbox(event) {
+        var allnodes = $.extend([], $nodes);
+        for (var index = 0; index < allnodes.length; index++) {
+            var element = allnodes[index];
 
+        }
+    }
 
 });
 
