@@ -14,13 +14,7 @@ function verifyUserPetrinet(simulationStates) {
 }
 
 function Signature(petrinetState) {
-    var keys = [];
-    var sortedDict = {};
-    var places = petrinetState.activePlaces;
-    var sortedKeys = Object.keys(places);
-    sortedKeys.sort();
-    sortedKeys.forEach(x => sortedDict[x] = places[x]);
-
+    var sortedDict = SortDictionary(petrinetState.activePlaces);
     var result = "";
     $.each(sortedDict, function (key, value) {
         result += value + "*" + key + " ";
@@ -46,4 +40,12 @@ function CreateStateEdgeList(states) {
         }
     }
     return PNstateEdges;
+}
+
+function SortDictionary(dict) {
+    var sortedDict = {};
+    var sortedKeys = Object.keys(dict);
+    sortedKeys.sort();
+    sortedKeys.forEach(x => sortedDict[x] = dict[x]);
+    return sortedDict;
 }
