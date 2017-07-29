@@ -227,22 +227,6 @@ class PetriNetState extends Node {
         this.selectionCircle.redraw();
     }
 
-    get signature() {
-        var keys = [];
-        $.each(this.activePlaces, function (key, value) { keys.push(key); });
-
-        keys.sort();
-
-        var result = "";
-        keys.forEach(function (key) {
-            var value = this.activePlaces[key];
-            result += value + "*" + key + " ";
-        }, this);
-        result = result.slice(0, -1);
-
-        return result;
-    }
-
     get width() { return this.drawObject.width; }
     get ratio() { return this.drawObject.height / this.drawObject.width; }
 

@@ -1,6 +1,6 @@
 $LAB
     //3rd party
-    .script('scripts/3rd party/jquery-3.2.1.min.js').wait()
+    //.script('scripts/3rd party/jquery-3.2.1.min.js').wait()
     .script('scripts/3rd party/ocanvas-2.8.7.js').wait()
     .script('scripts/3rd party/victor.js').wait()
 

@@ -22,9 +22,6 @@ class PS_SelectionState extends IEventHandler {
         //     this.parent.redraw();
 
         // }
-
-        var s = this.parent.signature;
-
     }
     DoubleClick(event) { }
     MouseEnter(event) { }
