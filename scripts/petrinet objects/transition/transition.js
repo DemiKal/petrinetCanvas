@@ -26,7 +26,6 @@ class Transition extends Node {
         this.drawObject.addChild(this.selectionCircle);
         this.initEventHandlers();
     }
-
     get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 } }
 
     //check if all incoming edges have > 0 tokens
@@ -41,6 +40,7 @@ class Transition extends Node {
         this.redraw();
         return isSated;
     }
+
 
     //consume a token from incoming edges, then distribute
     fire() {

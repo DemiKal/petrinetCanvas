@@ -34,6 +34,15 @@ class Place extends Node {
     this.redraw();
   }
 
+  edgePosition(endPos) {
+    var from = Victor.fromObject(this.center);
+    var to = Victor.fromObject(endPos);
+    var dir = to.subtract(from).normalize();
+
+    dir.multiply(new Victor(this.radius, this.radius));
+    var newPos = from.clone().add(dir);
+    return newPos;
+  }
 
   extraButtons() {
     //set plus sign

@@ -3,6 +3,7 @@ $LAB
     //.script('scripts/3rd party/jquery-3.2.1.min.js').wait()
     .script('scripts/3rd party/ocanvas-2.8.7.js').wait()
     .script('scripts/3rd party/victor.js').wait()
+    .script('scripts/3rd party/math.js').wait()
 
     //canvas
     .script('scripts/canvas/states/canvasDefaultState.js').wait()
