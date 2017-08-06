@@ -84,7 +84,7 @@ jQuery(document).ready(function ($) {
     $canvas.bind("mousedown", function (event) { $canvas.currentState.MouseDown(event); });
     $canvas.bind("keydown", function (event) { $canvas.currentState.KeyDown(event); });
     $canvas.bind("keypress", function (event) { $canvas.currentState.KeyPress(event); });
-    $canvas.bind("keyup", function (event) { $canvas.currentState.KeyUp(event); drawbbox(event); });
+    $canvas.bind("keyup", function (event) { $canvas.currentState.KeyUp(event);   });
 
     initMenu();
 

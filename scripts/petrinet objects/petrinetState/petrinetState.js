@@ -378,6 +378,7 @@ class PetriNetState extends Node {
             name: this.id
         }).add();
 
+        
         var text = $canvas.display.text({
             x: pixelWidth / 2, y: pixelWidth / 2, origin: { x: 'center', y: 'center' },
             font: 'bold 30px sans-serif', text: "Add places", fill: '#0ba'

@@ -5,7 +5,7 @@ $LAB
     .script('scripts/3rd party/victor.js').wait()
 
     //misc
-    .script('scripts/misc/rect.js').wait()
+    .script('scripts/misc/popup.js').wait()
 
     //canvas
     .script('scripts/canvas/states/canvasDefaultState.js').wait()

@@ -9,9 +9,10 @@ function initMenu() {
 
     //this should later be implemented in its own class
     $validationButton.drawObject.bind("click tap", function (event) { event.stopPropagation(); initSimulation(); console.log('Clicked on validation button'); });
-    $resetColorsButton.drawObject.bind("click tap", function (event) { event.stopPropagation(); ResetColors(); console.log('Resetting Colors'); });
+    $resetColorsButton.drawObject.bind("click tap", function (event) { event.stopPropagation(); ResetColors(); console.log('b4'); CreatePopup(mousePos(), "Resetting Colors", true, $resetColorsButton); });
 
     $buttons.push($addPlaceButton, $addEdgeButton, $selectedButton, $executionButton, $validationButton);
+
 }
 
 function drawbbox(event) {
@@ -21,14 +22,17 @@ function drawbbox(event) {
         // var bb = element.BoundingBox;
         // element.drawObject.addChild($canvas.display.rectangle({ x: bb.left - element.x , y:  bb.top - element.y, width: bb.right - bb.left, height: bb.bottom - bb.top, fill: "#0aa"}));
     }
+
 }
 
-
+function mousePos() {
+    return { x: $canvas.mouse.x, y: $canvas.mouse.y }
+}
 function ResetColors() {
     $PNstates.forEach(function (element) {
         element.ResetColors();
     }, this);
-    
+
 }
 
 function AddPlace(pos) {
