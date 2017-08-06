@@ -4,13 +4,10 @@ class PetriNetState extends Node {
         //from which state/node did it come from?
 
         // this.from = fromState;
-        this.nextStates = [];
         this.activeTransitions = [];
         this.activePlaces = {};
-        this.id = this.CreateId();
         this.drawObject = this.createStateNode(x, y, width, height);
         this.drawObject.classPointer = this;
-        //this.AddDragAndDrop();
 
         this.defaultState = new PS_DefaultState(this);
         this.selectionState = new PS_SelectionState(this);
@@ -18,14 +15,55 @@ class PetriNetState extends Node {
         this.edgePendingState = new PS_EdgePendingState(this);
         this.currentState = this.defaultState;
 
-        this.selectionCircle = this.createSelectionCircle()
-
-        console.log($nodes)
+        this.selectionCircle = this.createSelectionCircle();
 
         this.initEventHandlers();
         this.popupMenu = this.CreatePopupAnchor();
         this.placeAnchor = this.CreatePlaceAnchor();
         this.AddDragAndDrop();
+    }
+
+    ResetColors() {
+        var drawObj = this.drawObject;
+        drawObj.stroke = $colorSettings.petrinetState.stroke;
+
+        this.edges.forEach(function (element) {
+            //use the edges'own reset method when it has its own drawobj class
+            element.stroke = $colorSettings.edge.stroke;
+            element.children[0].fill = $colorSettings.edge.arrow;
+            element.redraw();
+        }, this);
+
+        this.redraw();
+    }
+
+    get isCorrect() {
+        return this.drawObject.stroke == $colorSettings.petrinetState.stroke;
+    }
+
+    set isCorrect(val) {
+        val ? this.drawObject.stroke = $colorSettings.petrinetState.correctStroke : this.drawObject.stroke = $colorSettings.petrinetState.incorrectStroke;
+
+        if (!val) {
+            this.outgoingEdges.forEach(function (element) {
+                var arrow = element.children[0];
+                arrow.fill = $colorSettings.edge.incorrectArrow;
+                element.stroke = $colorSettings.edge.incorrectStroke;
+
+            }, this);
+        }
+
+        this.redraw()
+    }
+
+    get nextStates() {
+        var result = [];
+        this.outgoingEdges.forEach(function (element) {
+            var obj = element.To;
+            var id = obj.id;
+            result.push(id);
+        }, this);
+        return result;
     }
 
     CreatePlaceAnchor() {
@@ -133,7 +171,7 @@ class PetriNetState extends Node {
         var width = 50 * i + this.drawObject.strokeWidth * 2;
         if (width < 200) this.width = 200;
         else this.width = width;
-
+        if (!this.selected) return;
         this.CreatePopupMenu();
     }
 
@@ -202,7 +240,7 @@ class PetriNetState extends Node {
             y: -this.margin / 2 * this.height,
             width: this.width * (1 + this.margin * this.ratio),
             height: this.height * (1 + this.margin),
-            stroke: "3px red",
+            stroke: $colorSettings.petrinetState.selectionCircle,
             opacity: 0
         });
 
@@ -247,6 +285,8 @@ class PetriNetState extends Node {
 
     get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 } }
     get name() { return "petrinet state" + $PNstates.length; }
+    get id() { return Signature(this); }
+
     //old code
     readyTransitions() {
         for (var i = 0; i < $transitions.length; i++) {
@@ -254,6 +294,7 @@ class PetriNetState extends Node {
             if (trans.readyCheck(false)) this.activeTransitions.push(trans)
         }
     }
+
 
     CreateId() {
         var id = [];
@@ -269,12 +310,13 @@ class PetriNetState extends Node {
         return id;
     }
 
+    //this is the rectangle that is the main drawObject
     createStateNode(x, y, width, height) {
         var obj = $canvas.display.rectangle({
             x: x, y: y,
             width: width,
             height: height,
-            stroke: "5px #f46e42",
+            stroke: $colorSettings.petrinetState.stroke,
             name: this.id
         }).add();
 

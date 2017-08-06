@@ -13,7 +13,7 @@ class ExecutionButtonExecutionState extends IEventHandler {
 
         $nodes.forEach(function (node) {
             node.AddDragAndDrop();
-            node.drawObject.stroke = "5px red"; //reset colors
+            node.drawObject.stroke = "5px red"; //reset colors TODO: FIX
 
             if (node instanceof Place) {
                 node.tokens = node.originalTokens;

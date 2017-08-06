@@ -1,4 +1,37 @@
 jQuery(document).ready(function ($) {
+    //these are the original global color setting. 
+    $colorSettings = {
+        petrinetState:
+        {
+            stroke: "5px #f46e42",
+            correctStroke: "5px green",
+            incorrectStroke: "5px red",
+            selectionCircle: "3px orange"
+        },
+        place:
+        {
+            stroke: "5px red",
+            nameColor: "#0ba",
+            tokenColor: "#0ba",
+            selectionCircle: "3px orange"
+        },
+        transition:
+        {
+            stroke: "5px red",
+            nameColor: "#0ba",
+            readyFireStroke: "5px green",
+            selectionCircle: "3px orange"
+        },
+        edge:
+        {
+            stroke: "11px #0aa",
+            correctStroke: "11px green",
+            incorrectStroke: "11px red",
+            arrow: "#0da",
+            incorrectArrow: "red",
+            correctArrow: "green",
+        }
+    };
 
     //global vars
     $nodes = [];
@@ -15,6 +48,7 @@ jQuery(document).ready(function ($) {
     currentState = null;
     $stateManager = new StateManager();
     $buttons = [];
+
 
     mycanvas = document.getElementById("canvas");
     context = mycanvas.getContext("2d");
@@ -54,30 +88,6 @@ jQuery(document).ready(function ($) {
 
     initMenu();
 
-
-
-
-    function initMenu() {
-        $addPlaceButton = new AddPlaceButton(10, 10, 100, 50, "Add node (A)");
-        $addEdgeButton = new AddEdgeButton(120, 10, 100, 50, "Add Edge (E)");
-        $selectedButton = new Button(230, 10, 100, 50, "None selected");
-        $selected = null;
-        $executionButton = new ExecutionButton(340, 10, 100, 50, "Execute");
-        $validationButton = new Button(450, 10, 100, 50, "Validate");
-
-        //this should later be implemented in its own class
-        $validationButton.drawObject.bind("click tap", function (event) { event.stopPropagation(); initSimulation(); console.log('Clicked on validation button'); });
-
-        $buttons.push($addPlaceButton, $addEdgeButton, $selectedButton, $executionButton, $validationButton);
-    }
-
-    function drawbbox(event) {
-        var allnodes = $.extend([], $nodes);
-        for (var index = 0; index < allnodes.length; index++) {
-            var element = allnodes[index];
-
-        }
-    }
 
 });
 

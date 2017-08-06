@@ -14,20 +14,24 @@ class Transition extends Node {
         this.executionState = new TransitionExecutionState(this);
         this.currentState = this.defaultState;
 
-        this.selectionCircle = $canvas.display.rectangle({
-            x: -0.05 * this.width,
-            y: -0.05 * this.height,
-            width: this.width * 1.1,
-            height: this.height * 1.1,
-            stroke: "3px orange",
-            opacity: 0
-        });
-
-        this.drawObject.addChild(this.selectionCircle);
+        this.selectionCircle = this.createSelectionCircle();
         this.initEventHandlers();
     }
     get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 } }
 
+    createSelectionCircle() {
+        var selectionCircle = $canvas.display.rectangle({
+            x: -0.05 * this.width,
+            y: -0.05 * this.height,
+            width: this.width * 1.1,
+            height: this.height * 1.1,
+            stroke: $colorSettings.transition.selectionCircle,
+            opacity: 0
+        });
+
+        this.drawObject.addChild(selectionCircle);
+        return selectionCircle;
+    }
     //check if all incoming edges have > 0 tokens
     readyCheck(colorIndicator = true) {
         var isSated = true;
@@ -35,8 +39,8 @@ class Transition extends Node {
 
         if (!colorIndicator) return isSated;
 
-        if (isSated) this.drawObject.stroke = "5px green";
-        else this.drawObject.stroke = "5px red";
+        if (isSated) this.drawObject.stroke = $colorSettings.transition.readyFireStroke;
+        else this.drawObject.stroke = $colorSettings.transition.stroke;
         this.redraw();
         return isSated;
     }
@@ -82,7 +86,7 @@ class Transition extends Node {
             x: x, y: y,
             width: width,
             height: height,
-            stroke: "5px red",
+            stroke: $colorSettings.transition.stroke,
             name: text
         });
 
@@ -92,7 +96,7 @@ class Transition extends Node {
             origin: { x: "center", y: "top" },
             font: "bold 30px sans-serif",
             text: text,
-            fill: "#0ba"
+            fill: $colorSettings.place.nameColor
         });
 
         // transition.bind("click tap", function (event) { transition.classPointer.currentState.Click(event); });

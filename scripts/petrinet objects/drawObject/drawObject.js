@@ -14,9 +14,10 @@ class DrawingObject {
 
   //check collisions with adjacent nodes.
   //not necessary, may omit if buggy or performance issues
-  checkCollision(otherNodes) {
-    for (var index = 0; index < otherNodes.length; index++) {
-      var otherNode = otherNodes[index].To.name == this.name ? otherNode = otherNodes[index].From : otherNode = otherNodes[index].To;
+  checkCollision(edges) {
+    for (var index = 0; index < edges.length; index++) {
+      //make sure you're comparing this boundingbox with the other node's bbox
+      var otherNode = edges[index].To.drawObject.id == this.drawObject.id ? otherNode = edges[index].From : otherNode = edges[index].To;
       var otherBB = otherNode.BoundingBox;
       var collision = this.intersect(otherBB);
 
@@ -84,9 +85,4 @@ class DrawingObject {
       this.classPointer.currentState.MouseLeave(event); event.stopPropagation();
     });
   }
-
-  // Click(classPointer, event) { this.currentState.Click(); }
-  // DoubleClick(classPointer, event) { this.currentState.DoubleClick(); }
-  // MouseEnter(classPointer, event) { this.currentState.MouseEnter(); }
-  // MouseLeave(classPointer, event) { this.currentState.MouseLeave(); }
 }

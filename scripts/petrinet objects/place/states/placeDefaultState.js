@@ -14,9 +14,10 @@ class placeDefaultState extends IEventHandler {
     }
 
     MouseEnter(event) {
-        //this.parent.drawObject.stroke = "5px white"
+
     }
+    
     MouseLeave(event) {
-        //this.parent.drawObject.stroke = "5px red"
+
     }
 }

@@ -13,10 +13,8 @@ class TransitionDefaultState extends IEventHandler {
         console.log('DOUBLEclicked on transition in default state')
     }
     MouseEnter(event) {
-       // this.parent.drawObject.stroke = "5px white"
     }
     MouseLeave(event) {
-       // this.parent.drawObject.stroke = "5px red"
     }
 }
 

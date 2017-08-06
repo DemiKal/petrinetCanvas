@@ -5,7 +5,7 @@ class AddEdgeSelectionState extends IEventHandler {
         var line = $canvas.display.line({
             start: { x: $selected.center.x, y: $selected.center.y },
             end: { x: $canvas.mouse.x, y: $canvas.mouse.y },
-            stroke: "11px #0aa",
+            stroke: $edgeStroke,
             cap: "round"
         }).add();
 

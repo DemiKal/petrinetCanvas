@@ -4,6 +4,7 @@ function verifyUserPetrinet(simulationStates) {
     var PNStates = $.extend([], $PNstates);
     var simulatedEdges = [];
     var simulationStateEdges = [];
+    var signatureLookup = createLookupTable(PNStates);
 
     //var x = simulationStates[0].places;
     //var y = Object.keys(x)
@@ -11,6 +12,92 @@ function verifyUserPetrinet(simulationStates) {
     var PNstateEdges = CreateStateEdgeList(PNStates);
     var PNsimulatedStateEdges = CreateStateEdgeList(simulationStates);
 
+    //now compare the two datastructures and send feedback to the user
+    compareSimulation(PNstateEdges, PNsimulatedStateEdges, signatureLookup);
+}
+
+function compareSimulation(PNstateEdges, PNsimulatedStateEdges, signatureLookup) {
+    var correctStates = [];
+    var incorrectStates = [];
+    var x = PNsimulatedStateEdges.length;
+    var missingEdges = [];
+
+    for (var element in PNstateEdges) {
+        if (PNstateEdges.hasOwnProperty(element)) {
+            if (element in PNsimulatedStateEdges) {
+                missingEdges[element] = []
+                correctStates.push(element);
+                var nextStates = PNstateEdges[element];
+                var SimNextStates = PNsimulatedStateEdges[element];
+
+                //check if the simulatedEdges contains all the user defined edges of the current state
+                SimNextStates.forEach(function (toState) {
+                    if (-1 < $.inArray(toState, nextStates)) {
+
+                    }
+                    else {
+                        missingEdges[element].push(toState);
+
+                    }
+
+
+                }, this);
+            }
+            else incorrectStates.push(element)
+
+        }
+    }
+
+    for (var index = 0; index < correctStates.length; index++) {
+        var element = correctStates[index];
+        var currentStateObj = signatureLookup[element];
+        currentStateObj.isCorrect = true;
+
+        var outerEdges = currentStateObj.nextStates;
+        var simulatedOuterEdges = PNsimulatedStateEdges[element];
+        outerEdges.sort();
+        simulatedOuterEdges.sort();
+
+        compareEdges(element, outerEdges, simulatedOuterEdges, signatureLookup);
+    }
+
+    for (var index = 0; index < incorrectStates.length; index++) {
+        var element = incorrectStates[index];
+        var currentStateObj = signatureLookup[element];
+        currentStateObj.isCorrect = false;
+
+    }
+}
+
+function compareEdges(currentState, outerEdges, simulatedOuterEdges, signatureLookup) {
+    for (var index = 0; index < outerEdges.length; index++) {
+        var element = outerEdges[index];
+        var petriDrawObject = signatureLookup[currentState];
+        var i = $.inArray(element, simulatedOuterEdges)
+
+        if (i != -1) {
+            //find the edge of element where currentState -> element then paint it green or something
+            var edge = findEdge(petriDrawObject, element);
+            edge.stroke = $colorSettings.edge.correctStroke;
+            edge.children[0].fill = $colorSettings.edge.correctArrow;
+            edge.redraw();
+        }
+        else {
+            var edge = findEdge(petriDrawObject, element);
+            edge.stroke = $colorSettings.edge.incorrectStroke;
+            edge.children[0].fill = $colorSettings.edge.incorrectArrow;
+            edge.redraw();
+        }
+    }
+}
+
+function findEdge(petriDrawObject, id) {
+    var edge = null;
+    petriDrawObject.outgoingEdges.forEach(function (_edge) {
+        if (_edge.To.id == id)
+            edge = _edge;
+    });
+    return edge;
 }
 
 function Signature(petrinetState) {
@@ -41,7 +128,15 @@ function CreateStateEdgeList(states) {
     }
     return PNstateEdges;
 }
-
+function createLookupTable(PNStates) {
+    var dict = {};
+    for (var index = 0; index < PNStates.length; index++) {
+        var element = PNStates[index];
+        var sign = Signature(element);
+        dict[sign] = element;
+    }
+    return dict;
+}
 function SortDictionary(dict) {
     var sortedDict = {};
     var sortedKeys = Object.keys(dict);

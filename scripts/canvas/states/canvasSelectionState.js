@@ -29,7 +29,7 @@ class canvasSelectionState {
         var line = $canvas.display.line({
             start: $selected.center,
             end: { x: $canvas.mouse.x, y: $canvas.mouse.y },
-            stroke: "11px #0aa",
+            stroke: $colorSettings.edge.stroke,
             cap: "round"
         }).add();
 

@@ -3,7 +3,7 @@ class Place extends Node {
     super();
     this.radius = radius;
     this.text = text;
-    this.drawObject = createNode(x, y, radius, text, tokens);
+    this.drawObject = this.createNode(x, y, radius, text, tokens);
     this.drawObject.classPointer = this;
     this.namePlate = this.drawObject.children[0];
     this.tokensPlate = this.drawObject.children[1];
@@ -11,6 +11,7 @@ class Place extends Node {
     this.originalTokens = this.tokenAmount;
     this.AddDragAndDrop();
     this.extraButtons();
+    this.selectionCircle = this.createSelectionCircle();
 
     this.defaultState = new placeDefaultState(this);
     this.edgePendingState = new placeEdgePendingState(this);
@@ -18,13 +19,10 @@ class Place extends Node {
     this.executionState = new placeExecutionState(this);
     this.currentState = this.defaultState;
 
-    this.selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: this.radius * 1.1, stroke: "3px orange", opacity: 0 });
-    this.drawObject.addChild(this.selectionCircle);
-    this.initEventHandlers();
 
-    // this.selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: 55, stroke: "3px orange", opacity: 1});
-    //this.drawObject.add(this.selectionCircle)
+    this.initEventHandlers();
   }
+
   //override since the centerpoint is in the middle and not in the topleft like most objects
   get BoundingBox() {
     var rect = {
@@ -36,6 +34,7 @@ class Place extends Node {
 
     return rect;
   }
+
   get width() { return this.radius; }
   set width(val) { this.drawObject.radius = val; }
 
@@ -49,14 +48,44 @@ class Place extends Node {
     this.tokensPlate.text = amount;
     this.redraw();
   }
+  createSelectionCircle() {
+    var selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: this.radius * 1.1, stroke: $colorSettings.place.selectionCircle, opacity: 0 });
+    this.drawObject.addChild(selectionCircle);
+    return selectionCircle;
+  }
 
+  createNode(x, y, radius, text, tokens) {
+    var place = $canvas.display.ellipse({ x: x, y: y, radius: radius, stroke: $colorSettings.place.stroke, name: text });
+    var nodeText = $canvas.display.text({
+      x: 0, y: radius, origin: { x: 'center', y: 'top' },
+      font: 'bold 30px sans-serif', text: text, fill: $colorSettings.place.nameColor
+    });
+
+
+    var tokenText = $canvas.display.text({
+      x: 0, y: 0, origin: { x: 'center', y: 'center' },
+      font: 'bold 30px sans-serif', text: tokens, fill: $colorSettings.place.tokenColor
+    });
+
+    place.addChild(nodeText);
+    place.addChild(tokenText);
+    place.add();
+    //remove!
+    place.tokens = tokens;
+    place.originalTokens = tokens;
+    place.nodeType = 'place';
+
+    place.classPointer = this;
+
+    return place;
+  }
   edgePosition(endPos) {
     var from = Victor.fromObject(this.center);
     var to = Victor.fromObject(endPos);
     var dir = to.subtract(from).normalize();
-
     dir.multiply(new Victor(this.radius, this.radius));
     var newPos = from.clone().add(dir);
+
     return newPos;
   }
 
@@ -82,48 +111,10 @@ class Place extends Node {
     line.addChild(line2);
     this.drawObject.addChild(line) //child  index 2
 
-
-    //TODO MAKE OWN CLASS WITH STATE
+    //TODO: MAKE OWN CLASS WITH STATE
     line.bind('click tap', function (event) { this.parent.classPointer.tokens++ });
   }
 
-
 }
 
-function createNode(x, y, radius, text, tokens) {
-  var place = $canvas.display.ellipse({ x: x, y: y, radius: radius, stroke: '5px red', name: text });
-  var nodeText = $canvas.display.text({
-    x: 0, y: radius, origin: { x: 'center', y: 'top' },
-    font: 'bold 30px sans-serif', text: text, fill: '#0ba'
-  });
 
-  var tokenText = $canvas.display.text({
-    x: 0, y: 0, origin: { x: 'center', y: 'center' },
-    font: 'bold 30px sans-serif', text: tokens, fill: '#0ba'
-  });
-
-  place.addChild(nodeText);
-  place.addChild(tokenText);
-  place.add();
-  //remove!
-  place.tokens = tokens;
-  place.originalTokens = tokens;
-  place.nodeType = 'place';
-
-  place.classPointer = null;
-
-  //refer to state!
-  // place.bind('click tap', function (event) { place.classPointer.currentState.Click(event); });
-  // place.bind('dblclick', function (event) { /*   fire(this);   */ });
-  // place.bind('mouseenter', function (event) { place.classPointer.currentState.MouseEnter(event) });
-  // place.bind('mouseleave', function (event) { place.classPointer.currentState.MouseLeave(event) });
-
-  var selectionCircleColor = "3px orange"
-  selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: radius * 1.1, stroke: selectionCircleColor, opacity: 0 });
-
-  place.addChild(selectionCircle);
-
-
-
-  return place;
-}

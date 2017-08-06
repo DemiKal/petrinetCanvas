@@ -9,10 +9,12 @@ class placeSelectionState extends IEventHandler {
          event.stopPropagation();
     }
     DoubleClick(event) { this.parent.tokens++;}
+  
     MouseEnter(event) {
-       // this.parent.drawObject.stroke = "5px white"
+
     }
+
     MouseLeave(event) {
-     //   this.parent.drawObject.stroke = "5px red"
+        
     }
 }

@@ -1,3 +1,36 @@
+function initMenu() {
+    $addPlaceButton = new AddPlaceButton(10, 10, 100, 50, "Add node (A)");
+    $addEdgeButton = new AddEdgeButton(120, 10, 100, 50, "Add Edge (E)");
+    $selectedButton = new Button(230, 10, 100, 50, "None selected");
+    $selected = null;
+    $executionButton = new ExecutionButton(340, 10, 100, 50, "Execute");
+    $validationButton = new Button(450, 10, 100, 50, "Validate");
+    $resetColorsButton = new Button(560, 10, 100, 50, "Reset Colors");
+
+    //this should later be implemented in its own class
+    $validationButton.drawObject.bind("click tap", function (event) { event.stopPropagation(); initSimulation(); console.log('Clicked on validation button'); });
+    $resetColorsButton.drawObject.bind("click tap", function (event) { event.stopPropagation(); ResetColors(); console.log('Resetting Colors'); });
+
+    $buttons.push($addPlaceButton, $addEdgeButton, $selectedButton, $executionButton, $validationButton);
+}
+
+function drawbbox(event) {
+    var allnodes = $.extend([], $nodes);
+    for (var index = 0; index < allnodes.length; index++) {
+        var element = allnodes[index];
+        // var bb = element.BoundingBox;
+        // element.drawObject.addChild($canvas.display.rectangle({ x: bb.left - element.x , y:  bb.top - element.y, width: bb.right - bb.left, height: bb.bottom - bb.top, fill: "#0aa"}));
+    }
+}
+
+
+function ResetColors() {
+    $PNstates.forEach(function (element) {
+        element.ResetColors();
+    }, this);
+    
+}
+
 function AddPlace(pos) {
     var position = { x: $canvas.width / 2, y: $canvas.height / 2 };
     if (pos) position = pos;
@@ -49,7 +82,7 @@ function edgePlacementValidation(node) {
     if ($selected.constructor == node.constructor && node.constructor != PetriNetState) { console.log("same type!"); return false; }
     if ($selected.constructor == PetriNetState && node.constructor != PetriNetState) { console.log("cant link state to node!"); return false; }
     if ($selected.constructor != PetriNetState && node.constructor == PetriNetState) { console.log("cant link state to node!"); return false; }
-    
+
     var mapped = node.incomingEdges.map(function (item) { return item.From; });
     if ($.inArray($selected, mapped) != -1) { console.log("edge already exists"); return false; }
 
@@ -60,7 +93,7 @@ function createEdge(nodeA, nodeB) {
     var line = $canvas.display.line({
         start: { x: nodeA.x, y: nodeA.y },
         end: { x: nodeB.x, y: nodeB.y },
-        stroke: "11px #0aa",
+        stroke: $colorSettings.edge.stroke,
         cap: "butt"
     });
 
@@ -75,7 +108,7 @@ function createEdge(nodeA, nodeB) {
 
     var triangle = $canvas.display.polygon({
         x: 0, y: 0, sides: 3, radius: 20,
-        rotation: 0, fill: "#0da"
+        rotation: 0, fill: $colorSettings.edge.arrow
     });
 
     line.addChild(triangle);
@@ -90,7 +123,7 @@ function createEdge(nodeA, nodeB) {
 
 function deselect() {
     $nodes.forEach(function (item) { item.selected = false; });
-    $selected  = null;
+    $selected = null;
     $selectedButton.name = "None selected";
     $selectedButton.redraw();
 }
