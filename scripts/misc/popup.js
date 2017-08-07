@@ -1,28 +1,30 @@
 function CreatePopup(pos, text, fade, obj) {
     //TODO: get font from general variable
-    var font = "17px sans-serif";
+    var font = "13px sans-serif";
     var fontsplitted = font.split(' ');
     //if there is a style like bold or italic in front of NRpx, then index is 1.  
     var pxIndex = isDigitCode(font[0]) ? 0 : 1
     var fontpx = 1.1 * font.split(' ')[pxIndex].split('px')[0];
-
-    var ctx = mycanvas.getContext("2d");
-    ctx.font = font;
-    var width = ctx.measureText(text).width
+    var textlines = text.split('\n');
+    var width = measureStringWidth(textlines, font);
+    var height = fontpx * textlines.length;
     var rect = $canvas.display.rectangle({
         x: pos.x, y: pos.y,
         width: width * 1.05,
-        height: fontpx,
+        height: height,
         stroke: "2px orange",
-        opacity: 0
+        opacity: 0,
+        zIndex: "front"
     }).add();
 
+    obj.hoverTime = 0;
     var nodeText = $canvas.display.text({
         x: rect.width / 2, y: 0, origin: { x: 'center', y: 'top' },
         font: font, text: text, fill: $colorSettings.place.nameColor
     });
 
     if (fade == undefined || fade == false) {
+        rect.opacity = 1;
         var boxSize = fontpx < 25 ? fontpx : 25;
         var xButton = $canvas.display.rectangle({
             x: rect.width, y: 0,
@@ -51,22 +53,44 @@ function CreatePopup(pos, text, fade, obj) {
             $canvas.redraw();
         });
 
+        var lineToEdge = $canvas.display.line({
+            start: { x: 0, y: 0 },
+            end: { x: rect.x - obj.x, y: rect.y - obj.y },
+            stroke: "2px 0ba",
+            cap: "square"
+        });
+
         rect.addChild(xButton);
-        rect.dragAndDrop();
+        rect.addChild(lineToEdge);
+
+
+        var dd = {
+            start: function () { },
+            move: function () {
+                lineToEdge.end.x = obj.x - rect.x;
+                lineToEdge.end.y = obj.y - rect.y;
+            },
+            end: function () { }
+        }
+        rect.dragAndDrop(dd);
     }
 
     else {
         obj.drawObject.bind("mouseenter", function () {
             $canvas.setLoop(function () {
-                console.log("entering button at " + obj.hoverTime);
+                console.log(obj.hoverTime);
                 if (rect.opacity > 0) return;
-                if (obj.hoverTime > 1) {
+                var sec = 1;
+                if (obj.hoverTime > sec * $canvas.settings.fps) {
                     obj.hoverTime = 0;
-                    rect.fadeIn("short", "ease-out-cubic", function () { $canvas.timeline.stop() });
+                    var mousepos = mousePos();
+                    rect.x = mousepos.x;
+                    rect.y = mousepos.y;
+
+                    rect.fadeIn("short", "ease-out-cubic", function () { $canvas.timeline.stop(); });
                 }
                 else {
-                    var add = 1 / $canvas.settings.fps;
-                    obj.hoverTime += add
+                    obj.hoverTime += 1;
                 }
 
             }).start();
@@ -82,7 +106,7 @@ function CreatePopup(pos, text, fade, obj) {
         });
     }
 
-    rect.hoverTime = 0;
+
     rect.addChild(nodeText);
     rect.add();
 
@@ -93,4 +117,13 @@ function CreatePopup(pos, text, fade, obj) {
 
 function isDigitCode(n) {
     return !isNaN(parseInt(n));
+}
+
+//of the given textlines, get the widest for the border around it.
+function measureStringWidth(textlines, font) {
+    var ctx = mycanvas.getContext("2d");
+    ctx.font = font;
+    var list = textlines.map(function (element) { return ctx.measureText(element).width; });
+    return Math.max.apply(null, list);
+
 }

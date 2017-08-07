@@ -18,7 +18,8 @@ class Place extends Node {
     this.selectionState = new placeSelectionState(this);
     this.executionState = new placeExecutionState(this);
     this.currentState = this.defaultState;
-
+    
+    
 
     this.initEventHandlers();
   }

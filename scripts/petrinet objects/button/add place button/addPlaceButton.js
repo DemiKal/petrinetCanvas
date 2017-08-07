@@ -12,6 +12,8 @@ class AddPlaceButton extends Button {
         // this.drawObject.bind("dblclick", function (event) { this.classPointer.currentState.DoubleClick(event); });
         // this.drawObject.bind("mouseenter", function (event) { this.classPointer.currentState.MouseEnter(event); });
         // this.drawObject.bind("mouseleave", function (event) { this.classPointer.currentState.MouseLeave(event); });
+        //this.helpMessage = CreatePopup(mousePos(), "Add a Place\nOr press [A].",true, this);
+        this.helpMessage = this.AddHelpMessage("Add a Place\nOr press [A].");
 
         this.initEventHandlers();
     }

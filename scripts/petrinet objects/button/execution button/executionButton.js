@@ -7,11 +7,7 @@ class ExecutionButton extends Button {
         this.selectionState = new ExecutionButtonSelectionState(this);
         this.executionState = new ExecutionButtonExecutionState(this);
         this.currentState = this.defaultState;
-         
-        // this.drawObject.bind("click tap", function (event, classPointer) { this.classPointer.currentState.Click(event); });
-        // this.drawObject.bind("dblclick", function (event, classPointer) { this.classPointer.currentState.DoubleClick(event); });
-        // this.drawObject.bind("mouseenter", function (event, classPointer) { this.classPointer.currentState.MouseEnter(event); });
-        // this.drawObject.bind("mouseleave", function (event, classPointer) { this.classPointer.currentState.MouseLeave(event); });
+        this.helpMessage = this.AddHelpMessage("Click to execute your Petrinet.\n Click on the transitions to fire\ngreen means ready to fire");
         this.initEventHandlers();
     }
 }

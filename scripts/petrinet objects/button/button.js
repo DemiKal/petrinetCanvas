@@ -12,6 +12,14 @@ class Button extends DrawingObject {
         else this.text = newname;
     }
 
+    AddHelpMessage(text){
+        var pos  = mousePos();
+        var popupMessage = CreatePopup(pos, text, true, this) ;
+        this.drawObject.addChild(popupMessage);
+        popupMessage.zIndex = "front";
+        return popupMessage;
+    }
+    
     createButton(x, y, width, height, text) {
         var button = $canvas.display.rectangle({
             x: x,

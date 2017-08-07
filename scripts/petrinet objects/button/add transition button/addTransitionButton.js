@@ -7,6 +7,7 @@ class AddTransition extends Button {
         this.selectionState = new AddTransitionSelectionState(this);
         this.executionState = new AddTransitionExecutionState(this);
         this.currentState = this.defaultState;
+        this.helpMessage = this.AddHelpMessage("Add a transition\nOr press [T]");
 
         // this.drawObject.bind("click tap", function (event) { this.classPointer.currentState.Click(event); });
         // this.drawObject.bind("dblclick", function (event) { this.classPointer.currentState.DoubleClick(event); });

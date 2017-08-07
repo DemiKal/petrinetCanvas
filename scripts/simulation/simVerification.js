@@ -20,7 +20,7 @@ function compareSimulation(PNstateEdges, PNsimulatedStateEdges, signatureLookup)
     var correctStates = [];
     var incorrectStates = [];
     var x = PNsimulatedStateEdges.length;
-    var missingEdges = [];
+    var missingEdges = {};
 
     for (var element in PNstateEdges) {
         if (PNstateEdges.hasOwnProperty(element)) {
@@ -47,6 +47,8 @@ function compareSimulation(PNstateEdges, PNsimulatedStateEdges, signatureLookup)
 
         }
     }
+
+    popupMessageMissingEdges(missingEdges, signatureLookup);
 
     for (var index = 0; index < correctStates.length; index++) {
         var element = correctStates[index];
@@ -86,11 +88,34 @@ function compareEdges(currentState, outerEdges, simulatedOuterEdges, signatureLo
             var edge = findEdge(petriDrawObject, element);
             edge.stroke = $colorSettings.edge.incorrectStroke;
             edge.children[0].fill = $colorSettings.edge.incorrectArrow;
+            //add messagebox
+            var txt = "this edge is incorrect";
+            CreatePopup({ x: edge.x, y: edge.y }, txt, false, edge);
             edge.redraw();
         }
     }
 }
 
+//create a popup message for the states that are missing edges
+function popupMessageMissingEdges(missingEdges, signatureLookup) {
+    var nrMissing = Object.keys(missingEdges).length;
+    var PNStates = $.extend([], $PNstates);
+    for (var key in missingEdges) {
+        if (missingEdges.hasOwnProperty(key)) {
+            var missingStates = missingEdges[key];
+            var obj = signatureLookup[key];
+            var text = "this state is missing " + nrMissing + " edge(s)!\n";
+            var alreadyExisting = 0;
+            PNStates.forEach(function (element) { if (Signature(element) in missingStates) alreadyExisting++; }, this);
+            var nrOfnewStates = (nrMissing - alreadyExisting);
+            text += "You have already made " + alreadyExisting + " states\nThat this one should point to.\nFigure out which one to connect!\n";
+            text += "Therefore, " + nrOfnewStates + " new states should be made.";
+            CreatePopup({ x: obj.x, y: obj.y }, text, false, obj);
+
+        }
+    }
+
+}
 function findEdge(petriDrawObject, id) {
     var edge = null;
     petriDrawObject.outgoingEdges.forEach(function (_edge) {
