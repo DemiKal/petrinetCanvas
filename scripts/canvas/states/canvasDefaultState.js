@@ -21,16 +21,17 @@ class canvasDefaultState {
     KeyDown(event) {
 
         var pos = { x: $canvas.mouse.x, y: $canvas.mouse.y };
+
         // key T
-        if (event.which === 84) SpawnTransition(pos);
+        if (event.which === 84) SpawnTransition(pos, event.which);
 
         //key A
-        if (event.which === 65) AddPlace(pos);
+        if (event.which === 65) AddPlace(pos, event.which);
 
         //Q
-        if (event.which === 81) SpawnPNState(pos)
-
+        if (event.which === 81) SpawnPNState(pos, event.which);
     }
+
     KeyPress(event) { }
     KeyUp(event) { }
 

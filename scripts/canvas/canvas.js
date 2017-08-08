@@ -15,13 +15,33 @@ function initMenu() {
     $resetColorsButton.drawObject.bind("click tap", function (event) { event.stopPropagation(); ResetAllColors(); });
     $resetColorsButton.helpMessage = $resetColorsButton.AddHelpMessage("Reset colors of your reachability graph");
 
+    $saveLogButton = $canvas.display.rectangle({
+        x: 670,
+        y: 10,
+        width: 100,
+        height: 50,
+        fill: "#000"
+    }).add();
+
+    var buttonText = $canvas.display.text({
+        x: $saveLogButton.width / 2,
+        y: $saveLogButton.height / 2,
+        origin: { x: "center", y: "center" },
+        font: "bold 10px sans-serif",
+        text: "save log file",
+        fill: "#fff"
+    });
+    $saveLogButton.addChild(buttonText);
+    $saveLogButton.bind("click tap", function (event) { event.stopPropagation(); saveLog(); });
+    $saveLogButton.bind("mouseenter", function (event) { event.stopPropagation(); this.fill = "orange"; this.redraw(); });
+    $saveLogButton.bind("mouseleave", function (event) { event.stopPropagation(); this.fill = "black"; this.redraw(); });
+
     $buttons.push($addPlaceButton, $addEdgeButton, $selectedButton, $executionButton, $validationButton);
-
-
-
-
 }
 
+function comparePosition(a, b) {
+    return (a.x == b.x && a.y == b.y);
+}
 function drawbbox(event) {
     var allnodes = $.extend([], $nodes);
     for (var index = 0; index < allnodes.length; index++) {
@@ -42,16 +62,21 @@ function ResetAllColors() {
 
 }
 
-function AddPlace(pos) {
+function AddPlace(pos, buttonPress) {
     var position = { x: $canvas.width / 2, y: $canvas.height / 2 };
     if (pos) position = pos;
     var name = "P" + ($places.length + 1);
     var newPlace = new Place(position.x, position.y, 50, name, 1);
+
+    var action = "created place by clicking spawn button"
+    if (buttonPress) action = `created by pressing [${String.fromCharCode(buttonPress)}]`;
+
     $nodes.push(newPlace);
     $places.push(newPlace);
+    logAction(action, newPlace, `at ${JSON.stringify(pos)}`)
 }
 
-function SpawnTransition(pos) {
+function SpawnTransition(pos, buttonPress) {
     var position = { x: $canvas.width / 2, y: $canvas.height / 2 };
     if (pos) position = pos;
     var name = "T" + ($transitions.length + 1);
@@ -59,17 +84,26 @@ function SpawnTransition(pos) {
     var height = 100;
 
     var trans = new Transition(pos.x - width / 2, pos.y - height / 2, 100, 100, name);
+    var action = "created transition by clicking spawn button"
+    if (buttonPress) action = `created by pressing [${String.fromCharCode(buttonPress)}]`;
+    logAction(action, trans, `at ${JSON.stringify(pos)}`)
+
     $nodes.push(trans);
     $transitions.push(trans);
 }
 
-function SpawnPNState(pos) {
+function SpawnPNState(pos, buttonPress) {
     position = { x: $canvas.width / 2, y: $canvas.height / 2 };
     if (pos) position = pos;
     var width = 200;
     var height = 100
 
     var pnstate = new PetriNetState(pos.x - width / 2, pos.y - height / 2, width, height)
+
+    var action = "created transition by clicking spawn button"
+    if (buttonPress) action = `created by pressing [${String.fromCharCode(buttonPress)}]`;
+    logAction(action, pnstate, `at ${JSON.stringify(pos)}`)
+
     $nodes.push(pnstate);
     $PNstates.push(pnstate);
 }
@@ -89,14 +123,36 @@ function TryEdge(node) {
 function edgePlacementValidation(node) {
     var selectedClass = $selected.constructor;
     var nodeClass = node.constructor;
-    if ($selected === node) { console.log('cant point to self!'); return false; }
-    if ($selected.constructor == node.constructor && node.constructor != PetriNetState) { console.log("same type!"); return false; }
-    if ($selected.constructor == PetriNetState && node.constructor != PetriNetState) { console.log("cant link state to node!"); return false; }
-    if ($selected.constructor != PetriNetState && node.constructor == PetriNetState) { console.log("cant link state to node!"); return false; }
+    if ($selected === node) {
+        logAction('tried to point edge to itself', node);
+        ErrorPopup("can't point edge to self");
+        return false;
+    }
+    if ($selected.constructor == node.constructor && node.constructor != PetriNetState) {
+        logAction('tried to link to same type', $selected);
+        ErrorPopup("This node can't point to the same type");
+        return false;
+    }
+    if ($selected.constructor == PetriNetState && node.constructor != PetriNetState) {
+        logAction('tried to link petrinetState with another type', $selected);
+        ErrorPopup("Can only link to same node type");
+        return false;
+    }
+
+    if ($selected.constructor != PetriNetState && node.constructor == PetriNetState) {
+        logAction('tried to link to a petrinetState', $selected);
+        ErrorPopup("This type cannot point to that type");
+        return false;
+    }
 
     var mapped = node.incomingEdges.map(function (item) { return item.From; });
-    if ($.inArray($selected, mapped) != -1) { console.log("edge already exists"); return false; }
+    if ($.inArray($selected, mapped) != -1) {
+        logAction('edge already exists to', $selected);
+        ErrorPopup("Edge already exists");
+        return false;
+    }
 
+    logAction('edge placed', $selected, ` with ${node.name} of type ${node.constructor.name}`);
     return true;
 }
 

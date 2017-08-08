@@ -50,19 +50,4 @@ class StateManager {
             else node.originalTokens = node.tokens;  //remember token amount before execution
         });
     }
-
-    //old code
-    petriNetSimulation() {
-        state.currentState = state.executionState;
-        button.children[0].text = "Execution Mode";
-        button.children[0].fill = "red";
-
-        //create new currentStaet in the context of coverability graph. The new state has null as parent
-        currentState = new PetriNetState();
-        petrinetStates.push(currentState);
-        console.log(currentState)
-        console.log(currentState.id)
-    }
-
-
 }

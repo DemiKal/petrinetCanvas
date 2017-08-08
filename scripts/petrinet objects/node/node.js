@@ -25,6 +25,10 @@ class Node extends DrawingObject {
     if (this.namePlate) namePlate.text = newname;
     else this.text = newname;
   }
+  
+  ResetColors() { 
+
+  }
   createBoundingBox() {
     var boundingBox = new Rectangle(Victor.fromObject(this.center).subtract(new Victor(this.width, this.height)));
 
@@ -75,9 +79,6 @@ class Node extends DrawingObject {
   }
 
   lineOnEdge() {
-    //make sure the nodes dont collidge and if they do push them back a little
-    this.checkCollision(this.edges);
-
     var center = Victor.fromObject(this.center);
     for (var index = 0; index < this.outgoingEdges.length; index++) {
       var edge = this.outgoingEdges[index];
@@ -97,15 +98,25 @@ class Node extends DrawingObject {
     }
   }
 
-  AddDragAndDrop(opt) {
+  AddDragAndDrop() {
     this.drawObject.dragAndDrop({
-      start: function () { nodeIsMoving = true },
+      start: function () {
+        nodeIsMoving = true;
+        this.classPointer.prevPosition = this.classPointer.position;
+      },
+
       move: function () {
-        console.log('dragging');
         this.classPointer.lineOnEdge();
 
       },
-      end: function () { nodeIsMoving = false }
+      end: function () {
+        nodeIsMoving = false;
+        if (!comparePosition(this.classPointer.prevPosition, this.classPointer.position)) {
+          var prevpos = JSON.stringify(this.classPointer.prevPosition);
+          var pos = JSON.stringify(this.classPointer.position);
+          logAction("stopped dragging", this.classPointer, "from " + prevpos + " to " + pos);
+        }
+      }
     })
   }
 }

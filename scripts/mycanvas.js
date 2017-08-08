@@ -34,9 +34,12 @@ jQuery(document).ready(function ($) {
     };
 
     //global vars
+    //the list of actions that should be written to a (database) file. 
+    //Currently a huge string.
+    $actions = "";
     $nodes = [];
-    $transitions = [];   //not used yet
-    $edges = [];      //not used yet
+    $transitions = [];
+    $edges = [];
     $PNstates = [];
     $simulationStates = [];
     $places = [];
@@ -48,8 +51,6 @@ jQuery(document).ready(function ($) {
     currentState = null;
     $stateManager = new StateManager();
     $buttons = [];
-
-
     mycanvas = document.getElementById("canvas");
     context = mycanvas.getContext("2d");
     mycanvas.width = $(window).width();
@@ -64,6 +65,10 @@ jQuery(document).ready(function ($) {
         background: '#2c3e50',
         fps: 60,
     });
+
+    //create simple error message box
+    $errorMessage = CreatePopupMessage({ x: 0, y: 0 }, "errormessage");
+    $errorMessage.opacity = 0;
 
     $canvas.defaultState = new canvasDefaultState();
     $canvas.selectionState = new canvasSelectionState();
@@ -84,7 +89,7 @@ jQuery(document).ready(function ($) {
     $canvas.bind("mousedown", function (event) { $canvas.currentState.MouseDown(event); });
     $canvas.bind("keydown", function (event) { $canvas.currentState.KeyDown(event); });
     $canvas.bind("keypress", function (event) { $canvas.currentState.KeyPress(event); });
-    $canvas.bind("keyup", function (event) { $canvas.currentState.KeyUp(event);   });
+    $canvas.bind("keyup", function (event) { $canvas.currentState.KeyUp(event); });
 
     initMenu();
 

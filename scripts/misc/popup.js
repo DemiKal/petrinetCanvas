@@ -1,7 +1,6 @@
 function CreatePopupMessage(pos, text) {
     //TODO: get font from general variable
     var font = "13px sans-serif";
-    var fontsplitted = font.split(' ');
     //if there is a style like bold or italic in front of NRpx, then index is 1.  
     var pxIndex = isDigitCode(font[0]) ? 0 : 1
     var fontpx = 1.1 * font.split(' ')[pxIndex].split('px')[0];
@@ -13,7 +12,8 @@ function CreatePopupMessage(pos, text) {
         width: width * 1.05,
         height: height,
         stroke: "2px orange",
-        zIndex: "front"
+        zIndex: "front",
+        opacity: 0
     }).add();
 
 
@@ -27,9 +27,33 @@ function CreatePopupMessage(pos, text) {
     return rect;
 }
 
+
+function ErrorPopup(errorMessage) {
+    var pos = mousePos();
+    var font = "16px sans-serif";
+    var pxIndex = isDigitCode(font[0]) ? 0 : 1
+    var fontpx = 1.1 * font.split(' ')[pxIndex].split('px')[0];
+    var textlines = errorMessage.split('\n');
+    var width = measureStringWidth(textlines, font);
+    
+    $errorMessage.width = width;
+    $errorMessage.height = 1.1 * font.split(' ')[pxIndex].split('px')[0];;
+    $errorMessage.x = pos.x;
+    $errorMessage.y = pos.y;
+
+    $errorMessage.children[0].text = errorMessage;
+    $errorMessage.children[0].x = $errorMessage.width / 2;
+    $errorMessage.children[0].redraw();
+
+
+    $errorMessage.finish();
+
+    $errorMessage.fadeIn(100, "linear", function () { $errorMessage.fadeOut("long", "ease-in-cubic") });
+}
+
 function CreateClickablePopup(pos, text, obj) {
     var rect = CreatePopupMessage(pos, text);
-
+    rect.opacity = 1;
     //make a clickable box to remove the message
     var boxSize = 25;//fontpx < 25 ? fontpx : 25;
     var xButton = $canvas.display.rectangle({
@@ -94,7 +118,6 @@ function CreateFadingMessage(pos, text, obj) {
     obj.hoverTime = 0;
     obj.drawObject.bind("mouseenter", function () {
         $canvas.setLoop(function () {
-            console.log(obj.hoverTime);
             if (rect.opacity > 0) return;
             var sec = 1;
             if (obj.hoverTime > sec * $canvas.settings.fps) {

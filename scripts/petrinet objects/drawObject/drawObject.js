@@ -82,6 +82,7 @@ class DrawingObject {
   initEventHandlers() {
     this.drawObject.bind("click tap", function (event) {
       this.classPointer.currentState.Click(event); event.stopPropagation();
+      logAction('clicked on', this.classPointer);
     });
 
     this.drawObject.bind("dblclick", function (event) {
@@ -90,13 +91,18 @@ class DrawingObject {
 
     this.drawObject.bind("mouseenter", function (event) {
       this.classPointer.currentState.MouseEnter(event); event.stopPropagation();
-      var a = this.classPointer.mouseIntersect();
-      console.log(a);
+
+      logAction('Mouse entered ', this.classPointer);
 
     });
 
     this.drawObject.bind("mouseleave", function (event) {
       this.classPointer.currentState.MouseLeave(event); event.stopPropagation();
+
+      logAction('mouse left ', this.classPointer);
+
+      //if a is true, it means the mouse has left, yet is still inside the boundingbox. TODO: fix this bug.
+
       var a = this.classPointer.mouseIntersect();
       if (a) console.log('mouseleave triggered but still inside boundingbox!', a);
     });

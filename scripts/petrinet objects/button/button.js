@@ -30,6 +30,7 @@ class Button extends DrawingObject {
     AddHelpMessage(text) {
         var pos = mousePos();
         var popupMessage = CreateFadingMessage(pos, text, this);
+        popupMessage.opacity=0;
         this.drawObject.addChild(popupMessage);
         popupMessage.zIndex = "front";
         return popupMessage;

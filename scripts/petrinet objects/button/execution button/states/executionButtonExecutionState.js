@@ -12,6 +12,7 @@ class ExecutionButtonExecutionState extends IEventHandler {
         // event.stopPropagation();
         $transitions.forEach(t => t.ResetColors());
         $places.forEach(p => p.tokens = p.originalTokens);
+        $nodes.forEach(n => n.AddDragAndDrop());
 
         this.parent.namePlate.fill = "white";
         this.parent.namePlate.redraw();
