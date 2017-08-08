@@ -45,12 +45,16 @@ class PetriNetState extends Node {
         val ? this.drawObject.stroke = $colorSettings.petrinetState.correctStroke : this.drawObject.stroke = $colorSettings.petrinetState.incorrectStroke;
 
         if (!val) {
+            //TODO FIGURE OUT WHICH ACTIVE PLACES INSIDE THIS STATE ARE INCORRECT
+            var txt = "this state is incorrect";
+            CreateClickablePopup(this.position, txt, this);
+
             this.outgoingEdges.forEach(function (element) {
                 var arrow = element.children[0];
                 arrow.fill = $colorSettings.edge.incorrectArrow;
                 element.stroke = $colorSettings.edge.incorrectStroke;
-                var txt = "this edge is wrong since the origin is wrong";
-                CreatePopup({ x: element.x, y: element.y }, txt, false, element);
+                txt = "this edge is wrong since the original state is wrong";
+                CreateClickablePopup({ x: element.x, y: element.y }, txt, element);
             }, this);
         }
 

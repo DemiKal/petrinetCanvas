@@ -3,23 +3,38 @@ class Button extends DrawingObject {
         super(x, y);
         this.drawObject = this.createButton(x, y, width, height, text);
         this.drawObject.classPointer = this;
-
     }
+
     get name() { return this.namePlate.text; }
 
     set name(newname) {
         if (this.namePlate) this.namePlate.text = newname;
         else this.text = newname;
     }
+    bindManual() {
+        
+        this.drawObject.bind("mouseenter", function (event) {
+            this.fill = "orange";
+            this.redraw();
+        });
+        this.drawObject.bind("mouseleave", function (event) {
+            this.fill = "black";
+            this.redraw();
+        });
+    }
+    fillColor(color) {
+        this.drawObject.fill = color;
+        this.redraw();
+    }
 
-    AddHelpMessage(text){
-        var pos  = mousePos();
-        var popupMessage = CreatePopup(pos, text, true, this) ;
+    AddHelpMessage(text) {
+        var pos = mousePos();
+        var popupMessage = CreateFadingMessage(pos, text, this);
         this.drawObject.addChild(popupMessage);
         popupMessage.zIndex = "front";
         return popupMessage;
     }
-    
+
     createButton(x, y, width, height, text) {
         var button = $canvas.display.rectangle({
             x: x,
@@ -37,6 +52,7 @@ class Button extends DrawingObject {
             text: text,
             fill: "#fff"
         });
+
         this.namePlate = buttonText;
         button.addChild(buttonText);
         button.classPointer = null;

@@ -1,4 +1,4 @@
-function CreatePopup(pos, text, fade, obj) {
+function CreatePopupMessage(pos, text) {
     //TODO: get font from general variable
     var font = "13px sans-serif";
     var fontsplitted = font.split(' ');
@@ -13,106 +13,113 @@ function CreatePopup(pos, text, fade, obj) {
         width: width * 1.05,
         height: height,
         stroke: "2px orange",
-        opacity: 0,
         zIndex: "front"
     }).add();
 
-    obj.hoverTime = 0;
+
     var nodeText = $canvas.display.text({
         x: rect.width / 2, y: 0, origin: { x: 'center', y: 'top' },
         font: font, text: text, fill: $colorSettings.place.nameColor
     });
 
-    if (fade == undefined || fade == false) {
-        rect.opacity = 1;
-        var boxSize = fontpx < 25 ? fontpx : 25;
-        var xButton = $canvas.display.rectangle({
-            x: rect.width, y: 0,
-            width: boxSize,
-            height: boxSize,
-            stroke: "2px orange",
-        });
+    rect.addChild(nodeText);
+    rect.add();
+    return rect;
+}
 
-        var ul = { x: 0, y: 0 };
-        var ur = { x: xButton.width, y: 0 };
-        var lr = { x: xButton.width, y: xButton.height };
-        var ll = { x: 0, y: xButton.height };
+function CreateClickablePopup(pos, text, obj) {
+    var rect = CreatePopupMessage(pos, text);
 
-        var line1 = $canvas.display.line({
-            start: ul,
-            end: lr,
-            stroke: "2px red",
-            cap: "square"
-        });
+    //make a clickable box to remove the message
+    var boxSize = 25;//fontpx < 25 ? fontpx : 25;
+    var xButton = $canvas.display.rectangle({
+        x: rect.width, y: 0,
+        width: boxSize,
+        height: boxSize,
+        stroke: "2px orange",
+    });
 
-        var line2 = line1.clone({ start: ll, end: ur });
-        xButton.addChild(line1);
-        xButton.addChild(line2);
-        xButton.bind("click tap", function (event) {
-            rect.opacity = 0;
-            $canvas.redraw();
-        });
+    var ul = { x: 0, y: 0 };
+    var ur = { x: xButton.width, y: 0 };
+    var lr = { x: xButton.width, y: xButton.height };
+    var ll = { x: 0, y: xButton.height };
 
+    var line1 = $canvas.display.line({
+        start: ul,
+        end: lr,
+        stroke: "2px red",
+        cap: "square"
+    });
+    var line2 = line1.clone({ start: ll, end: ur });
+
+    xButton.addChild(line1);
+    xButton.addChild(line2);
+    xButton.bind("click tap", function (event) {
+        rect.opacity = 0;
+        $canvas.redraw();
+    });
+    rect.addChild(xButton);
+    rect.dragAndDrop();
+
+    //if there is an object to draw a line to
+    if (obj != null || obj != undefined) {
         var lineToEdge = $canvas.display.line({
             start: { x: 0, y: 0 },
-            end: { x: rect.x - obj.x, y: rect.y - obj.y },
+            //end: { x: rect.x, y: rect.y },
+            end: { x: obj.x - rect.x, y: obj.y - rect.y },
             stroke: "2px 0ba",
             cap: "square"
         });
-
-        rect.addChild(xButton);
         rect.addChild(lineToEdge);
-
-
-        var dd = {
+        rect.dragAndDrop(false);
+        rect.dragAndDrop({
             start: function () { },
             move: function () {
+                // lineToEdge.end.x = obj.x;
+                // lineToEdge.end.y = obj.y;
+                console.log('rdargg')
                 lineToEdge.end.x = obj.x - rect.x;
                 lineToEdge.end.y = obj.y - rect.y;
             },
             end: function () { }
-        }
-        rect.dragAndDrop(dd);
-    }
-
-    else {
-        obj.drawObject.bind("mouseenter", function () {
-            $canvas.setLoop(function () {
-                console.log(obj.hoverTime);
-                if (rect.opacity > 0) return;
-                var sec = 1;
-                if (obj.hoverTime > sec * $canvas.settings.fps) {
-                    obj.hoverTime = 0;
-                    var mousepos = mousePos();
-                    rect.x = mousepos.x;
-                    rect.y = mousepos.y;
-
-                    rect.fadeIn("short", "ease-out-cubic", function () { $canvas.timeline.stop(); });
-                }
-                else {
-                    obj.hoverTime += 1;
-                }
-
-            }).start();
-        });
-
-        obj.drawObject.bind("mouseleave", function () {
-            rect.fadeOut("long", "ease-out-cubic", function () { });
-            $canvas.timeline.stop();
-            var s = obj.hoverTime;
-            console.log('exiting button after ' + obj.hoverTime + " sec");
-            obj.hoverTime = 0;
-
         });
     }
-
-
-    rect.addChild(nodeText);
-    rect.add();
-
-
     return rect;
+}
 
+
+function CreateFadingMessage(pos, text, obj) {
+    var rect = CreatePopupMessage(pos, text);
+    rect.opacity = 0;
+    obj.hoverTime = 0;
+    obj.drawObject.bind("mouseenter", function () {
+        $canvas.setLoop(function () {
+            console.log(obj.hoverTime);
+            if (rect.opacity > 0) return;
+            var sec = 1;
+            if (obj.hoverTime > sec * $canvas.settings.fps) {
+                obj.hoverTime = 0;
+                var mousepos = mousePos();
+                rect.x = mousepos.x;
+                rect.y = mousepos.y;
+
+                rect.fadeIn("short", "ease-out-cubic", function () { $canvas.timeline.stop(); });
+            }
+            else {
+                obj.hoverTime += 1;
+            }
+
+        }).start();
+    });
+
+    obj.drawObject.bind("mouseleave", function () {
+        rect.fadeOut("long", "ease-out-cubic", function () { });
+        $canvas.timeline.stop();
+        var s = obj.hoverTime;
+        console.log('exiting button after ' + obj.hoverTime + " sec");
+        obj.hoverTime = 0;
+    });
+    return rect;
 }
 
 function isDigitCode(n) {

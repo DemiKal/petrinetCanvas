@@ -12,13 +12,11 @@ class AddEdgeDefaultState extends IEventHandler {
     }
 
     MouseEnter(event) {
-        this.parent.drawObject.fill = "orange";
-        this.parent.drawObject.redraw()
+        this.parent.fillColor("orange");
     }
 
     MouseLeave(event) {
-        this.parent.drawObject.fill = "black";
-        this.parent.drawObject.redraw()
+        this.parent.fillColor("black");
     }
 }
         // addPlace.bind("mouseenter", function (event) { this.fill = "orange"; this.redraw() });

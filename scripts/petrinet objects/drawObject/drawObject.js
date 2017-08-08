@@ -50,6 +50,15 @@ class DrawingObject {
       b.top <= a.bottom)
   }
 
+  mouseIntersect() {
+    var mp = mousePos();
+    var a = this.BoundingBox;
+    return ((a.left <= mp.x &&
+      mp.x <= a.right &&
+      a.top <= mp.y &&
+      mp.y <= a.bottom))
+  }
+
   get dragging() { return this.drawObject.dragging; }
   set dragging(val) { this.drawObject.dragging = val; }
 
@@ -65,24 +74,31 @@ class DrawingObject {
   set y(amount) { this.drawObject.y = amount; }
 
   get center() { return { x: this.x, y: this.y } }
-
+  get position() { return { x: this.x, y: this.y } };
 
   redraw() { this.drawObject.redraw(); }
   dragAndDrop(opt) { this.drawObject.dragAndDrop(opt); }
 
   initEventHandlers() {
-    this.drawObject.bind("click tap", function (event, classPointer) {
-      this.classPointer.currentState.Click(event);
-      event.stopPropagation();
+    this.drawObject.bind("click tap", function (event) {
+      this.classPointer.currentState.Click(event); event.stopPropagation();
     });
-    this.drawObject.bind("dblclick", function (event, classPointer) {
+
+    this.drawObject.bind("dblclick", function (event) {
       this.classPointer.currentState.DoubleClick(event); event.stopPropagation();
     });
-    this.drawObject.bind("mouseenter", function (event, classPointer) {
+
+    this.drawObject.bind("mouseenter", function (event) {
       this.classPointer.currentState.MouseEnter(event); event.stopPropagation();
+      var a = this.classPointer.mouseIntersect();
+      console.log(a);
+
     });
-    this.drawObject.bind("mouseleave", function (event, classPointer) {
+
+    this.drawObject.bind("mouseleave", function (event) {
       this.classPointer.currentState.MouseLeave(event); event.stopPropagation();
+      var a = this.classPointer.mouseIntersect();
+      if (a) console.log('mouseleave triggered but still inside boundingbox!', a);
     });
   }
 }

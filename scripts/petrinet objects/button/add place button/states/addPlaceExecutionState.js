@@ -8,11 +8,11 @@ class AddPlaceExecutionState extends IEventHandler {
     DoubleClick(event) {
         
     }
-
     MouseEnter(event) {
+        this.parent.fillColor("orange");
     }
-    
+
     MouseLeave(event) {
-       
+        this.parent.fillColor("black");
     }
 }

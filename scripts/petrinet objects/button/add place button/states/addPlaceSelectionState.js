@@ -10,9 +10,10 @@ class AddPlaceSelectionState extends IEventHandler {
     }
 
     MouseEnter(event) {
+        this.parent.fillColor("orange");
     }
 
     MouseLeave(event) {
-
+        this.parent.fillColor("black");
     }
 }

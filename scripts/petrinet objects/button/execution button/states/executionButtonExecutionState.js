@@ -10,17 +10,8 @@ class ExecutionButtonExecutionState extends IEventHandler {
         //  this.parent.children[0].fill = "#fff";
         // state.currentState = state.defaultState;
         // event.stopPropagation();
-
-        $nodes.forEach(function (node) {
-            node.AddDragAndDrop();
-            node.drawObject.stroke = "5px red"; //reset colors TODO: FIX
-
-            if (node instanceof Place) {
-                node.tokens = node.originalTokens;
-            }
-
-            node.redraw();
-        });
+        $transitions.forEach(t => t.ResetColors());
+        $places.forEach(p => p.tokens = p.originalTokens);
 
         this.parent.namePlate.fill = "white";
         this.parent.namePlate.redraw();
@@ -30,8 +21,12 @@ class ExecutionButtonExecutionState extends IEventHandler {
 
     DoubleClick(event) { }
 
-    MouseEnter(event) { }
+    MouseEnter(event) {
+        this.parent.fillColor("orange");
+    }
 
-    MouseLeave(event) { }
+    MouseLeave(event) {
+        this.parent.fillColor("black");
+    }
 }
 

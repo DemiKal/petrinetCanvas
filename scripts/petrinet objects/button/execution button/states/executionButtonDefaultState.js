@@ -11,7 +11,7 @@ class ExecutionButtonDefaultState extends IEventHandler {
         this.parent.namePlate.fill = "red";
         this.parent.namePlate.redraw();
 
-       // currentState = new PetriNetState(null);
+        // currentState = new PetriNetState(null);
     }
 
     DoubleClick(event) {
@@ -19,11 +19,13 @@ class ExecutionButtonDefaultState extends IEventHandler {
     }
 
     MouseEnter(event) {
+        this.parent.fillColor("orange");
     }
 
     MouseLeave(event) {
-
+        this.parent.fillColor("black");
     }
+
 
     readyCheckTransitions() {
         $nodes.forEach(function (node) {

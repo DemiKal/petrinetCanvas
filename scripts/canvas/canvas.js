@@ -5,13 +5,20 @@ function initMenu() {
     $selected = null;
     $executionButton = new ExecutionButton(340, 10, 100, 50, "Execute");
     $validationButton = new Button(450, 10, 100, 50, "Validate");
+    $validationButton.bindManual();
     $resetColorsButton = new Button(560, 10, 100, 50, "Reset Colors");
-
+    $resetColorsButton.bindManual();
     //this should later be implemented in its own class
     $validationButton.drawObject.bind("click tap", function (event) { event.stopPropagation(); initSimulation(); console.log('Clicked on validation button'); });
-    $resetColorsButton.drawObject.bind("click tap", function (event) { event.stopPropagation(); ResetColors(); console.log('b4'); CreatePopup(mousePos(), "Resetting Colors", true, $resetColorsButton); });
+    $validationButton.helpMessage = $validationButton.AddHelpMessage("Click this button to get feedback on\nYour reachability graph.");
+
+    $resetColorsButton.drawObject.bind("click tap", function (event) { event.stopPropagation(); ResetAllColors(); });
+    $resetColorsButton.helpMessage = $resetColorsButton.AddHelpMessage("Reset colors of your reachability graph");
 
     $buttons.push($addPlaceButton, $addEdgeButton, $selectedButton, $executionButton, $validationButton);
+
+
+
 
 }
 
@@ -28,8 +35,8 @@ function drawbbox(event) {
 function mousePos() {
     return { x: $canvas.mouse.x, y: $canvas.mouse.y }
 }
-function ResetColors() {
-    $PNstates.forEach(function (element) {
+function ResetAllColors() {
+    $nodes.forEach(function (element) {
         element.ResetColors();
     }, this);
 

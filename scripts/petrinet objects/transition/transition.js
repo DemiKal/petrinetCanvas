@@ -18,6 +18,11 @@ class Transition extends Node {
         this.initEventHandlers();
     }
     get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 } }
+    
+    ResetColors() {
+        this.drawObject.stroke = $colorSettings.transition.stroke;
+        this.redraw();
+    }
 
     createSelectionCircle() {
         var selectionCircle = $canvas.display.rectangle({
@@ -32,6 +37,7 @@ class Transition extends Node {
         this.drawObject.addChild(selectionCircle);
         return selectionCircle;
     }
+
     //check if all incoming edges have > 0 tokens
     readyCheck(colorIndicator = true) {
         var isSated = true;
@@ -44,7 +50,6 @@ class Transition extends Node {
         this.redraw();
         return isSated;
     }
-
 
     //consume a token from incoming edges, then distribute
     fire() {
@@ -98,11 +103,6 @@ class Transition extends Node {
             text: text,
             fill: $colorSettings.place.nameColor
         });
-
-        // transition.bind("click tap", function (event) { transition.classPointer.currentState.Click(event); });
-        // transition.bind("dblclick", function (event) { transition.classPointer.currentState.DoubleClick(event); });
-        // transition.bind("mouseenter", function (event) { transition.classPointer.currentState.MouseEnter(event); });
-        // transition.bind("mouseleave", function (event) { transition.classPointer.currentState.MouseLeave(event); });
 
         transition.addChild(nodeText);
         transition.classPointer = null;

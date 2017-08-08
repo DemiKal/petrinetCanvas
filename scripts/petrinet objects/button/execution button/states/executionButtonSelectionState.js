@@ -3,8 +3,8 @@ class ExecutionButtonSelectionState extends IEventHandler {
 
     Click(event) {
 
-       //invoke the default state method
-       this.parent.defaultState.Click();
+        //invoke the default state method
+        this.parent.defaultState.Click();
     }
 
     DoubleClick(event) {
@@ -12,9 +12,10 @@ class ExecutionButtonSelectionState extends IEventHandler {
     }
 
     MouseEnter(event) {
+        this.parent.fillColor("orange");
     }
 
     MouseLeave(event) {
-
+        this.parent.fillColor("black");
     }
 }
