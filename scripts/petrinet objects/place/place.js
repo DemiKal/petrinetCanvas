@@ -18,11 +18,13 @@ class Place extends Node {
     this.selectionState = new placeSelectionState(this);
     this.executionState = new placeExecutionState(this);
     this.currentState = this.defaultState;
-    
-    
+
+
 
     this.initEventHandlers();
   }
+  get getSameNodes() { return $.extend([], $places); }
+  get nameAbbreviation() { return 'P'; }
 
   //override since the centerpoint is in the middle and not in the topleft like most objects
   get BoundingBox() {

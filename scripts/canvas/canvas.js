@@ -1,43 +1,4 @@
-function initMenu() {
-    $addPlaceButton = new AddPlaceButton(10, 10, 100, 50, "Add node (A)");
-    $addEdgeButton = new AddEdgeButton(120, 10, 100, 50, "Add Edge (E)");
-    $selectedButton = new Button(230, 10, 100, 50, "None selected");
-    $selected = null;
-    $executionButton = new ExecutionButton(340, 10, 100, 50, "Execute");
-    $validationButton = new Button(450, 10, 100, 50, "Validate");
-    $validationButton.bindManual();
-    $resetColorsButton = new Button(560, 10, 100, 50, "Reset Colors");
-    $resetColorsButton.bindManual();
-    //this should later be implemented in its own class
-    $validationButton.drawObject.bind("click tap", function (event) { event.stopPropagation(); initSimulation(); console.log('Clicked on validation button'); });
-    $validationButton.helpMessage = $validationButton.AddHelpMessage("Click this button to get feedback on\nYour reachability graph.");
 
-    $resetColorsButton.drawObject.bind("click tap", function (event) { event.stopPropagation(); ResetAllColors(); });
-    $resetColorsButton.helpMessage = $resetColorsButton.AddHelpMessage("Reset colors of your reachability graph");
-
-    $saveLogButton = $canvas.display.rectangle({
-        x: 670,
-        y: 10,
-        width: 100,
-        height: 50,
-        fill: "#000"
-    }).add();
-
-    var buttonText = $canvas.display.text({
-        x: $saveLogButton.width / 2,
-        y: $saveLogButton.height / 2,
-        origin: { x: "center", y: "center" },
-        font: "bold 10px sans-serif",
-        text: "save log file",
-        fill: "#fff"
-    });
-    $saveLogButton.addChild(buttonText);
-    $saveLogButton.bind("click tap", function (event) { event.stopPropagation(); saveLog(); });
-    $saveLogButton.bind("mouseenter", function (event) { event.stopPropagation(); this.fill = "orange"; this.redraw(); });
-    $saveLogButton.bind("mouseleave", function (event) { event.stopPropagation(); this.fill = "black"; this.redraw(); });
-
-    $buttons.push($addPlaceButton, $addEdgeButton, $selectedButton, $executionButton, $validationButton);
-}
 
 function comparePosition(a, b) {
     return (a.x == b.x && a.y == b.y);
@@ -79,11 +40,10 @@ function AddPlace(pos, buttonPress) {
 function SpawnTransition(pos, buttonPress) {
     var position = { x: $canvas.width / 2, y: $canvas.height / 2 };
     if (pos) position = pos;
-    var name = "T" + ($transitions.length + 1);
     var width = 100;
     var height = 100;
 
-    var trans = new Transition(pos.x - width / 2, pos.y - height / 2, 100, 100, name);
+    var trans = new Transition(pos.x - width / 2, pos.y - height / 2, 100, 100);
     var action = "created transition by clicking spawn button"
     if (buttonPress) action = `created by pressing [${String.fromCharCode(buttonPress)}]`;
     logAction(action, trans, `at ${JSON.stringify(pos)}`)

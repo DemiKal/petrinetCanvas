@@ -8,6 +8,7 @@ $LAB
     //misc
     .script('scripts/misc/popup.js').wait()
     .script('scripts/misc/logging.js').wait()
+    .script('scripts/misc/UI.js').wait()
 
     //canvas
     .script('scripts/canvas/states/canvasDefaultState.js').wait()

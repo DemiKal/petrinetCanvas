@@ -91,7 +91,7 @@ jQuery(document).ready(function ($) {
     $canvas.bind("keypress", function (event) { $canvas.currentState.KeyPress(event); });
     $canvas.bind("keyup", function (event) { $canvas.currentState.KeyUp(event); });
 
-    initMenu();
+    initUI();
 
 
 });

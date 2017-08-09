@@ -7,6 +7,22 @@ class Node extends DrawingObject {
     this.outgoingEdges = [];
     this.selectionCircle = null;
   }
+  get sameNodes() {
+
+  }
+
+  calcName() {
+    var myNodes = this.sameNodes;
+    var names = myNodes.map(x => x.name);
+
+    //currently only works when you don't name them yourself. Be wary.
+    var nrs = $.extend([0], names.map(x => parseInt(x.split(/(\d+)/)[1])));
+
+    var highest = Math.max.apply(null, nrs);
+    highest += 1;
+    var newName = `${this.nameAbbreviation}` + highest;
+    return newName;
+  }
 
   Select() {
     $selectedButton.name = "Selected: " + this.name;
@@ -25,8 +41,8 @@ class Node extends DrawingObject {
     if (this.namePlate) namePlate.text = newname;
     else this.text = newname;
   }
-  
-  ResetColors() { 
+
+  ResetColors() {
 
   }
   createBoundingBox() {

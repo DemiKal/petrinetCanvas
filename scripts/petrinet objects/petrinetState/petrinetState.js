@@ -21,8 +21,16 @@ class PetriNetState extends Node {
         this.popupMenu = this.CreatePopupAnchor();
         this.placeAnchor = this.CreatePlaceAnchor();
         this.AddDragAndDrop();
+        this._name = this.calcName();
     }
 
+    get sameNodes() {
+        var states = $.extend([], $PNstates);
+        return states;
+    }
+    get nameAbbreviation() { return 'PS'; }
+    
+    //get the highest nr in the list. like state1, state2, state3, then make name yours state4
     ResetColors() {
         var drawObj = this.drawObject;
         drawObj.stroke = $colorSettings.petrinetState.stroke;
@@ -289,7 +297,9 @@ class PetriNetState extends Node {
     }
 
     get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 } }
-    get name() { return "petrinet state" + $PNstates.length; }
+    get name() { 
+        return this._name; }
+    set name(val) { this.nameAlt = val; }
     get id() { return Signature(this); }
 
     //old code

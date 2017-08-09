@@ -1,7 +1,8 @@
 class Transition extends Node {
-    constructor(x, y, width, height, text) {
+    constructor(x, y, width, height) {
         super();
-        this.drawObject = this.createTransition(x, y, width, height, text); //make width/heigth independent
+        var name = this.calcName();
+        this.drawObject = this.createTransition(x, y, width, height, name); //make width/heigth independent
         this.drawObject.classPointer = this;
         this.namePlate = this.drawObject.children[0];
         this.width = width;
@@ -16,9 +17,13 @@ class Transition extends Node {
 
         this.selectionCircle = this.createSelectionCircle();
         this.initEventHandlers();
+
     }
+    get sameNodes() { return $.extend([], $transitions); }
+    get nameAbbreviation() { return 'T'; }
+
     get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 } }
-    
+
     ResetColors() {
         this.drawObject.stroke = $colorSettings.transition.stroke;
         this.redraw();
