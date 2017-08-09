@@ -1,7 +1,7 @@
 class AddPlaceExecutionState extends IEventHandler {
     constructor(parent) { super(parent); }
     Click(event) {
-        console.log('cant add place in execution mode!')
+        console.log("cant add place in execution mode!");
 
     }
 

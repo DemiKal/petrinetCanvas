@@ -1,7 +1,7 @@
 class placeEdgePendingState extends IEventHandler {
     constructor(parent) { super(parent); }
     Click(event) {
-        TryEdge(this.parent)
+        TryEdge(this.parent);
         event.stopPropagation();
     }
 

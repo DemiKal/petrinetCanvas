@@ -5,7 +5,7 @@ class ExecutionButtonDefaultState extends IEventHandler {
         //deselect
         //switch to execution state
         deselect();
-        console.log('clicked on exec button in default state, switching to exec');
+        console.log("clicked on exec button in default state, switching to exec");
         $stateManager.SwitchToExecutionState();
         this.readyCheckTransitions();
         this.parent.namePlate.fill = "red";
@@ -34,7 +34,7 @@ class ExecutionButtonDefaultState extends IEventHandler {
             else node.originalTokens = node.tokens;  //remember token amount before execution
         });
 
-        $nodes.forEach(function (element) { element.dragAndDrop(false); })
+        $nodes.forEach(function (element) { element.dragAndDrop(false); });
 
     }
 

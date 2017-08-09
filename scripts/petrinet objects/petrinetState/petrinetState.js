@@ -28,7 +28,7 @@ class PetriNetState extends Node {
         var states = $.extend([], $PNstates);
         return states;
     }
-    get nameAbbreviation() { return 'PS'; }
+    get nameAbbreviation() { return "PS"; }
 
     //get the highest nr in the list. like state1, state2, state3, then make name yours state4
     ResetColors() {
@@ -66,7 +66,7 @@ class PetriNetState extends Node {
             }, this);
         }
 
-        this.redraw()
+        this.redraw();
     }
 
     get nextStates() {
@@ -111,7 +111,7 @@ class PetriNetState extends Node {
         this.popupMenu = null;
         this.popupMenu = this.CreatePopupAnchor();
 
-        var nonActivePlaces = []
+        var nonActivePlaces = [];
         for (var i = 0; i < $places.length; i++) {
             var element = $places[i];
             var name = element.name;
@@ -199,7 +199,7 @@ class PetriNetState extends Node {
             stroke: "2px blue",
             opacity: 1
         });
-        var text = value + '*' + key;
+        var text = value + "*" + key;
         var objText = $canvas.display.text({
             x: obj.width / 2,
             y: obj.height / 2,
@@ -281,7 +281,7 @@ class PetriNetState extends Node {
     get width() { return this.drawObject.width; }
     get ratio() { return this.drawObject.height / this.drawObject.width; }
 
-    get selected() { return this.selectionCircle.opacity > 0 }
+    get selected() { return this.selectionCircle.opacity > 0; }
     set selected(bool) {
         if (bool) {
             this.selectionCircle.opacity = 1;
@@ -296,7 +296,7 @@ class PetriNetState extends Node {
         }
     }
 
-    get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 } }
+    get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 }; }
     get name() {
         return this._name;
     }
@@ -313,7 +313,7 @@ class PetriNetState extends Node {
     readyTransitions() {
         for (var i = 0; i < $transitions.length; i++) {
             var trans = $transitions[i];
-            if (trans.readyCheck(false)) this.activeTransitions.push(trans)
+            if (trans.readyCheck(false)) this.activeTransitions.push(trans);
         }
     }
 
@@ -352,7 +352,7 @@ class PetriNetState extends Node {
         var width = this.activePlaces.length * widthPixels;
         var height = 100;
 
-        var pos = { x: $canvas.width / 2, y: $canvas.height / 2 }
+        var pos = { x: $canvas.width / 2, y: $canvas.height / 2 };
 
         var transition = $canvas.display.rectangle({
             x: pos.x, y: pos.y,
@@ -372,8 +372,8 @@ class PetriNetState extends Node {
                 var text = $canvas.display.text({
                     x: currentWidth,
                     y: height / 2,
-                    origin: { x: 'center', y: 'center' },
-                    font: 'bold 30px sans-serif', text: text, fill: '#0ba'
+                    origin: { x: "center", y: "center" },
+                    font: "bold 30px sans-serif", text: text, fill: "#0ba"
                 });
 
                 transition.addChild(text);
@@ -388,7 +388,7 @@ class PetriNetState extends Node {
 
     //old code
     createTransitionObject() {
-        var pos = { x: $canvas.width / 2, y: $canvas.height / 2 }
+        var pos = { x: $canvas.width / 2, y: $canvas.height / 2 };
         var pixelWidth = 100;
         var pixelHeight = 100;
 
@@ -402,8 +402,8 @@ class PetriNetState extends Node {
 
 
         var text = $canvas.display.text({
-            x: pixelWidth / 2, y: pixelWidth / 2, origin: { x: 'center', y: 'center' },
-            font: 'bold 30px sans-serif', text: "Add places", fill: '#0ba'
+            x: pixelWidth / 2, y: pixelWidth / 2, origin: { x: "center", y: "center" },
+            font: "bold 30px sans-serif", text: "Add places", fill: "#0ba"
         });
 
         rect.addChild(text);

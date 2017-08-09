@@ -1,12 +1,21 @@
 //this module is about logging the user's actions to a file.
 //this should be delegated to the back end
 function logAction(action, obj, extra) {
-    var user = 'user';
+    var user = "user";
     var date = new Date().toJSON();
-    var completename = obj.name + ' of type ' + obj.constructor.name;
+    var newAction = "";
+    if (!obj) {
+        newAction = `${user} | ${date} | ${action}`;
+        console.log(newAction);
+        $actions += newAction;
+        return;
+    }
 
-    var newAction = `${user} | ${date} | ${action} | ${completename}`;
-    extra ? newAction += ` ${extra} \n` : newAction += '\n';
+    var completename = obj.name + " of type " + obj.constructor.name;
+
+
+    newAction = `${user} | ${date} | ${action} | ${completename}`;
+    extra ? newAction += ` ${extra} \n` : newAction += "\n";
 
     console.log(newAction);
     $actions += newAction;
@@ -15,8 +24,8 @@ function logAction(action, obj, extra) {
 
 function saveLog() {
     //replace user by the correct username and update in database
-    var user = 'user';
-    var newAction = user + ' | saved log | ' + new Date().toJSON() + '\n';
+    var user = "user";
+    var newAction = user + " | saved log | " + new Date().toJSON() + "\n";
     $actions += newAction;
     var newActions = $actions;
     $actions = "";

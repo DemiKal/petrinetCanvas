@@ -3,7 +3,7 @@ class canvasDefaultState {
 
     Click(event) {
         /// /set current place as selected
-        console.log('clicked canvas in default state');
+        console.log("clicked canvas in default state");
     }
 
     DoubleClick(event) { }
@@ -19,17 +19,27 @@ class canvasDefaultState {
     }
 
     KeyDown(event) {
-
         var pos = { x: $canvas.mouse.x, y: $canvas.mouse.y };
+        var key = String.fromCharCode(event.which);
+        switch (key) {
+            case "T":
+                // key T
 
-        // key T
-        if (event.which === 84) SpawnTransition(pos, event.which);
+                SpawnTransition(pos, event.which);
+                break;
+            case "A":
+                //key A
+                AddPlace(pos, event.which);
+                break;
+            case "Q":
 
-        //key A
-        if (event.which === 65) AddPlace(pos, event.which);
 
-        //Q
-        if (event.which === 81) SpawnPNState(pos, event.which);
+                SpawnPNState(pos, event.which);
+                break;
+            default:
+                logAction(`pressed ${key}`, null);
+        }
+
     }
 
     KeyPress(event) { }

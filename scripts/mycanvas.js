@@ -1,4 +1,5 @@
 jQuery(document).ready(function ($) {
+
     //these are the original global color setting. 
     $colorSettings = {
         petrinetState:
@@ -61,8 +62,8 @@ jQuery(document).ready(function ($) {
     var scrollY = $canvasDOM.scrollTop();
 
     $canvas = oCanvas.create({
-        canvas: '#canvas',
-        background: '#2c3e50',
+        canvas: "#canvas",
+        background: "#2c3e50",
         fps: 60,
     });
 
@@ -83,7 +84,7 @@ jQuery(document).ready(function ($) {
     //right click on canvas override
     $canvasDOM.contextmenu(function () { return false; });
 
-    $canvas.bind("click tap", function (event) { $canvas.currentState.Click(event); if (event.which == 2) console.log('states', $PNstates) });
+    $canvas.bind("click tap", function (event) { $canvas.currentState.Click(event); if (event.which == 2) console.log("states", $PNstates); });
     $canvas.bind("mouseup", function (event) { $canvas.currentState.MouseUp(event); });
     $canvas.bind("mousemove", function (event) { $canvas.currentState.MouseMove(event); });
     $canvas.bind("mousedown", function (event) { $canvas.currentState.MouseDown(event); });

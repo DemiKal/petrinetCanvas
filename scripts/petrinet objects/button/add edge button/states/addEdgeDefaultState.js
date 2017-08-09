@@ -2,9 +2,9 @@ class AddEdgeDefaultState extends IEventHandler {
     constructor(parent) { super(parent); }
     Click(event) {
         //adds a place in the middle of the screen.
-        console.log('select  a node first!');
-        var sadsadsa = 'dsad'
-        
+        console.log("select  a node first!");
+        var sadsadsa = "dsad";
+
 
 
     }

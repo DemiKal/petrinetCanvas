@@ -2,9 +2,9 @@ function CreatePopupMessage(pos, text) {
     //TODO: get font from general variable
     var font = "13px sans-serif";
     //if there is a style like bold or italic in front of NRpx, then index is 1.  
-    var pxIndex = isDigitCode(font[0]) ? 0 : 1
-    var fontpx = 1.1 * font.split(' ')[pxIndex].split('px')[0];
-    var textlines = text.split('\n');
+    var pxIndex = isDigitCode(font[0]) ? 0 : 1;
+    var fontpx = 1.1 * font.split(" ")[pxIndex].split("px")[0];
+    var textlines = text.split("\n");
     var width = measureStringWidth(textlines, font);
     var height = fontpx * textlines.length;
     var rect = $canvas.display.rectangle({
@@ -18,7 +18,7 @@ function CreatePopupMessage(pos, text) {
 
 
     var nodeText = $canvas.display.text({
-        x: rect.width / 2, y: 0, origin: { x: 'center', y: 'top' },
+        x: rect.width / 2, y: 0, origin: { x: "center", y: "top" },
         font: font, text: text, fill: $colorSettings.place.nameColor
     });
 
@@ -30,13 +30,13 @@ function CreatePopupMessage(pos, text) {
 function ErrorPopup(errorMessage) {
     var pos = mousePos();
     var font = "16px sans-serif";
-    var pxIndex = isDigitCode(font[0]) ? 0 : 1
-    var fontpx = 1.1 * font.split(' ')[pxIndex].split('px')[0];
-    var textlines = errorMessage.split('\n');
+    var pxIndex = isDigitCode(font[0]) ? 0 : 1;
+    var fontpx = 1.1 * font.split(" ")[pxIndex].split("px")[0];
+    var textlines = errorMessage.split("\n");
     var width = measureStringWidth(textlines, font);
     
     $errorMessage.width = width;
-    $errorMessage.height = 1.1 * font.split(' ')[pxIndex].split('px')[0];;
+    $errorMessage.height = 1.1 * font.split(" ")[pxIndex].split("px")[0];
     $errorMessage.x = pos.x;
     $errorMessage.y = pos.y;
 
@@ -47,7 +47,7 @@ function ErrorPopup(errorMessage) {
 
     $errorMessage.finish();
 
-    $errorMessage.fadeIn(100, "linear", function () { $errorMessage.fadeOut("long", "ease-in-cubic") });
+    $errorMessage.fadeIn(100, "linear", function () { $errorMessage.fadeOut("long", "ease-in-cubic"); });
 }
 
 function CreateClickablePopup(pos, text, obj) {
@@ -100,7 +100,7 @@ function CreateClickablePopup(pos, text, obj) {
             move: function () {
                 // lineToEdge.end.x = obj.x;
                 // lineToEdge.end.y = obj.y;
-                console.log('rdargg')
+                console.log("rdargg");
                 lineToEdge.end.x = obj.x - rect.x;
                 lineToEdge.end.y = obj.y - rect.y;
             },
@@ -138,7 +138,7 @@ function CreateFadingMessage(pos, text, obj) {
         rect.fadeOut("long", "ease-out-cubic", function () { });
         $canvas.timeline.stop();
         var s = obj.hoverTime;
-        console.log('exiting button after ' + obj.hoverTime + " sec");
+        console.log("exiting button after " + obj.hoverTime + " sec");
         obj.hoverTime = 0;
     });
     return rect;

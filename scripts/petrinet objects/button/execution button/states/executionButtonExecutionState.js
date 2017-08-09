@@ -4,7 +4,7 @@ class ExecutionButtonExecutionState extends IEventHandler {
 
         //go back to default mode;  TODO: FIX
         deselect();
-        console.log('clicked on exec button in exec state');
+        console.log("clicked on exec button in exec state");
 
         //  this.parent.children[0].text = "Execution";
         //  this.parent.children[0].fill = "#fff";

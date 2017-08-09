@@ -34,7 +34,7 @@ class canvasEdgePendingState {
         edgePending = null;
 
         $stateManager.SwitchToSelectionState();
-        console.log('edge is deleted')
+        console.log("edge is deleted");
     }
 
     KeyPress(event) {

@@ -10,12 +10,13 @@ function drawbbox(event) {
         // var bb = element.BoundingBox;
         // element.drawObject.addChild($canvas.display.rectangle({ x: bb.left - element.x , y:  bb.top - element.y, width: bb.right - bb.left, height: bb.bottom - bb.top, fill: "#0aa"}));
     }
-    console.log('as');
+    console.log("as");
 }
 
 function mousePos() {
-    return { x: $canvas.mouse.x, y: $canvas.mouse.y }
+    return { x: $canvas.mouse.x, y: $canvas.mouse.y };
 }
+
 function ResetAllColors() {
     $nodes.forEach(function (element) {
         element.ResetColors();
@@ -29,12 +30,12 @@ function AddPlace(pos, buttonPress) {
     var name = "P" + ($places.length + 1);
     var newPlace = new Place(position.x, position.y, 50, name, 1);
 
-    var action = "created place by clicking spawn button"
+    var action = "created place by clicking spawn button";
     if (buttonPress) action = `created by pressing [${String.fromCharCode(buttonPress)}]`;
 
     $nodes.push(newPlace);
     $places.push(newPlace);
-    logAction(action, newPlace, `at ${JSON.stringify(pos)}`)
+    logAction(action, newPlace, `at ${JSON.stringify(pos)}`);
 }
 
 function SpawnTransition(pos, buttonPress) {
@@ -44,9 +45,9 @@ function SpawnTransition(pos, buttonPress) {
     var height = 100;
 
     var trans = new Transition(pos.x - width / 2, pos.y - height / 2, 100, 100);
-    var action = "created transition by clicking spawn button"
+    var action = "created transition by clicking spawn button";
     if (buttonPress) action = `created by pressing [${String.fromCharCode(buttonPress)}]`;
-    logAction(action, trans, `at ${JSON.stringify(pos)}`)
+    logAction(action, trans, `at ${JSON.stringify(pos)}`);
 
     $nodes.push(trans);
     $transitions.push(trans);
@@ -56,13 +57,13 @@ function SpawnPNState(pos, buttonPress) {
     position = { x: $canvas.width / 2, y: $canvas.height / 2 };
     if (pos) position = pos;
     var width = 200;
-    var height = 100
+    var height = 100;
 
-    var pnstate = new PetriNetState(pos.x - width / 2, pos.y - height / 2, width, height)
+    var pnstate = new PetriNetState(pos.x - width / 2, pos.y - height / 2, width, height);
 
-    var action = "created transition by clicking spawn button"
+    var action = "created transition by clicking spawn button";
     if (buttonPress) action = `created by pressing [${String.fromCharCode(buttonPress)}]`;
-    logAction(action, pnstate, `at ${JSON.stringify(pos)}`)
+    logAction(action, pnstate, `at ${JSON.stringify(pos)}`);
 
     $nodes.push(pnstate);
     $PNstates.push(pnstate);
@@ -84,35 +85,35 @@ function edgePlacementValidation(node) {
     var selectedClass = $selected.constructor;
     var nodeClass = node.constructor;
     if ($selected === node) {
-        logAction('tried to point edge to itself', node);
+        logAction("tried to point edge to itself", node);
         ErrorPopup("can't point edge to self");
         return false;
     }
     if ($selected.constructor == node.constructor && node.constructor != PetriNetState) {
-        logAction('tried to link to same type', $selected);
+        logAction("tried to link to same type", $selected);
         ErrorPopup("This node can't point to the same type");
         return false;
     }
     if ($selected.constructor == PetriNetState && node.constructor != PetriNetState) {
-        logAction('tried to link petrinetState with another type', $selected);
+        logAction("tried to link petrinetState with another type", $selected);
         ErrorPopup("Can only link to same node type");
         return false;
     }
 
     if ($selected.constructor != PetriNetState && node.constructor == PetriNetState) {
-        logAction('tried to link to a petrinetState', $selected);
+        logAction("tried to link to a petrinetState", $selected);
         ErrorPopup("This type cannot point to that type");
         return false;
     }
 
     var mapped = node.incomingEdges.map(function (item) { return item.From; });
     if ($.inArray($selected, mapped) != -1) {
-        logAction('edge already exists to', $selected);
+        logAction("edge already exists to", $selected);
         ErrorPopup("Edge already exists");
         return false;
     }
 
-    logAction('edge placed', $selected, ` with ${node.name} of type ${node.constructor.name}`);
+    logAction("edge placed", $selected, ` with ${node.name} of type ${node.constructor.name}`);
     return true;
 }
 

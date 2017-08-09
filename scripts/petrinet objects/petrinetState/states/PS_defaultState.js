@@ -5,7 +5,7 @@ class PS_DefaultState extends IEventHandler {
         event.stopPropagation();
         
         $stateManager.SwitchToSelectionState();
-        console.log('clicked on ps');
+        console.log("clicked on ps");
     }
     DoubleClick(event) { }
     MouseEnter(event) { }

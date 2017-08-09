@@ -24,7 +24,7 @@ class Place extends Node {
     this.initEventHandlers();
   }
   get getSameNodes() { return $.extend([], $places); }
-  get nameAbbreviation() { return 'P'; }
+  get nameAbbreviation() { return "P"; }
 
   //override since the centerpoint is in the middle and not in the topleft like most objects
   get BoundingBox() {
@@ -44,7 +44,7 @@ class Place extends Node {
   get height() { return this.radius; }
   set height(val) { this.drawObject.radius = val; }
 
-  get center() { return { x: this.x, y: this.y } }
+  get center() { return { x: this.x, y: this.y } ;}
   get tokens() { return this.tokenAmount; }
   set tokens(amount) {
     this.tokenAmount = amount;
@@ -66,14 +66,14 @@ class Place extends Node {
   createNode(x, y, radius, text, tokens) {
     var place = $canvas.display.ellipse({ x: x, y: y, radius: radius, stroke: $colorSettings.place.stroke, name: text });
     var nodeText = $canvas.display.text({
-      x: 0, y: radius, origin: { x: 'center', y: 'top' },
-      font: 'bold 30px sans-serif', text: text, fill: $colorSettings.place.nameColor
+      x: 0, y: radius, origin: { x: "center", y: "top" },
+      font: "bold 30px sans-serif", text: text, fill: $colorSettings.place.nameColor
     });
 
 
     var tokenText = $canvas.display.text({
-      x: 0, y: 0, origin: { x: 'center', y: 'center' },
-      font: 'bold 30px sans-serif', text: tokens, fill: $colorSettings.place.tokenColor
+      x: 0, y: 0, origin: { x: "center", y: "center" },
+      font: "bold 30px sans-serif", text: tokens, fill: $colorSettings.place.tokenColor
     });
 
     place.addChild(nodeText);
@@ -82,7 +82,7 @@ class Place extends Node {
     //remove!
     place.tokens = tokens;
     place.originalTokens = tokens;
-    place.nodeType = 'place';
+    place.nodeType = "place";
 
     place.classPointer = this;
 
@@ -108,7 +108,7 @@ class Place extends Node {
       stroke: stroke,
       cap: "round",
       opacity: 0
-    })
+    });
 
     var line2 = $canvas.display.line({
       start: { x: 0, y: - length / 2 },
@@ -118,10 +118,10 @@ class Place extends Node {
     });
 
     line.addChild(line2);
-    this.drawObject.addChild(line) //child  index 2
+    this.drawObject.addChild(line); //child  index 2
 
     //TODO: MAKE OWN CLASS WITH STATE
-    line.bind('click tap', function (event) { this.parent.classPointer.tokens++ });
+    line.bind("click tap", function (event) { this.parent.classPointer.tokens++; });
   }
 
 }

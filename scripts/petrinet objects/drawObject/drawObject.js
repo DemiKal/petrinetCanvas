@@ -22,7 +22,7 @@ class DrawingObject {
       var collision = this.intersect(otherBB);
 
       if (collision) {
-        console.log('collison!!', collision);
+        console.log("collison!!", collision);
         this.drawObject.dragging = false;
         var vec = Victor.fromObject(otherNode.center).subtract(Victor.fromObject(this.center)).normalize();
         this.x -= 13 * vec.x;
@@ -47,7 +47,7 @@ class DrawingObject {
     return (a.left <= b.right &&
       b.left <= a.right &&
       a.top <= b.bottom &&
-      b.top <= a.bottom)
+      b.top <= a.bottom);
   }
 
   mouseIntersect() {
@@ -56,7 +56,7 @@ class DrawingObject {
     return ((a.left <= mp.x &&
       mp.x <= a.right &&
       a.top <= mp.y &&
-      mp.y <= a.bottom))
+      mp.y <= a.bottom));
   }
 
   get dragging() { return this.drawObject.dragging; }
@@ -68,13 +68,13 @@ class DrawingObject {
   get height() { return this.drawObject.height; }
   set height(val) { this.drawObject.height = val; }
 
-  get x() { return this.drawObject.x }
+  get x() { return this.drawObject.x; }
   set x(amount) { this.drawObject.x = amount; }
-  get y() { return this.drawObject.y }
+  get y() { return this.drawObject.y; }
   set y(amount) { this.drawObject.y = amount; }
 
-  get center() { return { x: this.x, y: this.y } }
-  get position() { return { x: this.x, y: this.y } };
+  get center() { return { x: this.x, y: this.y }; }
+  get position() { return { x: this.x, y: this.y }; }
 
   redraw() { this.drawObject.redraw(); }
   dragAndDrop(opt) { this.drawObject.dragAndDrop(opt); }
@@ -82,7 +82,7 @@ class DrawingObject {
   initEventHandlers() {
     this.drawObject.bind("click tap", function (event) {
       this.classPointer.currentState.Click(event); event.stopPropagation();
-      logAction('clicked on', this.classPointer);
+      logAction("clicked on", this.classPointer);
     });
 
     this.drawObject.bind("dblclick", function (event) {
@@ -92,19 +92,19 @@ class DrawingObject {
     this.drawObject.bind("mouseenter", function (event) {
       this.classPointer.currentState.MouseEnter(event); event.stopPropagation();
 
-      logAction('Mouse entered ', this.classPointer);
+      logAction("Mouse entered ", this.classPointer);
 
     });
 
     this.drawObject.bind("mouseleave", function (event) {
       this.classPointer.currentState.MouseLeave(event); event.stopPropagation();
 
-      logAction('mouse left ', this.classPointer);
+      logAction("mouse left ", this.classPointer);
 
       //if a is true, it means the mouse has left, yet is still inside the boundingbox. TODO: fix this bug.
 
       var a = this.classPointer.mouseIntersect();
-      if (a) console.log('mouseleave triggered but still inside boundingbox!', a);
+      if (a) console.log("mouseleave triggered but still inside boundingbox!", a);
     });
   }
 }

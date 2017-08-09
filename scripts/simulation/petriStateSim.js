@@ -27,9 +27,10 @@ class petriStateSim {
             var parsedKey = JSON.parse(key);
             var filteredState = {};
 
-            for (var key in parsedKey) {
-                if (parsedKey[key] > 0)
-                    filteredState[key] = parsedKey[key];
+            //key2 could break, watch out
+            for (var key2 in parsedKey) {
+                if (parsedKey[key2] > 0)
+                    filteredState[key2] = parsedKey[key2];
             }
 
             var obj = Object();

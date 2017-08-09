@@ -76,7 +76,7 @@ function summarize(missingEdges, correctStates, incorrectStates, PNsimulatedStat
     var edgeRating = nrOfUserEdges / nrOfSimEdges * 100;
     edgeRating = edgeRating > 100 ? Math.round(edgeRating - (edgeRating - 100)) : Math.round(edgeRating);
     var totalRating = Math.round(0.5 * (edgeRating + stateRating));
-    
+
     var text = "Summary:\n";
     text += "You have made " + nrOfTotalUserStates + " while there should be " + nrOfTotalSimStates + " total states\n";
     text += "You have made " + nrOfCorrStates + " correct states. Which rates " + stateRating + "%\n";
@@ -116,7 +116,7 @@ function compareEdges(currentState, outerEdges, simulatedOuterEdges, signatureLo
             edge.children[0].fill = $colorSettings.edge.incorrectArrow;
             //add messagebox
             var txt = "this edge is incorrect";
-            CreateClickablePopup({ x: edge.x, y: edge.y }, txt, edge)
+            CreateClickablePopup({ x: edge.x, y: edge.y }, txt, edge);
             edge.redraw();
             nrCorrectEdges++;
         }
@@ -166,7 +166,7 @@ function CreateStateEdgeList(states) {
 
     for (var index = 0; index < states.length; index++) {
         var fromState = states[index];
-        var fromSignature = Signature(fromState)
+        var fromSignature = Signature(fromState);
         //if the state doesnt exist in the dict, create it with an empty list (next states) as value
         if (!(fromSignature in PNstateEdges)) PNstateEdges[fromSignature] = [];
         //copy so the get method doesnt get called more than once

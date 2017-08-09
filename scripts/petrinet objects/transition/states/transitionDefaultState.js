@@ -10,7 +10,7 @@ class TransitionDefaultState extends IEventHandler {
     }
 
     DoubleClick(event) {
-        console.log('DOUBLEclicked on transition in default state')
+        console.log("DOUBLEclicked on transition in default state");
     }
     MouseEnter(event) {
     }

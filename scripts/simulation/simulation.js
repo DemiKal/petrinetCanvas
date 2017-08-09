@@ -22,7 +22,7 @@ function initSimulation() {
         });
     else {
         simulationStates = initialState;
-        console.log('no transition to fire, only 1 state to reach');
+        console.log("no transition to fire, only 1 state to reach");
     }
     verifyUserPetrinet(simulationStates);
 }
@@ -54,7 +54,8 @@ function FireSim(state, transition) {
     //make > 0 variable later!  
     $.each(transition.incomingEdges, function (i, v) { if (state.places[i] <= 0) readyToFire = false; });
 
-    if (!readyToFire) return state//new petriStateSim(newPlaces, state); //return same state -> break recursion
+    //return same state -> break recursion
+    if (!readyToFire) return state;
 
     $.each(transition.incomingEdges, function (i, v) { newPlaces[i] -= 1; });     //make > 0 variable later!  
     $.each(transition.outgoingEdges, function (i, v) { newPlaces[i] += 1; });
@@ -101,7 +102,7 @@ function stateAlreadySeen(state, simulationStates) {
     return alreadySeen;
 }
 function dictEq(a, b) {
-    var eq = true
+    var eq = true;
     $.each(a, function (key, val) {
         if (b[key] != val)
             eq = false;

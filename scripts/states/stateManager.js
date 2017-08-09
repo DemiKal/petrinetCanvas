@@ -1,7 +1,7 @@
 class StateManager {
     constructor() { }
     get allDrawObjects() {
-        return $nodes.concat([$canvas], $buttons)
+        return $nodes.concat([$canvas], $buttons);
     }
 
     get currentState() {
@@ -11,29 +11,29 @@ class StateManager {
     }
 
     SwitchToDefaultState() {
-        this.allDrawObjects.forEach(function (element) { element.currentState = element.defaultState; })
-        console.log('switched to default')
-    };
+        this.allDrawObjects.forEach(function (element) { element.currentState = element.defaultState; });
+        console.log("switched to default");
+    }
     SwitchToSelectionState() {
         this.allDrawObjects.forEach(function (element) { element.currentState = element.selectionState; });
-        console.log('switched to selection')
-    };
+        console.log("switched to selection");
+    }
     SwitchToExecutionState() {
         this.allDrawObjects.forEach(function (element) { element.currentState = element.executionState; });
-        console.log('switched to exec')
+        console.log("switched to exec");
 
-    };
+    }
 
     SwitchToEdgePendingState() {
         this.allDrawObjects.forEach(function (element) { element.currentState = element.edgePendingState; });
 
-        console.log('switched to edgepending');
-    };
+        console.log("switched to edgepending");
+    }
 
     SwitchToSimulationState() {
         this.allDrawObjects.forEach(function (element) { element.currentState = element.simulationState; });
-        console.log('switched to ');
-    };
+        console.log("switched to ");
+    }
 
 
     switchToExecState(button) {
@@ -41,7 +41,7 @@ class StateManager {
 
 
         //disable drag & drop
-        $nodes.forEach(function (element) { element.dragAndDrop(false); })
+        $nodes.forEach(function (element) { element.dragAndDrop(false); });
 
         //check each transition for fire eligibility (green = allowed to Fire())
         $nodes.forEach(function (node) {

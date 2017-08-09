@@ -6,15 +6,15 @@ class placeSelectionState extends IEventHandler {
         if (event.which == 2) {
             if (this.parent.tokens > 0) this.parent.tokens--;
         }
-         event.stopPropagation();
+        event.stopPropagation();
     }
-    DoubleClick(event) { this.parent.tokens++;}
-  
+    DoubleClick(event) { this.parent.tokens++; }
+
     MouseEnter(event) {
 
     }
 
     MouseLeave(event) {
-        
+
     }
 }
