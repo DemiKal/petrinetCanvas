@@ -51,6 +51,12 @@ class Place extends Node {
     this.tokensPlate.text = amount;
     this.redraw();
   }
+
+  removePointers() {
+        super.removePointers();
+    $places = $places.filter(x => x !== this);
+  }
+
   createSelectionCircle() {
     var selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: this.radius * 1.1, stroke: $colorSettings.place.selectionCircle, opacity: 0 });
     this.drawObject.addChild(selectionCircle);

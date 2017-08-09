@@ -19,10 +19,17 @@ class Transition extends Node {
         this.initEventHandlers();
 
     }
+
+
     get sameNodes() { return $.extend([], $transitions); }
     get nameAbbreviation() { return 'T'; }
 
     get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 } }
+    
+    removePointers() {
+        super.removePointers();
+        $transitions = $transitions.filter(x => x !== this);
+    }
 
     ResetColors() {
         this.drawObject.stroke = $colorSettings.transition.stroke;

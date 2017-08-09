@@ -10,7 +10,7 @@ function drawbbox(event) {
         // var bb = element.BoundingBox;
         // element.drawObject.addChild($canvas.display.rectangle({ x: bb.left - element.x , y:  bb.top - element.y, width: bb.right - bb.left, height: bb.bottom - bb.top, fill: "#0aa"}));
     }
-
+    console.log('as');
 }
 
 function mousePos() {

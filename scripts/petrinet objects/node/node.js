@@ -11,6 +11,31 @@ class Node extends DrawingObject {
 
   }
 
+  remove() {
+    this.edges.forEach(x => x.remove());
+
+    this.incomingEdges.forEach(function (edge) {
+      var neighbour = edge.From;
+      neighbour.outgoingEdges = neighbour.outgoingEdges.filter(e => e !== edge)
+    });
+
+    this.outgoingEdges.forEach(function (edge) {
+      var neighbour = edge.To;
+      neighbour.incomingEdges = neighbour.incomingEdges.filter(e => e !== edge)
+    });
+
+    this.incomingEdges = [];
+    this.outgoingEdges = [];
+    this.drawObject.remove();
+
+    this.removePointers();
+    deselect();
+  }
+
+  removePointers() {
+    $nodes = $nodes.filter(x => x !== this);
+  }
+
   calcName() {
     var myNodes = this.sameNodes;
     var names = myNodes.map(x => x.name);
@@ -36,6 +61,7 @@ class Node extends DrawingObject {
   set selected(bool) { bool ? this.selectionCircle.opacity = 1 : this.selectionCircle.opacity = 0; this.redraw(); }
 
   get edges() { return this.outgoingEdges.concat(this.incomingEdges); }
+
   get name() { return this.namePlate.text; }
   set name(newname) {
     if (this.namePlate) namePlate.text = newname;

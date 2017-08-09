@@ -29,11 +29,18 @@ function initUI() {
     $openFileButton = createButton(890, 10, 100, 50, "Open file", "Load a petrinet graph from a file");
     $openFileButton.bind("click tap", function (event) { event.stopPropagation(); $('#fileinput').trigger('click'); });
 
+    $deleteButton = createButton(400, 400, 100, 50, "delete", "delete");
+    $deleteButton.bind("click tap", function (event) { event.stopPropagation(); deleteAll(); });
+
     $buttons.push($addPlaceButton, $addEdgeButton, $selectedButton, $executionButton, $validationButton);
 
 }
+function deleteAll() {
+    var nodes = $.extend([], $nodes);
+    nodes.forEach(function (element) { element.remove(); }, this);
+    $nodes = $transitions = $places = $PNstates = [];
+}
 
-function onChange(event) { OpenFile(event); }
 
 function OpenFile(evt) {
     var files = evt.target.files;
@@ -41,10 +48,10 @@ function OpenFile(evt) {
     var reader = new FileReader();
 
     reader.onload = function (event) {
-        var newObjects = {};
+
 
         try {
-            newObjects = JSON.parse(event.target.result);
+            var newObjects = JSON.parse(event.target.result);
             LoadGraph(newObjects)
         } catch (e) {
 
@@ -63,7 +70,9 @@ function OpenFile(evt) {
 
 //recreate the nodes from the JSON file
 function LoadGraph(graph) {
-    console.log(graph)
+    var transitions = graph.transitions;
+    var places = graph.places;
+    var places = graph.transitions;
 
 }
 
@@ -155,3 +164,6 @@ function createButton(x, y, width, height, text, helpmessage) {
     rect.bind("mouseleave", function (event) { event.stopPropagation(); this.fill = "black"; this.redraw(); });
     return rect;
 }
+
+//when file has been uploaded
+function onChange(event) { OpenFile(event); }

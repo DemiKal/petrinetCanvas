@@ -27,7 +27,6 @@ function CreatePopupMessage(pos, text) {
     return rect;
 }
 
-
 function ErrorPopup(errorMessage) {
     var pos = mousePos();
     var font = "16px sans-serif";
