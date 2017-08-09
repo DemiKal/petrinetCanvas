@@ -1,8 +1,8 @@
 
-
 function comparePosition(a, b) {
     return (a.x == b.x && a.y == b.y);
 }
+
 function drawbbox(event) {
     var allnodes = $.extend([], $nodes);
     for (var index = 0; index < allnodes.length; index++) {
