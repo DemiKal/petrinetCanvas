@@ -6,9 +6,9 @@ class placeDefaultState extends IEventHandler {
         
         event.stopPropagation();
 
-        $stateManager.SwitchToSelectionState();
-
+        
     }
+
     DoubleClick(event) {
          
     }

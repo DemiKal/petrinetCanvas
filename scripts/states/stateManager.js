@@ -12,26 +12,30 @@ class StateManager {
 
     SwitchToDefaultState() {
         this.allDrawObjects.forEach(function (element) { element.currentState = element.defaultState; });
+        $currentState = "Default";
         console.log("switched to default");
     }
     SwitchToSelectionState() {
         this.allDrawObjects.forEach(function (element) { element.currentState = element.selectionState; });
+        $currentState = "Selection";
         console.log("switched to selection");
     }
     SwitchToExecutionState() {
         this.allDrawObjects.forEach(function (element) { element.currentState = element.executionState; });
+        $currentState = "Execution";
         console.log("switched to exec");
 
     }
 
     SwitchToEdgePendingState() {
         this.allDrawObjects.forEach(function (element) { element.currentState = element.edgePendingState; });
-
+        $currentState = "EdgePending";
         console.log("switched to edgepending");
     }
 
     SwitchToSimulationState() {
         this.allDrawObjects.forEach(function (element) { element.currentState = element.simulationState; });
+        $currentState = "Simulation";
         console.log("switched to ");
     }
 

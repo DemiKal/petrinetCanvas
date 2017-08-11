@@ -2,24 +2,35 @@ class canvasSelectionState {
     constructor() { }
 
     Click(event) {
-        // console.log('clicked canvas in selectState');
-        $stateManager.SwitchToDefaultState();
-
         deselect();
-
     }
+
     DoubleClick(event) {
         //console.log('DOUBLEclicked canvas ss') 
     }
+
     MouseDown(event) {
         //console.log('mousedown canvas ss'); 
     }
+
     MouseUp(event) { }
     MouseMove(event) { }
     KeyDown(event) {
-        //simulate clicking on adding edge button by pressing E
-        if (event.which == 69)
-            this.spawnPendingEdge();
+        //call the default event first, then its own methods
+        $canvas.defaultState.KeyDown(event);
+        var key = String.fromCharCode(event.which);
+
+        switch (key) {
+            case "E":
+                this.spawnPendingEdge();
+                break;
+            case ".":
+                $selected.remove();
+                break;
+            default:
+                break;
+        }
+
     }
 
     KeyPress(event) { }

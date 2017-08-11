@@ -4,7 +4,7 @@ class TransitionDefaultState extends IEventHandler {
         this.parent.Select();
         event.stopPropagation();
 
-        $stateManager.SwitchToSelectionState();
+        
 
 
     }

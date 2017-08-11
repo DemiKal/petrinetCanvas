@@ -7,12 +7,13 @@ class ExecutionButtonDefaultState extends IEventHandler {
         deselect();
         console.log("clicked on exec button in default state, switching to exec");
         $stateManager.SwitchToExecutionState();
-        this.readyCheckTransitions();
+        readyCheckTransitions();
         this.parent.namePlate.fill = "red";
         this.parent.namePlate.redraw();
 
         // currentState = new PetriNetState(null);
     }
+
 
     DoubleClick(event) {
 
@@ -25,17 +26,4 @@ class ExecutionButtonDefaultState extends IEventHandler {
     MouseLeave(event) {
         this.parent.fillColor("black");
     }
-
-
-    readyCheckTransitions() {
-        $nodes.forEach(function (node) {
-            if (node instanceof Transition)
-                node.readyCheck();
-            else node.originalTokens = node.tokens;  //remember token amount before execution
-        });
-
-        $nodes.forEach(function (element) { element.dragAndDrop(false); });
-
-    }
-
 }

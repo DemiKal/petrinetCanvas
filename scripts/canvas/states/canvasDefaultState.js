@@ -32,8 +32,6 @@ class canvasDefaultState {
                 AddPlace(pos, event.which);
                 break;
             case "Q":
-
-
                 SpawnPNState(pos, event.which);
                 break;
             default:

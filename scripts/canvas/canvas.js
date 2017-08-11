@@ -1,3 +1,7 @@
+function reconstruct(graph) {
+
+}
+
 
 function comparePosition(a, b) {
     return (a.x == b.x && a.y == b.y);
@@ -27,8 +31,8 @@ function ResetAllColors() {
 function AddPlace(pos, buttonPress) {
     var position = { x: $canvas.width / 2, y: $canvas.height / 2 };
     if (pos) position = pos;
-    var name = "P" + ($places.length + 1);
-    var newPlace = new Place(position.x, position.y, 50, name, 1);
+
+    var newPlace = new Place(position.x, position.y, 50, 1);
 
     var action = "created place by clicking spawn button";
     if (buttonPress) action = `created by pressing [${String.fromCharCode(buttonPress)}]`;
@@ -43,8 +47,8 @@ function SpawnTransition(pos, buttonPress) {
     if (pos) position = pos;
     var width = 100;
     var height = 100;
-
-    var trans = new Transition(pos.x - width / 2, pos.y - height / 2, 100, 100);
+    var midscreen = { x: position.x - width / 2, y: position.y - height / 2 };
+    var trans = new Transition(midscreen.x, midscreen.y, 100, 100);
     var action = "created transition by clicking spawn button";
     if (buttonPress) action = `created by pressing [${String.fromCharCode(buttonPress)}]`;
     logAction(action, trans, `at ${JSON.stringify(pos)}`);
@@ -59,7 +63,7 @@ function SpawnPNState(pos, buttonPress) {
     var width = 200;
     var height = 100;
 
-    var pnstate = new PetriNetState(pos.x - width / 2, pos.y - height / 2, width, height);
+    var pnstate = new PetriNetState(position.x - width / 2, position.y - height / 2, width, height);
 
     var action = "created transition by clicking spawn button";
     if (buttonPress) action = `created by pressing [${String.fromCharCode(buttonPress)}]`;
@@ -154,4 +158,5 @@ function deselect() {
     $selected = null;
     $selectedButton.name = "None selected";
     $selectedButton.redraw();
+    $stateManager.SwitchToDefaultState();
 }

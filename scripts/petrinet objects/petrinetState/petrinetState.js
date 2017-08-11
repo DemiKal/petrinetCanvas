@@ -4,7 +4,7 @@ class PetriNetState extends Node {
         //from which state/node did it come from?
 
         // this.from = fromState;
-        this.activeTransitions = [];
+            this.activeTransitions = [];
         this.activePlaces = {};
         this.drawObject = this.createStateNode(x, y, width, height);
         this.drawObject.classPointer = this;
@@ -199,6 +199,7 @@ class PetriNetState extends Node {
             stroke: "2px blue",
             opacity: 1
         });
+
         var text = value + "*" + key;
         var objText = $canvas.display.text({
             x: obj.width / 2,
@@ -300,7 +301,7 @@ class PetriNetState extends Node {
     get name() {
         return this._name;
     }
-    set name(val) { this.nameAlt = val; }
+    set name(val) { this._name = val; }
 
     get id() { return Signature(this); }
 
@@ -338,8 +339,8 @@ class PetriNetState extends Node {
             x: x, y: y,
             width: width,
             height: height,
-            stroke: $colorSettings.petrinetState.stroke,
-            name: this.id
+            stroke: $colorSettings.petrinetState.stroke
+
         }).add();
 
         return obj;
