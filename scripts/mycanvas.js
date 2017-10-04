@@ -51,6 +51,7 @@ jQuery(document).ready(function ($) {
     petrinetStates = [];
     currentState = null;
     $stateManager = new StateManager();
+    $CommandManager = new CommandManager();
     $buttons = [];
     mycanvas = document.getElementById("canvas");
     context = mycanvas.getContext("2d");
@@ -66,6 +67,8 @@ jQuery(document).ready(function ($) {
         background: "#2c3e50",
         fps: 60,
     });
+
+    $commandManager = new CommandManager();
 
     //create simple error message box
     $errorMessage = CreatePopupMessage({ x: 0, y: 0 }, "errormessage");
@@ -84,6 +87,7 @@ jQuery(document).ready(function ($) {
     //right click on canvas override
     $canvasDOM.contextmenu(function () { return false; });
 
+    //bind the input events to the canvas.
     $canvas.bind("click tap", function (event) { $canvas.currentState.Click(event); if (event.which == 2) console.log("states", $PNstates); });
     $canvas.bind("mouseup", function (event) { $canvas.currentState.MouseUp(event); });
     $canvas.bind("mousemove", function (event) { $canvas.currentState.MouseMove(event); });

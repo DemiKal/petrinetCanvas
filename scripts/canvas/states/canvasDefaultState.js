@@ -29,10 +29,23 @@ class canvasDefaultState {
                 break;
             case "A":
                 //key A
-                AddPlace(pos, event.which);
+                //AddPlace(pos, event.which);
+                var mousepos = mousePos();
+                var cmd = new AddPlaceCommand();
+                cmd.Execute(mousepos);
                 break;
             case "Q":
                 SpawnPNState(pos, event.which);
+                break;
+            case "Z":
+                if (event.ctrlKey == true) {
+                    $commandManager.Undo();
+                }
+                break;
+                case "Y":
+                if (event.ctrlKey == true) {
+                    $commandManager.Redo();
+                }
                 break;
             default:
                 logAction(`pressed ${key}`, null);

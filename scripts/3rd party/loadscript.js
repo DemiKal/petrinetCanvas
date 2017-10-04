@@ -9,7 +9,11 @@ $LAB
     .script("scripts/misc/popup.js").wait()
     .script("scripts/misc/logging.js").wait()
     .script("scripts/misc/UI.js").wait()
-
+    .script("scripts/misc/Commands/Command.js").wait()
+    .script("scripts/misc/Commands/CommandManager.js").wait()
+    .script("scripts/misc/Commands/Implementation/AddPlaceCommand.js").wait()
+    .script("scripts/misc/Commands/Implementation/AddTransitionCommand.js").wait()
+    
     //canvas
     .script("scripts/canvas/states/canvasDefaultState.js").wait()
     .script("scripts/canvas/states/canvasEdgePendingState.js").wait()

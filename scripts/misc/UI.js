@@ -140,7 +140,7 @@ function createSelectionButton(x, y, width, height, text) {
 
 
 
-
+//refer to the commandmanager execution methods!
 function createFileDropdown() {
     var submenus = ["New file", "Open", "Save"];
     var functions = [deleteAll, triggerOpenFile, SaveGraph];
@@ -157,14 +157,18 @@ function createGraphDropdown() {
 
 function createAddDropdown() {
     var submenus = ["+ node", "+ Transition", "+ Petrin. state"];
-    var functions = [AddPlace, SpawnTransition, SpawnPNState];
+    var functions = [AddPlaceRef, SpawnTransition, SpawnPNState];
     var button = createDropDown((2 * (75 + 5)) + 10, 10, 75, 25, "Add", submenus, functions);
     return button;
 }
 
+//execution of an obj's function cant be referenced directly in  'strint mode'
+
+
 function AddplaceViaButton() {
     var midscreen = { x: mycanvas.width / 2, y: mycanvas.height / 2 };
-    AddPlace(midscreen, false);
+    // AddPlace(midscreen, false);
+    $commandManager.AddPlace.execute();
 }
 function createDropDown(x, y, width, height, text, subs, functions) {
     var mainbutton = $canvas.display.rectangle({
@@ -242,7 +246,9 @@ function AddSubButtons(mainbutton, names, functions) {
         var func = functions[index];
         sub.bind("mouseenter", function (event) { event.stopPropagation(); this.fill = "orange"; this.redraw(); });
         sub.bind("mouseleave", function (event) { event.stopPropagation(); this.fill = "black"; this.redraw(); });
-        sub.bind("click", function (event) { event.stopPropagation(); func(); });
+        sub.bind("click", function (event) {
+             event.stopPropagation(); 
+             func(); });
     });
 }
 

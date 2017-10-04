@@ -12,6 +12,7 @@ class Node extends DrawingObject {
     }
 
     remove() {
+        //remove the drawObjects for each edge
         this.edges.forEach(x => x.remove());
 
         this.incomingEdges.forEach(function (edge) {
