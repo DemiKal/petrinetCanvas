@@ -12,6 +12,7 @@ class AddPlaceCommand extends AddNodeCommand {
     Undo() {
         super.Undo();
         $places = $places.filter(x => x !== this.node);
+        var places = $.extend([], $places);
         var nodes = $.extend([], $nodes);
     }
 
@@ -23,6 +24,7 @@ class AddPlaceCommand extends AddNodeCommand {
             
         }
         var nodes = $.extend([], $nodes);
+        var places = $.extend([], $places);
     }
 
     CreatePlace(onMouse, buttonPress) {
@@ -31,7 +33,7 @@ class AddPlaceCommand extends AddNodeCommand {
 
         var newPlace = new Place(position.x, position.y, 50, 1);
         var action = "created place by clicking spawn button";
-        if (buttonPress) action = `created by pressing [${String.fromCharCode(buttonPress)}]`;
+        if (buttonPress) action = `created by pressing [${buttonPress}]`;
 
         $nodes.push(newPlace);
         $places.push(newPlace);

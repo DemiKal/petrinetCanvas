@@ -25,14 +25,17 @@ class canvasDefaultState {
             case "T":
                 // key T
 
-                SpawnTransition(pos, event.which);
+                //SpawnTransition(pos, event.which);
+                var mousepos = mousePos();
+                var cmd = new AddTransitionCommand();
+                cmd.Execute(mousepos, key);
                 break;
             case "A":
                 //key A
                 //AddPlace(pos, event.which);
                 var mousepos = mousePos();
                 var cmd = new AddPlaceCommand();
-                cmd.Execute(mousepos);
+                cmd.Execute(mousepos, key);
                 break;
             case "Q":
                 SpawnPNState(pos, event.which);
@@ -42,7 +45,7 @@ class canvasDefaultState {
                     $commandManager.Undo();
                 }
                 break;
-                case "Y":
+            case "Y":
                 if (event.ctrlKey == true) {
                     $commandManager.Redo();
                 }

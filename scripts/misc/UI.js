@@ -157,7 +157,7 @@ function createGraphDropdown() {
 
 function createAddDropdown() {
     var submenus = ["+ node", "+ Transition", "+ Petrin. state"];
-    var functions = [AddPlaceRef, SpawnTransition, SpawnPNState];
+    var functions = [AddPlaceRef, AddTransitionRef, SpawnPNState];
     var button = createDropDown((2 * (75 + 5)) + 10, 10, 75, 25, "Add", submenus, functions);
     return button;
 }

@@ -4,6 +4,9 @@ class Command {
          
     }
 
-    Execute() { }
+    Execute() { 
+        //empty redo actions after doing a new action.
+        $commandManager.redoActions = [];
+    }
     Undo() { }
 }

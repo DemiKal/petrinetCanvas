@@ -30,7 +30,11 @@ function ResetAllColors() {
 
 function AddPlaceRef(){
     var cmd = new AddPlaceCommand;
-    cmd.Execute();
+    cmd.Execute(false,false);
+}
+function AddTransitionRef(){
+    var cmd = new AddTransitionCommand;
+    cmd.Execute(false,false);
 }
 
 function SpawnTransition(pos, buttonPress) {
