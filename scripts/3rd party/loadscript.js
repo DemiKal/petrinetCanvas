@@ -18,6 +18,7 @@ $LAB
     .script("scripts/misc/Commands/Implementation/AddTransitionCommand.js").wait()
     .script("scripts/misc/Commands/Implementation/AddPNStateCommand.js").wait()
     .script("scripts/misc/Commands/Implementation/MoveNodeCommand.js").wait()
+    .script("scripts/misc/Commands/Implementation/AddEdgeCommand.js").wait()
     
     //canvas
     .script("scripts/canvas/states/canvasDefaultState.js").wait()

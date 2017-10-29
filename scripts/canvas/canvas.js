@@ -71,7 +71,10 @@ function SpawnPNState(pos, buttonPress) {
 function TryEdge(node) {
     if (!edgePlacementValidation(node)) return;
 
-    var newEdge = createEdge($selected, node);
+    //var newEdge = createEdge($selected, node);
+
+    var cmd = new AddEdgeCommand($selected, node);
+    cmd.Execute();
 
     edgePending.remove();
     edgePending = null;

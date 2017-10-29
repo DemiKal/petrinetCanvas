@@ -6,15 +6,15 @@ class MoveNodeCommand extends Command {
         this.newPos = newPos;
     }
 
-    Execute(){
+    Execute() {
         super.Execute();
     }
 
-    Undo(){
-         this.node.position = this.prevPos;         
+    Undo() {
+        this.node.position = this.prevPos;
     }
 
-    Redo(){
+    Redo() {
         this.node.position = this.newPos;
     }
 }
