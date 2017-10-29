@@ -1,29 +1,28 @@
-class AddPlaceCommand extends Command {
+class AddPlaceCommand extends AddNodeCommand {
     constructor() {
         super();
-        this.place = null;
+        this.node = null;
     }
 
     Execute(onMouse) {
         this.CreatePlace(onMouse);
-        $commandManager.executed.push(this);
+        super.Execute();
     }
 
-    Undo() { 
-        var place = this.place;
-        place.remove();
-        
-        $nodes = $nodes.filter(x => x !== place);
-        $places = $places.filter(x => x !== place);
+    Undo() {
+        super.Undo();
+        $places = $places.filter(x => x !== this.node);
+        var nodes = $.extend([], $nodes);
     }
 
-    Redo(){
+    Redo() {
         //it shouldnt be null!
-        if(this.place != null)    {
-            $nodes.push(this.place);
-            $places.push(this.place);
-            this.place.drawObject.add();
+        if (this.node != null) {
+            super.Redo();
+            $places.push(this.node);
+            
         }
+        var nodes = $.extend([], $nodes);
     }
 
     CreatePlace(onMouse, buttonPress) {
@@ -36,8 +35,8 @@ class AddPlaceCommand extends Command {
 
         $nodes.push(newPlace);
         $places.push(newPlace);
-        this.place = newPlace;
-        
+        this.node = newPlace;
+
         logAction(action, newPlace, `at ${JSON.stringify(position)}`);
     }
 }

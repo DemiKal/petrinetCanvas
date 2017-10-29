@@ -5,4 +5,8 @@ class AddTransitionCommand extends Command {
 
     Execute() { }
     Undo() { }
+    CreateTransition(onMouse){
+
+
+    }
 }

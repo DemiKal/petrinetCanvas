@@ -18,11 +18,12 @@ class CommandManager {
     }
 
     Redo() {
-        //pop last undone command (ctrl-z) and redo it. 
+        //pop last undone command (ctrl-y) and redo it. 
         //This will push it back to the executed stack/list
         var lastUndoneAction = this.redoActions.pop();
         if (lastUndoneAction != undefined) {
             //this.redoActions.push(lastUndoneAction);
+            this.executed.push(lastUndoneAction);
             lastUndoneAction.Redo();
             console.log(lastUndoneAction);
         }
