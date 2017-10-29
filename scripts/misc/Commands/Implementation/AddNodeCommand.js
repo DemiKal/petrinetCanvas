@@ -4,9 +4,9 @@ class AddNodeCommand extends Command {
     }
 
     Execute() {
-        $commandManager.executed.push(this);
         super.Execute();
     }
+    
     Undo() {
         var n = this.node;
         n.remove();

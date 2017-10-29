@@ -8,7 +8,7 @@ class Node extends DrawingObject {
         this.selectionCircle = null;
     }
     get sameNodes() {
-        
+
     }
 
     remove() {
@@ -157,9 +157,11 @@ class Node extends DrawingObject {
             end: function () {
                 nodeIsMoving = false;
                 if (!comparePosition(this.classPointer.prevPosition, this.classPointer.position)) {
-                    var prevpos = JSON.stringify(this.classPointer.prevPosition);
-                    var pos = JSON.stringify(this.classPointer.position);
-                    logAction("stopped dragging", this.classPointer, "from " + prevpos + " to " + pos);
+                    var prevpos = this.classPointer.prevPosition;
+                    var pos = this.classPointer.position;
+                    var cmd = new MoveNodeCommand(this.classPointer, prevpos, pos);
+                    cmd.Execute();
+                    //logAction("stopped dragging", this.classPointer, "from " + prevpos + " to " + pos);
                 }
             }
         });

@@ -75,6 +75,10 @@ class DrawingObject {
 
   get center() { return { x: this.x, y: this.y }; }
   get position() { return { x: this.x, y: this.y }; }
+  set position(pos) {
+    this.x = pos.x;
+    this.y = pos.y;
+  }
 
   redraw() { this.drawObject.redraw(); }
   dragAndDrop(opt) { this.drawObject.dragAndDrop(opt); }

@@ -19,36 +19,27 @@ class canvasDefaultState {
     }
 
     KeyDown(event) {
-        var pos = { x: $canvas.mouse.x, y: $canvas.mouse.y };
+        var mousepos = mousePos();
         var key = String.fromCharCode(event.which);
         switch (key) {
             case "T":
-                // key T
-
-                //SpawnTransition(pos, event.which);
-                var mousepos = mousePos();
                 var cmd = new AddTransitionCommand();
                 cmd.Execute(mousepos, key);
                 break;
             case "A":
-                //key A
-                //AddPlace(pos, event.which);
-                var mousepos = mousePos();
                 var cmd = new AddPlaceCommand();
                 cmd.Execute(mousepos, key);
                 break;
             case "Q":
-                SpawnPNState(pos, event.which);
+                //SpawnPNState(pos, event.which);
+                var cmd = new AddPNStateCommand();
+                cmd.Execute(mousepos, false);
                 break;
             case "Z":
-                if (event.ctrlKey == true) {
-                    $commandManager.Undo();
-                }
+                if (event.ctrlKey == true) { $commandManager.Undo(); }
                 break;
             case "Y":
-                if (event.ctrlKey == true) {
-                    $commandManager.Redo();
-                }
+                if (event.ctrlKey == true) { $commandManager.Redo(); }
                 break;
             default:
                 logAction(`pressed ${key}`, null);
