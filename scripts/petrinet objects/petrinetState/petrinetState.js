@@ -262,7 +262,11 @@ class PetriNetState extends Node {
         return sc;
 
     }
+    Readd(){
+        super.Readd();
+        $PNstates.push(this);
 
+    }
     set width(val) {
         this.drawObject.width = val;
         this.popupMenu.width = val;

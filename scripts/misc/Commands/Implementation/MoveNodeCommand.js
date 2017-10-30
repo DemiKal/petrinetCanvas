@@ -12,9 +12,11 @@ class MoveNodeCommand extends Command {
 
     Undo() {
         this.node.position = this.prevPos;
+        this.node.lineOnEdge();
     }
 
     Redo() {
         this.node.position = this.newPos;
+        this.node.lineOnEdge();
     }
 }

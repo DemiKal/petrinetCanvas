@@ -119,12 +119,20 @@ function edgePlacementValidation(node) {
     return true;
 }
 
+function deselect() {
+    $nodes.forEach(function (item) { item.selected = false; });
+    $selected = null;
+    $selectedButton.name = "None selected";
+    $selectedButton.redraw();
+    $stateManager.SwitchToDefaultState();
+}
+
 function createEdge(nodeA, nodeB) {
     var line = $canvas.display.line({
         start: { x: nodeA.x, y: nodeA.y },
         end: { x: nodeB.x, y: nodeB.y },
         stroke: $colorSettings.edge.stroke,
-        cap: "butt"
+        cap: "butt", opacity: 0
     });
 
     nodeA.outgoingEdges.push(line);
@@ -149,12 +157,5 @@ function createEdge(nodeA, nodeB) {
 
     nodeB.lineOnEdge();
     nodeA.lineOnEdge();
-}
-
-function deselect() {
-    $nodes.forEach(function (item) { item.selected = false; });
-    $selected = null;
-    $selectedButton.name = "None selected";
-    $selectedButton.redraw();
-    $stateManager.SwitchToDefaultState();
+    line.opacity = 1;
 }

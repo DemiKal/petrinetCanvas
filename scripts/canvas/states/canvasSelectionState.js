@@ -24,8 +24,10 @@ class canvasSelectionState {
             case "E":
                 this.spawnPendingEdge();
                 break;
-            case ".":
-                $selected.remove();
+            case ".":   //delete button
+                var cmd = new DeleteNodeCommand($selected);
+                cmd.Execute();
+                //$selected.remove();
                 break;
             default:
                 break;

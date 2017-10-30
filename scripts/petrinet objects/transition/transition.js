@@ -25,7 +25,7 @@ class Transition extends Node {
 	get nameAbbreviation() { return "T"; }
 
 	get center() { return { x: this.x + this.width / 2, y: this.y + this.height / 2 }; }
-    
+
 	removePointers() {
 		super.removePointers();
 		$transitions = $transitions.filter(x => x !== this);
@@ -62,7 +62,11 @@ class Transition extends Node {
 		this.redraw();
 		return isSated;
 	}
-
+	Readd() {
+		super.Readd();
+		$transitions.push(this);
+	}
+	
 	//consume a token from incoming edges, then distribute
 	fire() {
 		//consume
@@ -91,10 +95,10 @@ class Transition extends Node {
 				y: element.end.y,
 				opacity: 0
 			},
-			{
-				duration: "long",
-				easing: "ease-out-quint",
-			});
+				{
+					duration: "long",
+					easing: "ease-out-quint",
+				});
 		});
 	}
 

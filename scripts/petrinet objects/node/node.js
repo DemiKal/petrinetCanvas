@@ -33,6 +33,11 @@ class Node extends DrawingObject {
         deselect();
     }
 
+    Readd(){
+        this.drawObject.add();
+        $nodes.push(this);
+    }
+
     removePointers() {
         $nodes = $nodes.filter(x => x !== this);
     }
