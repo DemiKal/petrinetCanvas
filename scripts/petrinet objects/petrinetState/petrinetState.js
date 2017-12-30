@@ -93,8 +93,8 @@ class PetriNetState extends Node {
 
     CreatePopupAnchor() {
         var anchor = $canvas.display.rectangle({
-            x: this.width + this.drawObject.strokeWidth,
-            y: 0,
+            x: 0,
+            y: this.height + this.drawObject.strokeWidth,
             width: 0,
             height: 0,
             opacity: 1,
@@ -111,24 +111,24 @@ class PetriNetState extends Node {
         this.popupMenu = null;
         this.popupMenu = this.CreatePopupAnchor();
 
-        var nonActivePlaces = [];
-        for (var i = 0; i < $places.length; i++) {
-            var element = $places[i];
+        //var nonActivePlaces = [];
+        // for (var i = 0; i < $places.length; i++) {
+        //     var element = $places[i];
+        //     var name = element.name;
+
+        //    // if (!(name in this.activePlaces)) nonActivePlaces.push(element);
+        // }
+
+        for (var index = 0; index < $places.length; index++) {
+            var element = $places[index];
             var name = element.name;
 
-            if (!(name in this.activePlaces)) nonActivePlaces.push(element);
-        }
-
-        for (var index = 0; index < nonActivePlaces.length; index++) {
-            var element = nonActivePlaces[index];
-            var name = element.name;
-
-            if (name in this.activePlaces) { index--; continue; }
+            //if (name in this.activePlaces) { index--; continue; }
 
             var anchorX = this.width;
             var popup = $canvas.display.rectangle({
-                x: 0,
-                y: 50 * index,
+                x: 50 * index,
+                y: 0,
                 width: 50,
                 height: 50,
                 stroke: "3px red",
@@ -161,11 +161,15 @@ class PetriNetState extends Node {
         var placename = button.children[0].text;
 
         //if it already is an active place to the state, then dont add.
-        if (!(placename in this.activePlaces)) {
-            this.activePlaces[placename] = 1;
+        if ((placename in this.activePlaces)) {
+            this.activePlaces[placename] += 1;
             this.redraw();
         }
-        this.CreatePopupMenu();
+        else {
+            this.activePlaces[placename] = 1;
+           this.redraw();
+        }
+        //this.CreatePopupMenu();
     }
 
     redraw() {

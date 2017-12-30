@@ -26,7 +26,7 @@ class canvasDefaultState {
                 var cmd = new AddTransitionCommand();
                 cmd.Execute(mousepos, key);
                 break;
-            case "A":
+            case "P":
                 var cmd = new AddPlaceCommand();
                 cmd.Execute(mousepos, key);
                 break;
