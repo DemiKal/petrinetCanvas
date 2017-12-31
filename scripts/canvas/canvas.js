@@ -28,13 +28,13 @@ function ResetAllColors() {
 
 }
 
-function AddPlaceRef(){
+function AddPlaceRef() {
     var cmd = new AddPlaceCommand;
-    cmd.Execute(false,false);
+    cmd.Execute(false, false);
 }
-function AddTransitionRef(){
+function AddTransitionRef() {
     var cmd = new AddTransitionCommand;
-    cmd.Execute(false,false);
+    cmd.Execute(false, false);
 }
 
 function SpawnTransition(pos, buttonPress) {
@@ -127,7 +127,7 @@ function deselect() {
     $stateManager.SwitchToDefaultState();
 }
 
-function createEdge(nodeA, nodeB) {
+function createEdge(nodeA, nodeB, addTransbutton) {
     var line = $canvas.display.line({
         start: { x: nodeA.x, y: nodeA.y },
         end: { x: nodeB.x, y: nodeB.y },
@@ -158,4 +158,131 @@ function createEdge(nodeA, nodeB) {
     nodeB.lineOnEdge();
     nodeA.lineOnEdge();
     line.opacity = 1;
+
+    //add an extra button to select transition if its between petrinetstates
+    if (addTransbutton) CreateTransButton(line);
+}
+
+function CreateTransButton(line) {
+    var width = 50;
+    var Trans = $canvas.display.rectangle({
+        x: -width / 2, y: -width / 2,
+        height: width, width: width, fill: "red"
+    });
+
+    var transText = $canvas.display.text({
+        x: width / 2,
+        y: width / 2,
+        origin: { x: "center", y: "center" },
+        font: "bold 30px sans-serif",
+        text: "",
+        fill: "#fff"
+    });
+
+    Trans.addChild(transText);
+    line.addChild(Trans);
+    Trans.clicked = false;
+
+    var anchor = $canvas.display.rectangle({
+        x: 0, y: 0,   
+        height: $transitions.length * width, width: width * 2
+    });
+    anchor.isAnchor = true;
+
+    Trans.addChild(anchor);
+    anchor.TransButtons = [];
+    anchor.bind("mouseleave", function () {
+        // var asds = anchor.TransButton.some(function (element, index, array) { return element.MouseHovered; });
+        console.log('hasleft!')
+        var hasEntered = false;
+        for (var j = 0; j < anchor.TransButtons.length; j++) { if (anchor.TransButtons.mouseHover) hasEntered = true; }
+
+        if (hasEntered) return;
+        if (anchorHoverMouse(anchor)) { return; }
+
+        for (var i = 0; i < anchor.TransButtons.length; i++) { anchor.TransButtons[i].remove(); }
+
+        anchor.TransButtons = [];
+        Trans.redraw();
+        anchor.remove();
+    });
+
+    Trans.bind("mouseenter", function () {
+        console.log("trans enter");
+        var hasEntered = false;
+        for (var j = 0; j < anchor.TransButtons.length; j++) {
+            if (anchor.TransButtons.mouseHover)
+                hasEntered = true;
+        }
+        if (hasEntered) return;
+        //else if (anchorHoverMouse(anchor)) return;
+
+        var alreadyHasAnchor = false;
+        for (var v = 0; v < Trans.children.length; v++) {
+            if (Trans.children[v].isAnchor == true)
+                alreadyHasAnchor = true;
+        }
+        if (alreadyHasAnchor) return;
+        anchor.height = $transitions.length * width; //update height
+        Trans.addChild(anchor);
+
+
+        for (var i = 0; i < $transitions.length; i++) {
+            var transition = $transitions[i];
+            var tButton = $canvas.display.rectangle({
+                x: width + anchor.abs_x + width * 0.165, y: width * 0.165 + anchor.abs_y + i * width,
+                height: width * 0.66, width: width * 0.66, stroke: "2px red"
+            });
+
+
+            tButton.Tname = "" + transition.name;
+            tButton.mouseHover = false;
+            var ttext = $canvas.display.text({
+                x: tButton.width/2 , y:tButton.width/2,
+                origin: { x: "center", y: "center" },
+                font: "bold 25px sans-serif",
+                text: transition.name,
+                fill: "#fff"
+            });
+
+            tButton.addChild(ttext);
+            tButton.add();
+            tButton.bind("mouseenter", function () {
+                console.log('entered ' + this.Tname);
+                tButton.mouseHover = true;
+                this.children[0].fill = "green"
+            });
+            tButton.bind("mouseleave", function () {
+                tButton.mouseHover = false;
+                this.children[0].fill = "#fff"
+
+            });
+            tButton.bind("click", function () {
+                transText.text = this.Tname;
+                
+                
+                transText.redraw();
+            });
+            anchor.TransButtons.push(tButton);
+        }
+    });
+
+
+
+
+
+}
+
+function anchorHoverMouse(anchor) {
+    var aRect = {
+        left: anchor.abs_x, bottom: anchor.abs_y + anchor.height,
+        top: anchor.abs_y, right: anchor.abs_x + anchor.width
+    };
+
+    var mp = mousePos();
+
+    return ((aRect.left <= mp.x &&
+        mp.x <= aRect.right &&
+        aRect.top <= mp.y &&
+        mp.y <= aRect.bottom));
 }
