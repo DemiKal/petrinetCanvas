@@ -3,35 +3,35 @@ jQuery(document).ready(function ($) {
     //these are the original global color setting. 
     $colorSettings = {
         petrinetState:
-        {
-            stroke: "5px #f46e42",
-            correctStroke: "5px green",
-            incorrectStroke: "5px red",
-            selectionCircle: "3px orange"
-        },
+            {
+                stroke: "5px #f46e42",
+                correctStroke: "5px green",
+                incorrectStroke: "5px red",
+                selectionCircle: "3px orange"
+            },
         place:
-        {
-            stroke: "5px red",
-            nameColor: "#0ba",
-            tokenColor: "#0ba",
-            selectionCircle: "3px orange"
-        },
+            {
+                stroke: "5px red",
+                nameColor: "#0ba",
+                tokenColor: "#0ba",
+                selectionCircle: "3px orange"
+            },
         transition:
-        {
-            stroke: "5px red",
-            nameColor: "#0ba",
-            readyFireStroke: "5px green",
-            selectionCircle: "3px orange"
-        },
+            {
+                stroke: "5px red",
+                nameColor: "#0ba",
+                readyFireStroke: "5px green",
+                selectionCircle: "3px orange"
+            },
         edge:
-        {
-            stroke: "11px #0aa",
-            correctStroke: "11px green",
-            incorrectStroke: "11px red",
-            arrow: "#0da",
-            incorrectArrow: "red",
-            correctArrow: "green",
-        }
+            {
+                stroke: "11px #0aa",
+                correctStroke: "11px green",
+                incorrectStroke: "11px red",
+                arrow: "#0da",
+                incorrectArrow: "red",
+                correctArrow: "green",
+            }
     };
 
     //global vars
@@ -96,6 +96,12 @@ jQuery(document).ready(function ($) {
     $canvas.bind("keypress", function (event) { $canvas.currentState.KeyPress(event); });
     $canvas.bind("keyup", function (event) { $canvas.currentState.KeyUp(event); });
 
+    let cmd = new AddPNStateCommand();
+    cmd.Execute({x: 800, y: 500}, false);
+    let cmd2 = new AddPNStateCommand();
+    cmd2.Execute({x: 200, y: 500}, false);
+    
+    
     initUI();
 
 

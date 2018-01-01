@@ -189,7 +189,7 @@ function CreateTransButton(line) {
     });
     anchor.isAnchor = true;
 
-    Trans.addChild(anchor);
+   // Trans.addChild(anchor);
     anchor.TransButtons = [];
     anchor.bind("mouseleave", function () {
         // var asds = anchor.TransButton.some(function (element, index, array) { return element.MouseHovered; });
@@ -209,6 +209,7 @@ function CreateTransButton(line) {
 
     Trans.bind("mouseenter", function () {
         console.log("trans enter");
+        if($transitions.length == 0) return;
         var hasEntered = false;
         for (var j = 0; j < anchor.TransButtons.length; j++) {
             if (anchor.TransButtons.mouseHover)
@@ -266,11 +267,6 @@ function CreateTransButton(line) {
             anchor.TransButtons.push(tButton);
         }
     });
-
-
-
-
-
 }
 
 function anchorHoverMouse(anchor) {

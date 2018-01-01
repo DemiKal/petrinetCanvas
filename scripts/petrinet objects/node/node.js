@@ -129,6 +129,7 @@ class Node extends DrawingObject {
     }
 
     lineOnEdge() {
+        //take into account petrinet states
         var center = Victor.fromObject(this.center);
         for (var index = 0; index < this.outgoingEdges.length; index++) {
             var edge = this.outgoingEdges[index];
@@ -138,6 +139,7 @@ class Node extends DrawingObject {
             var direction = targetCenter.clone().subtract(center);
             this.alignEdge(edge, from, to, direction);
         }
+        
         for (var index = 0; index < this.incomingEdges.length; index++) {
             var edge = this.incomingEdges[index];
             var targetCenter = Victor.fromObject(edge.To.center);

@@ -4,7 +4,7 @@ class PetriNetState extends Node {
         //from which state/node did it come from?
 
         // this.from = fromState;
-            this.activeTransitions = [];
+        this.activeTransitions = [];
         this.activePlaces = {};
         this.drawObject = this.createStateNode(x, y, width, height);
         this.drawObject.classPointer = this;
@@ -79,11 +79,64 @@ class PetriNetState extends Node {
         return result;
     }
 
+    //override line on edge
+    lineOnEdge() {
+        super.lineOnEdge();
+
+        var recurringedges = [];
+        //find recurring edge
+        for (let i = 0; i < this.outgoingEdges.length; i++) {
+            let edge = this.outgoingEdges[i];
+            let neighbour = edge.To;
+            for (let j = 0; j < neighbour.outgoingEdges.length; j++) {
+                let pointingToMe = neighbour.outgoingEdges[j];
+                if (pointingToMe.To === this) {
+                    /*recurringedges.push(pointingToMe.From);*/
+
+
+                    //vector from other towards me
+                    let v = {
+                        x: pointingToMe.To.center.x - pointingToMe.From.center.x,
+                        y: pointingToMe.To.center.y - pointingToMe.From.center.y
+                    }
+
+                    let fromCenter = new Victor.fromObject(pointingToMe.From.center)
+                    let toCenter = new Victor.fromObject(pointingToMe.To.center)
+
+                    let vec = new Victor.fromObject(v);
+                    let normalDir = new Victor(-v.y, v.x).normalize();
+                    let delta = 0.33 * pointingToMe.From.height;
+                    let scalar = new Victor(-delta, -delta);
+                    let scalar2 = new Victor(delta, delta);
+
+                    let p1 = normalDir.clone().multiply(scalar).add(fromCenter);
+                    let p2 = normalDir.clone().multiply(scalar2).add(fromCenter);
+                    let p3 = normalDir.clone().multiply(scalar).add(toCenter);
+                    let p4 = normalDir.clone().multiply(scalar2).add(toCenter);
+
+                    edge.start = p1.toObject();
+                    edge.end = p3.toObject()
+                    pointingToMe.start = p2.toObject();
+                    pointingToMe.end = p4.toObject();
+
+                    let x = 0;
+                }
+
+            }
+        }
+
+        for (let k = 0; k < recurringedges.length; k++) {
+            let e = recurringedges[k];
+
+        }
+
+
+    }
+
     CreatePlaceAnchor() {
         var anchor = $canvas.display.rectangle({
-            x: 0, y: 0,
-            width: 0, height: 0,
-            opacity: 1,
+            x: 0, y: 0, width: 0,
+            height: 0, opacity: 1,
         });
 
         anchor.name = "place anchor";
@@ -167,7 +220,7 @@ class PetriNetState extends Node {
         }
         else {
             this.activePlaces[placename] = 1;
-           this.redraw();
+            this.redraw();
         }
         //this.CreatePopupMenu();
     }
@@ -266,7 +319,7 @@ class PetriNetState extends Node {
         return sc;
 
     }
-    Readd(){
+    Readd() {
         super.Readd();
         $PNstates.push(this);
 
