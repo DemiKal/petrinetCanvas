@@ -109,26 +109,60 @@ class PetriNetState extends Node {
                     let scalar = new Victor(-delta, -delta);
                     let scalar2 = new Victor(delta, delta);
 
-                    let p1 = normalDir.clone().multiply(scalar).add(fromCenter);
-                    let p2 = normalDir.clone().multiply(scalar2).add(fromCenter);
-                    let p3 = normalDir.clone().multiply(scalar).add(toCenter);
-                    let p4 = normalDir.clone().multiply(scalar2).add(toCenter);
+                    let p1 = normalDir.clone().multiply(scalar).add(toCenter);
+                    let p2 = normalDir.clone().multiply(scalar2).add(toCenter);
+
+                    let p3 = normalDir.clone().multiply(scalar).add(fromCenter);
+                    let p4 = normalDir.clone().multiply(scalar2).add(fromCenter);
 
                     edge.start = p1.toObject();
                     edge.end = p3.toObject()
-                    pointingToMe.start = p2.toObject();
-                    pointingToMe.end = p4.toObject();
+                    pointingToMe.start = p4.toObject();
+                    pointingToMe.end = p2.toObject();
 
-                    let x = 0;
+                    //intersect against the sides of the rect and set start/end points of edge
+                    let mySides = this.sides;
+                    let otherSides = neighbour.sides;
+
+                    let i1;
+                    let i2;
+                    let i3;
+                    let i4;
+                
+                    //intersect my outgoing edge with my edge and neighbours'
+                    mySides.forEach(function (side) {
+                        let intersection = segment_intersection(edge.start, edge.end, side.start, side.end);
+                        if (intersection != false) edge.start = intersection;
+                    }, this);
+                   
+                    //bug?
+                    otherSides.forEach(function (side) {
+                        let intersection = segment_intersection(edge.start, edge.end, side.start, side.end);
+                        if (intersection != false) edge.end = intersection;
+                    }, this);
+                    
+                    //intesrect the edge pointing towards me  against the sides of both rects
+                    mySides.forEach(function (side) {
+                        let intersection = segment_intersection(pointingToMe.start, pointingToMe.end, side.start, side.end);
+                        if (intersection != false) pointingToMe.end  = intersection;
+                    }, this);
+
+                    otherSides.forEach(function (side) {
+                        let intersection = segment_intersection(pointingToMe.start, pointingToMe.end, side.start, side.end);
+                        if (intersection != false) pointingToMe.start = intersection;
+                    }, this);
+
+                    //causes crash, fixed above
+                    // edge.start = i1;
+                    // edge.end = i2;
+                    // pointingToMe.start = i4;
+                    // pointingToMe.end = i3;
+
                 }
 
             }
         }
-
-        for (let k = 0; k < recurringedges.length; k++) {
-            let e = recurringedges[k];
-
-        }
+ 
 
 
     }

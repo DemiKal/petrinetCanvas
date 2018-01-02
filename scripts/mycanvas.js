@@ -97,9 +97,9 @@ jQuery(document).ready(function ($) {
     $canvas.bind("keyup", function (event) { $canvas.currentState.KeyUp(event); });
 
     let cmd = new AddPNStateCommand();
-    cmd.Execute({x: 800, y: 500}, false);
+    cmd.Execute({x: 200, y: 500}, false);
     let cmd2 = new AddPNStateCommand();
-    cmd2.Execute({x: 200, y: 500}, false);
+    cmd2.Execute({x: 800, y: 500}, false);  
     
     
     initUI();

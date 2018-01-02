@@ -10,6 +10,38 @@ class Node extends DrawingObject {
     get sameNodes() {
 
     }
+    //only works with rect
+    get sides() {
+        // let sides = [];
+        // let top = {
+        //     start: { x: this.x, y: this.y },
+        //     end: { x: this.x + this.width, y: this.y + this.height }
+        // };
+        // let right = {
+        //     start: { x: this.x + this.width, y: this.y + this.height },
+        //     end: { x: this.x, y: this.y + this.height }
+        // };
+        // let down = {
+        //     start: { x: this.x, y: this.y + this.height },
+        //     end: { x: this.x + this.width, y: this.y + this.height }
+        // };
+        // let left = {
+        //     start: { x: this.x, y: this.y },
+        //     end: { x: this.x, y: this.y + this.height }
+        // };
+        var upperLeft = { x: this.center.x - this.width / 2, y: this.center.y - this.height / 2 };
+        var upperRight = { x: this.center.x + this.width / 2, y: this.center.y - this.height / 2 };
+        var lowerRight = { x: this.center.x + this.width / 2, y: this.center.y + this.height / 2 };
+        var lowerLeft = { x: this.center.x - this.width / 2, y: this.center.y + this.height / 2 };
+
+        var up = { start: upperLeft, end: upperRight };
+        var right = { start: upperRight, end: lowerRight };
+        var down = { start: lowerLeft, end: lowerRight };
+        var left = { start: lowerLeft, end: upperLeft };
+        var lines = [up, right, down, left];
+        //sides.push(top,right,down,left);
+        return lines;
+    }
 
     remove() {
         //remove the drawObjects for each edge
@@ -33,7 +65,7 @@ class Node extends DrawingObject {
         deselect();
     }
 
-    Readd(){
+    Readd() {
         this.drawObject.add();
         $nodes.push(this);
     }
@@ -139,7 +171,7 @@ class Node extends DrawingObject {
             var direction = targetCenter.clone().subtract(center);
             this.alignEdge(edge, from, to, direction);
         }
-        
+
         for (var index = 0; index < this.incomingEdges.length; index++) {
             var edge = this.incomingEdges[index];
             var targetCenter = Victor.fromObject(edge.To.center);
