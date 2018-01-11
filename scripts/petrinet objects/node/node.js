@@ -12,7 +12,6 @@ class Node extends DrawingObject {
     }
     //only works with rect
     get sides() {
-
         var upperLeft = { x: this.center.x - this.width / 2, y: this.center.y - this.height / 2 };
         var upperRight = { x: this.center.x + this.width / 2, y: this.center.y - this.height / 2 };
         var lowerRight = { x: this.center.x + this.width / 2, y: this.center.y + this.height / 2 };
@@ -39,7 +38,7 @@ class Node extends DrawingObject {
             edge.children.forEach(e => this.removeTransButtons(e),this);
         }
     }
-
+    //remove this object
     remove() {
         //remove the drawObjects for each edge
         this.edges.forEach(x => x.remove());
@@ -114,10 +113,11 @@ class Node extends DrawingObject {
     ResetColors() {
 
     }
+
     createBoundingBox() {
         var boundingBox = new Rectangle(Victor.fromObject(this.center).subtract(new Victor(this.width, this.height)));
-
     }
+
     //assuming rectangular shape. override if not the case
     edgePosition(endPos) {
         var upperLeft = { x: this.center.x - this.width / 2, y: this.center.y - this.height / 2 };

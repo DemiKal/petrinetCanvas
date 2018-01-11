@@ -35,7 +35,8 @@ function compareSimulation(PNstateEdges, PNsimulatedStateEdges, signatureLookup)
 
                 //check if the simulatedEdges contains all the user defined edges of the current state
                 SimNextStates.forEach(function (toState) {
-                    if (-1 == $.inArray(toState, nextStates)) element in missingEdges ?
+                    if (-1 == $.inArray(toState, nextStates)) 
+                    element in missingEdges ?
                         missingEdges[element].push(toState) :
                         missingEdges[element] = [toState];
                 });

@@ -432,10 +432,10 @@ class PetriNetState extends Node {
             x: x, y: y,
             width: width,
             height: height,
-            stroke: $colorSettings.petrinetState.stroke
-
+            stroke: $colorSettings.petrinetState.stroke,
+            zIndex : "back"
         }).add();
-
+        obj.zIndex = "back";
         return obj;
     }
 

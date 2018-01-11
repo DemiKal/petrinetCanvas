@@ -83,6 +83,7 @@ class DrawingObject {
   redraw() { this.drawObject.redraw(); }
   dragAndDrop(opt) { this.drawObject.dragAndDrop(opt); }
 
+  //bind input event and delegate to seperate class
   initEventHandlers() {
     this.drawObject.bind("click tap", function (event) {
       this.classPointer.currentState.Click(event); event.stopPropagation();

@@ -205,7 +205,7 @@ function CreateTransButton(line) {
 
         anchor.TransButtons = [];
         Trans.redraw();
-        anchor.remove();
+        this.remove();
     });
 
     Trans.bind("mouseenter", function () {

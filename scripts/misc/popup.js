@@ -13,7 +13,8 @@ function CreatePopupMessage(pos, text) {
         height: height,
         stroke: "2px orange",
         zIndex: "front",
-        opacity: 0
+        opacity: 0,
+        fill: "black"
     }).add();
 
 

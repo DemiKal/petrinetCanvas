@@ -175,7 +175,8 @@ function createDropDown(x, y, width, height, text, subs, functions) {
         x: x, y: y,
         width: width,
         height: height,
-        fill: "black"
+        fill: "black",
+        zIndex : "front"
     });
 
     var buttonText = $canvas.display.text({
@@ -184,10 +185,12 @@ function createDropDown(x, y, width, height, text, subs, functions) {
         origin: { x: "center", y: "center" },
         font: "bold 10px sans-serif",
         text: text,
-        fill: "#fff"
+        fill: "#fff",
+        zIndex : "front"
     });
     mainbutton.addChild(buttonText);
     mainbutton.add();
+    mainbutton.zIndex = "front";
 
 
 
@@ -205,7 +208,7 @@ function createDropDown(x, y, width, height, text, subs, functions) {
 function showSubmenus(allChildren, opacity) {
     allChildren.slice(1).forEach(function (elem) {
         elem.opacity = opacity;
-        elem.redraw();
+        //elem.redraw();
     });
 }
 
