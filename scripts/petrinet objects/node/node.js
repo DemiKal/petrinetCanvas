@@ -12,23 +12,7 @@ class Node extends DrawingObject {
     }
     //only works with rect
     get sides() {
-        // let sides = [];
-        // let top = {
-        //     start: { x: this.x, y: this.y },
-        //     end: { x: this.x + this.width, y: this.y + this.height }
-        // };
-        // let right = {
-        //     start: { x: this.x + this.width, y: this.y + this.height },
-        //     end: { x: this.x, y: this.y + this.height }
-        // };
-        // let down = {
-        //     start: { x: this.x, y: this.y + this.height },
-        //     end: { x: this.x + this.width, y: this.y + this.height }
-        // };
-        // let left = {
-        //     start: { x: this.x, y: this.y },
-        //     end: { x: this.x, y: this.y + this.height }
-        // };
+
         var upperLeft = { x: this.center.x - this.width / 2, y: this.center.y - this.height / 2 };
         var upperRight = { x: this.center.x + this.width / 2, y: this.center.y - this.height / 2 };
         var lowerRight = { x: this.center.x + this.width / 2, y: this.center.y + this.height / 2 };
@@ -39,8 +23,21 @@ class Node extends DrawingObject {
         var down = { start: lowerLeft, end: lowerRight };
         var left = { start: lowerLeft, end: upperLeft };
         var lines = [up, right, down, left];
-        //sides.push(top,right,down,left);
+        //sides.push(top,right,down,left);  
         return lines;
+    }
+
+    //recursively find the list buttons on the edge with the transition label on it and remove them
+    //transbuttons is a distinct datastructure, not just a child of an object.
+    removeTransButtons(edge) {
+        if (edge.TransButtons) {
+            edge.TransButtons.forEach(e => e.remove());
+            edge.TransButtons = [];
+        }
+
+        else {
+            edge.children.forEach(e => this.removeTransButtons(e),this);
+        }
     }
 
     remove() {
@@ -50,12 +47,18 @@ class Node extends DrawingObject {
         this.incomingEdges.forEach(function (edge) {
             var neighbour = edge.From;
             neighbour.outgoingEdges = neighbour.outgoingEdges.filter(e => e !== edge);
-        });
+            //the tbutton is at index 1
+            this.removeTransButtons(edge);
+
+        }, this);
 
         this.outgoingEdges.forEach(function (edge) {
             var neighbour = edge.To;
             neighbour.incomingEdges = neighbour.incomingEdges.filter(e => e !== edge);
-        });
+            //the tbutton is at index 1
+            this.removeTransButtons(edge);
+
+        }, this);
 
         this.incomingEdges = [];
         this.outgoingEdges = [];

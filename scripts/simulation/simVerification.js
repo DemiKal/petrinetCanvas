@@ -35,10 +35,12 @@ function compareSimulation(PNstateEdges, PNsimulatedStateEdges, signatureLookup)
 
                 //check if the simulatedEdges contains all the user defined edges of the current state
                 SimNextStates.forEach(function (toState) {
-                    if (-1 == $.inArray(toState, nextStates)) element in missingEdges ? missingEdges[element].push(toState) : missingEdges[element] = [toState];
+                    if (-1 == $.inArray(toState, nextStates)) element in missingEdges ?
+                        missingEdges[element].push(toState) :
+                        missingEdges[element] = [toState];
                 });
             }
-            else incorrectStates.push(element)
+            else incorrectStates.push(element);
         }
     }
 
@@ -54,36 +56,76 @@ function compareSimulation(PNstateEdges, PNsimulatedStateEdges, signatureLookup)
         outerEdges.sort();
         simulatedOuterEdges.sort();
 
-        compareEdges(element, outerEdges, simulatedOuterEdges, signatureLookup);
+        var edgesRating = compareEdges(element, outerEdges, simulatedOuterEdges, signatureLookup);
+        nrIncorrectEdges += edgesRating.incorrect;
+        nrCorrectEdges += edgesRating.correct;
     }
+
+    //every Incorrect state has by definition a wrong edge
+
 
     for (var index = 0; index < incorrectStates.length; index++) {
         var element = incorrectStates[index];
         var currentStateObj = signatureLookup[element];
         currentStateObj.isCorrect = false;
+        var edgeCount = currentStateObj.outgoingEdges.length;
+        nrIncorrectEdges += edgeCount;
     }
+
+
+    // for (var fromUser in PNstateEdges) {
+    //     if (PNstateEdges.hasOwnProperty(fromUser)) {
+    //         var toUserArray = PNstateEdges[fromUser]; //array of states this one is pointing at
+    //         if (toUserArray.length == 0) continue;
+
+    //         for (var fromSim in PNsimulatedStateEdges) {
+    //             if (PNsimulatedStateEdges.hasOwnProperty(fromSim)) {
+    //                 var toSimulationArray = PNsimulatedStateEdges[fromSim];
+    //                 for (var k = 0; k < toSimulationArray.length; k++) {
+    //                     var toSim = toSimulationArray[k]; //string To
+    //                     if (-1 != $.inArray(toSim, toUserArray))
+    //                         nrCorrectEdges += 1;
+    //                 }
+    //             }
+
+
+    //         }
+    //     }
+    // }
 
     summarize(missingEdges, correctStates, incorrectStates, PNsimulatedStateEdges, PNstateEdges, nrIncorrectEdges, nrCorrectEdges);
 }
 
-function summarize(missingEdges, correctStates, incorrectStates, PNsimulatedStateEdges, PNstateEdges) {
+function summarize(missingEdges, correctStates, incorrectStates, PNsimulatedStateEdges, PNstateEdges, nrIncorrectEdges, nrCorrectEdges) {
     var nrOfTotalSimStates = Object.keys(PNsimulatedStateEdges).length;
     var nrOfTotalUserStates = Object.keys(PNstateEdges).length;
     var nrOfCorrStates = correctStates.length;
+    var nrOfMissingStates = nrOfTotalSimStates - nrOfCorrStates;
     var stateRating = Math.round(nrOfCorrStates / nrOfTotalSimStates * 100);
-    var nrOfUserEdges = getEdgeCount(PNstateEdges);
+    //this has to be a correct edge!
+    //var nrOfUserEdges = getEdgeCount(getCorrectEdges(PNstateEdges, PNsimulatedStateEdges));
     var nrOfSimEdges = getEdgeCount(PNsimulatedStateEdges);
-    var edgeRating = nrOfUserEdges / nrOfSimEdges * 100;
+    var edgeRating = nrCorrectEdges / nrOfSimEdges * 100;
+    //TODO: edgerating - wrong edges
     edgeRating = edgeRating > 100 ? Math.round(edgeRating - (edgeRating - 100)) : Math.round(edgeRating);
     var totalRating = Math.round(0.5 * (edgeRating + stateRating));
 
+    //youve made nrOfCorrStates out of nrOfTotalSimStates => score
     var text = "Summary:\n";
-    text += "You have made " + nrOfTotalUserStates + " while there should be " + nrOfTotalSimStates + " total states\n";
-    text += "You have made " + nrOfCorrStates + " correct states. Which rates " + stateRating + "%\n";
-    text += "there are in total " + nrOfSimEdges + " edges. You made " + nrOfUserEdges + " which rates " + edgeRating + "%\n";
-    text += "Total score: " + totalRating + "%";
+    text += "You have made " + nrOfCorrStates + "/" + nrOfTotalSimStates + " correct state(s)\n";
+    text += "You have made " + incorrectStates.length + " incorrect state(s)\n";
+    text += "You are missing " + nrOfMissingStates + " state(s)\n";
+    text += "this rates " + stateRating + "%\n";
+    text += "You have made " + nrCorrectEdges + "/" + nrOfSimEdges + " correct edge(s)\n";
+    text += "this rates " + edgeRating + "%\n";
+    //text += "there are in total " + nrOfSimEdges + " edges. You made " + nrCorrectEdges + "correct edges, which rates " + edgeRating + "%\n";
+    text += "Total score is avg of the above: " + totalRating + "%";
 
     CreateClickablePopup(mousePos(), text);
+}
+
+function getCorrectEdges(PNstateEdges, PNsimulatedStateEdges) {
+
 }
 
 function getEdgeCount(stateDict) {
@@ -96,31 +138,38 @@ function getEdgeCount(stateDict) {
     }
     return length;
 }
-function compareEdges(currentState, outerEdges, simulatedOuterEdges, signatureLookup, nrIncorrectEdges, nrCorrectEdges) {
+
+function compareEdges(currentState, outerEdges, simulatedOuterEdges, signatureLookup) {
+    var corr = 0;
+    var incorr = 0;
+    var edge;
+
     for (var index = 0; index < outerEdges.length; index++) {
         var element = outerEdges[index];
         var petriDrawObject = signatureLookup[currentState];
-        var i = $.inArray(element, simulatedOuterEdges)
+        var i = $.inArray(element, simulatedOuterEdges);
 
         if (i != -1) {
             //find the edge of element where currentState -> element then paint it green or something
-            var edge = findEdge(petriDrawObject, element);
+            edge = findEdge(petriDrawObject, element);
             edge.stroke = $colorSettings.edge.correctStroke;
             edge.children[0].fill = $colorSettings.edge.correctArrow;
             edge.redraw();
-            nrIncorrectEdges++;
+            corr++;
         }
         else {
-            var edge = findEdge(petriDrawObject, element);
+            edge = findEdge(petriDrawObject, element);
             edge.stroke = $colorSettings.edge.incorrectStroke;
             edge.children[0].fill = $colorSettings.edge.incorrectArrow;
             //add messagebox
             var txt = "this edge is incorrect";
             CreateClickablePopup({ x: edge.x, y: edge.y }, txt, edge);
             edge.redraw();
-            nrCorrectEdges++;
+            incorr++;
         }
     }
+
+    return { incorrect: incorr, correct: corr };
 }
 
 //create a popup message for the states that are missing edges

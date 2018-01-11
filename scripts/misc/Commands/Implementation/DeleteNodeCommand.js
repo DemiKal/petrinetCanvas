@@ -14,12 +14,13 @@ class DeleteNodeCommand extends Command {
 
     Undo() {
         this.node.Readd();
-        
+        var addTrans = this.node.constructor === PetriNetState;
+
         this.rememberedoutgoingEdges.forEach(function (element) {
-            createEdge(this.node, element.To);
+            createEdge(this.node, element.To,addTrans);
         }, this);
         this.rememberedIncomingEdges.forEach(function (element) {
-            createEdge(element.From, this.node);
+            createEdge(element.From, this.node,addTrans);
         }, this);
 
     }

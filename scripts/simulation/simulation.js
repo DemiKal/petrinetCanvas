@@ -37,7 +37,7 @@ function Simulate(state, transitions, transition, simulationStates, depth) {
     var newState = FireSim(state, transition);
     if (dictEq(newState.places, state.places)) return;
     if (stateAlreadySeen(newState, simulationStates)) {
-        UpdateDuplicateState(state, newState, transition.name, simulationStates)
+        UpdateDuplicateState(state, newState, transition.name, simulationStates);
         return;
     }
     $.each(transitions, function (i, trans) {
@@ -92,7 +92,7 @@ $.fn.equals = function (compareTo) {
 function stateAlreadySeen(state, simulationStates) {
     var alreadySeen = false;
     var dictStates = simulationStates.map(function (x) { return x.places; });
-    var i = 0
+    var i = 0;
     $.each(dictStates, function (key, val) {
 
         if (dictEq(val, state.places))

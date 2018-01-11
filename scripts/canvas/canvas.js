@@ -183,7 +183,7 @@ function CreateTransButton(line) {
     Trans.addChild(transText);
     line.addChild(Trans);
     Trans.clicked = false;
-
+    Trans.lineref = line;
     var anchor = $canvas.display.rectangle({
         x: 0, y: 0,   
         height: $transitions.length * width, width: width * 2
@@ -238,6 +238,7 @@ function CreateTransButton(line) {
 
 
             tButton.Tname = "" + transition.name;
+            tButton.Transref = Trans;
             tButton.mouseHover = false;
             var ttext = $canvas.display.text({
                 x: tButton.width/2 , y:tButton.width/2,
@@ -251,8 +252,12 @@ function CreateTransButton(line) {
             tButton.add();
             tButton.bind("mouseenter", function () {
                 console.log("entered " + this.Tname);
-                tButton.mouseHover = true;
+                this.mouseHover = true;
                 this.children[0].fill = "green";
+                var s = this.Transref.lineref;
+                if(!s.added){
+                    this.remove();
+                }
             });
             tButton.bind("mouseleave", function () {
                 tButton.mouseHover = false;
@@ -261,8 +266,7 @@ function CreateTransButton(line) {
             });
             tButton.bind("click", function () {
                 transText.text = this.Tname;
-                
-                
+                               
                 transText.redraw();
             });
             anchor.TransButtons.push(tButton);
