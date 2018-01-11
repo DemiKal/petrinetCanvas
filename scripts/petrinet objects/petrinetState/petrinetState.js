@@ -45,9 +45,7 @@ class PetriNetState extends Node {
         this.redraw();
     }
 
-    get isCorrect() {
-        return this.drawObject.stroke == $colorSettings.petrinetState.stroke;
-    }
+    get isCorrect() { return this.drawObject.stroke == $colorSettings.petrinetState.stroke; }
 
     set isCorrect(val) {
         val ? this.drawObject.stroke = $colorSettings.petrinetState.correctStroke : this.drawObject.stroke = $colorSettings.petrinetState.incorrectStroke;
@@ -98,10 +96,10 @@ class PetriNetState extends Node {
                     let v = {
                         x: pointingToMe.To.center.x - pointingToMe.From.center.x,
                         y: pointingToMe.To.center.y - pointingToMe.From.center.y
-                    }
+                    };
 
-                    let fromCenter = new Victor.fromObject(pointingToMe.From.center)
-                    let toCenter = new Victor.fromObject(pointingToMe.To.center)
+                    let fromCenter = new Victor.fromObject(pointingToMe.From.center);
+                    let toCenter = new Victor.fromObject(pointingToMe.To.center);
 
                     let vec = new Victor.fromObject(v);
                     let normalDir = new Victor(-v.y, v.x).normalize();
@@ -116,7 +114,7 @@ class PetriNetState extends Node {
                     let p4 = normalDir.clone().multiply(scalar2).add(fromCenter);
 
                     edge.start = p1.toObject();
-                    edge.end = p3.toObject()
+                    edge.end = p3.toObject();
                     pointingToMe.start = p4.toObject();
                     pointingToMe.end = p2.toObject();
 
@@ -128,23 +126,23 @@ class PetriNetState extends Node {
                     let i2;
                     let i3;
                     let i4;
-                
+
                     //intersect my outgoing edge with my edge and neighbours'
                     mySides.forEach(function (side) {
                         let intersection = segment_intersection(edge.start, edge.end, side.start, side.end);
                         if (intersection != false) edge.start = intersection;
                     }, this);
-                   
+
                     //bug?
                     otherSides.forEach(function (side) {
                         let intersection = segment_intersection(edge.start, edge.end, side.start, side.end);
                         if (intersection != false) edge.end = intersection;
                     }, this);
-                    
+
                     //intesrect the edge pointing towards me  against the sides of both rects
                     mySides.forEach(function (side) {
                         let intersection = segment_intersection(pointingToMe.start, pointingToMe.end, side.start, side.end);
-                        if (intersection != false) pointingToMe.end  = intersection;
+                        if (intersection != false) pointingToMe.end = intersection;
                     }, this);
 
                     otherSides.forEach(function (side) {
@@ -162,7 +160,7 @@ class PetriNetState extends Node {
 
             }
         }
- 
+
 
 
     }
@@ -287,7 +285,7 @@ class PetriNetState extends Node {
             y: h,
             width: 50,
             height: 50,
-            stroke: "2px blue",
+            stroke: "2px #f45c42",
             opacity: 1
         });
 
@@ -298,7 +296,7 @@ class PetriNetState extends Node {
             origin: { x: "center", y: "center" },
             font: "15px sans-serif",
             text: text,
-            fill: "#0ba"
+            fill: "#f45c42"
         });
 
         obj.addChild(objText);

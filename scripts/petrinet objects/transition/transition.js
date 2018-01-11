@@ -110,11 +110,11 @@ class Transition extends Node {
 			stroke: $colorSettings.transition.stroke,
 			name: text
 		});
-
+         
 		var nodeText = $canvas.display.text({
 			x: width / 2,
-			y: height,
-			origin: { x: "center", y: "top" },
+			y: height/2,
+			origin: { x: "center", y: "center" },
 			font: "bold 30px sans-serif",
 			text: text,
 			fill: $colorSettings.place.nameColor

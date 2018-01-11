@@ -163,11 +163,12 @@ function createEdge(nodeA, nodeB, addTransbutton) {
     if (addTransbutton) CreateTransButton(line);
 }
 
+//TODO: move to petrinetstate.js
 function CreateTransButton(line) {
     var width = 50;
     var Trans = $canvas.display.rectangle({
         x: -width / 2, y: -width / 2,
-        height: width, width: width, fill: "red"
+        height: width, width: width, fill: "#f45c42"
     });
 
     var transText = $canvas.display.text({
@@ -193,7 +194,7 @@ function CreateTransButton(line) {
     anchor.TransButtons = [];
     anchor.bind("mouseleave", function () {
         // var asds = anchor.TransButton.some(function (element, index, array) { return element.MouseHovered; });
-        console.log('hasleft!')
+        console.log("hasleft!");
         var hasEntered = false;
         for (var j = 0; j < anchor.TransButtons.length; j++) { if (anchor.TransButtons.mouseHover) hasEntered = true; }
 
@@ -249,13 +250,13 @@ function CreateTransButton(line) {
             tButton.addChild(ttext);
             tButton.add();
             tButton.bind("mouseenter", function () {
-                console.log('entered ' + this.Tname);
+                console.log("entered " + this.Tname);
                 tButton.mouseHover = true;
-                this.children[0].fill = "green"
+                this.children[0].fill = "green";
             });
             tButton.bind("mouseleave", function () {
                 tButton.mouseHover = false;
-                this.children[0].fill = "#fff"
+                this.children[0].fill = "#fff";
 
             });
             tButton.bind("click", function () {
