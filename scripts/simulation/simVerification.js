@@ -35,10 +35,10 @@ function compareSimulation(PNstateEdges, PNsimulatedStateEdges, signatureLookup)
 
                 //check if the simulatedEdges contains all the user defined edges of the current state
                 SimNextStates.forEach(function (toState) {
-                    if (-1 == $.inArray(toState, nextStates)) 
-                    element in missingEdges ?
-                        missingEdges[element].push(toState) :
-                        missingEdges[element] = [toState];
+                    if (-1 == $.inArray(toState, nextStates))
+                        element in missingEdges ?
+                            missingEdges[element].push(toState) :
+                            missingEdges[element] = [toState];
                 });
             }
             else incorrectStates.push(element);
@@ -61,9 +61,6 @@ function compareSimulation(PNstateEdges, PNsimulatedStateEdges, signatureLookup)
         nrIncorrectEdges += edgesRating.incorrect;
         nrCorrectEdges += edgesRating.correct;
     }
-
-    //every Incorrect state has by definition a wrong edge
-
 
     for (var index = 0; index < incorrectStates.length; index++) {
         var element = incorrectStates[index];
@@ -96,28 +93,57 @@ function compareSimulation(PNstateEdges, PNsimulatedStateEdges, signatureLookup)
 
     summarize(missingEdges, correctStates, incorrectStates, PNsimulatedStateEdges, PNstateEdges, nrIncorrectEdges, nrCorrectEdges);
 }
+function missingEdgesCount(PNstateEdges) {
+    var count = 0;
+    for (var key in PNstateEdges) {
+        if (PNstateEdges.hasOwnProperty(key)) {
+            var list = PNstateEdges[key];
+            count += list.length;
+        }
+    }
+    return count;
+}
+
+//calc the score. give  a punishment to missed and incorrect guesses
+function calcScore(correct, incorrect, missing, total) {
+    var totalprime = total + incorrect;
+    var cp = correct / total;   //make cp a bit bigger than the others
+    var ip = incorrect / totalprime; //%of incorrect guesses
+    var mp = missing / totalprime; //%of missing guesses
+    return cp * Math.sqrt(1 - ip - mp);
+}
 
 function summarize(missingEdges, correctStates, incorrectStates, PNsimulatedStateEdges, PNstateEdges, nrIncorrectEdges, nrCorrectEdges) {
+   // var xx = calcScore(correct, incorrect, missing, total);
+
     var nrOfTotalSimStates = Object.keys(PNsimulatedStateEdges).length;
     var nrOfTotalUserStates = Object.keys(PNstateEdges).length;
     var nrOfCorrStates = correctStates.length;
+    var nrOfIncStates = incorrectStates.length;
     var nrOfMissingStates = nrOfTotalSimStates - nrOfCorrStates;
-    var stateRating = Math.round(nrOfCorrStates / nrOfTotalSimStates * 100);
+
+    //var stateRating = Math.round(nrOfCorrStates / nrOfTotalSimStates * 100);
+    //var stateRating = Math.round(nrOfCorrStates / nrOfTotalSimStates * 100);
+    var stateRating = nrOfCorrStates / (nrOfCorrStates + nrOfIncStates + nrOfMissingStates)*100;
+    var nrOfMissingEdges = missingEdgesCount(missingEdges);
+
     //this has to be a correct edge!
     //var nrOfUserEdges = getEdgeCount(getCorrectEdges(PNstateEdges, PNsimulatedStateEdges));
     var nrOfSimEdges = getEdgeCount(PNsimulatedStateEdges);
-    var edgeRating = nrCorrectEdges / nrOfSimEdges * 100;
+    var edgeRating = nrCorrectEdges /(nrCorrectEdges + nrIncorrectEdges + nrOfMissingEdges)*100;//nrCorrectEdges - nrIncorrectEdges - / nrOfSimEdges * 100;
     //TODO: edgerating - wrong edges
-    edgeRating = edgeRating > 100 ? Math.round(edgeRating - (edgeRating - 100)) : Math.round(edgeRating);
+    //edgeRating = edgeRating > 100 ? Math.round(edgeRating - (edgeRating - 100)) : Math.round(edgeRating);
     var totalRating = Math.round(0.5 * (edgeRating + stateRating));
 
     //youve made nrOfCorrStates out of nrOfTotalSimStates => score
     var text = "Summary:\n";
     text += "You have made " + nrOfCorrStates + "/" + nrOfTotalSimStates + " correct state(s)\n";
-    text += "You have made " + incorrectStates.length + " incorrect state(s)\n";
+    text += "You have made " + nrOfIncStates + " incorrect state(s)\n";
     text += "You are missing " + nrOfMissingStates + " state(s)\n";
     text += "this rates " + stateRating + "%\n";
     text += "You have made " + nrCorrectEdges + "/" + nrOfSimEdges + " correct edge(s)\n";
+    text += "You have made " + nrIncorrectEdges + " incorrect edge(s)\n";
+    text += "You are missing" + nrOfMissingEdges + " edge(s)\n";
     text += "this rates " + edgeRating + "%\n";
     //text += "there are in total " + nrOfSimEdges + " edges. You made " + nrCorrectEdges + "correct edges, which rates " + edgeRating + "%\n";
     text += "Total score is avg of the above: " + totalRating + "%";
@@ -185,8 +211,12 @@ function popupMessageMissingEdges(missingEdges, signatureLookup) {
             var alreadyExisting = 0;
             PNStates.forEach(function (element) { if (Signature(element) in missingStates) alreadyExisting++; }, this);
             var nrOfnewStates = (nrMissing - alreadyExisting);
-            text += "You have already made " + alreadyExisting + " states\nThat this one should point to.\nFigure out which one to connect!\n";
-            text += "Therefore, " + nrOfnewStates + " new states should be made.";
+            if (alreadyExisting == 0) {
+                text += "Therefore, " + nrOfnewStates + " new state(s) should be made.";
+            }
+            else {
+                text += "You have already made " + alreadyExisting + " states\nThat this one should point to.\nFigure out which one to connect!\n";
+            }
             CreateClickablePopup(mousePos(), text, obj);
         }
     }

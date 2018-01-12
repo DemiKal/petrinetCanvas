@@ -96,16 +96,46 @@ jQuery(document).ready(function ($) {
     $canvas.bind("keypress", function (event) { $canvas.currentState.KeyPress(event); });
     $canvas.bind("keyup", function (event) { $canvas.currentState.KeyUp(event); });
 
-    let cmd = new AddPNStateCommand();
-    cmd.Execute({x: 200, y: 500}, false);
-    let cmd2 = new AddPNStateCommand();
-    cmd2.Execute({x: 800, y: 500}, false);  
-    
-    
+    // let cmd = new AddPNStateCommand();
+    // cmd.Execute({x: 200, y: 500}, false);
+    // let cmd2 = new AddPNStateCommand();
+    // cmd2.Execute({x: 800, y: 500}, false);  
+
     initUI();
 
+    var sss = $canvas.display.rectangle({ x: 400, y: 400, width: 100, height: 100, fill: "#0bs", opacity: 1 }).add();
+    sss.bind("mouseup", function (event) {
+        showCD("hello");
+
+    });
+
+    function showCD(str) {
+        if (str == "") {
+            //document.getElementById("txtHint").innerHTML = "";
+            return;
+        }
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {  // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                //document.getElementById("txtHint").innerHTML = this.responseText;
+                console.log("GET request finished!");
+                sss.fill = "hsl(" + Math.random() * 360 + ", 50%, 50%)";
+                console.log(this.responseText);
+            }
+        };
+        xmlhttp.open("GET", "test.php?q=" + str, true);
+        xmlhttp.send();
+    }
 
 });
+
+
+
 
 
 

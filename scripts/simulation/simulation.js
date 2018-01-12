@@ -1,5 +1,16 @@
 //prepare the start the simulation
 function initSimulation() {
+    // for (let i = 0; i < $PNstates.length; i++) {
+    //     const a = $PNstates[i].activePlaces;
+    //     for (let j = 0; j < $PNstates.length; j++) {
+    //         if (i == j) continue;
+    //         const b = $PNstates[j].activePlaces;
+       
+    //         if (dictEq(a, b))
+    //             return CreatePopupMessage(mousePos(), "No duplicate Petri net states!!");
+
+    //     }
+    // }
 
     var transitions = [];
     var simulationPlaces = {};
@@ -16,12 +27,12 @@ function initSimulation() {
 
     var initialState = new petriStateSim(simulationPlaces);
 
-    if (transitions != [])
+    if (transitions.length > 0)
         $.each(transitions, function (i, trans) {
             Simulate(initialState, transitions, trans, simulationStates, 0);
         });
     else {
-        simulationStates = initialState;
+        simulationStates = [initialState];
         console.log("no transition to fire, only 1 state to reach");
     }
     verifyUserPetrinet(simulationStates);
