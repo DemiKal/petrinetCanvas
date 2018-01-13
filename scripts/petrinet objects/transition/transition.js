@@ -17,7 +17,6 @@ class Transition extends Node {
 
 		this.selectionCircle = this.createSelectionCircle();
 		this.initEventHandlers();
-
 	}
 
 

@@ -106,14 +106,19 @@ jQuery(document).ready(function ($) {
 
     var sss = $canvas.display.rectangle({ x: 400, y: 400, width: 100, height: 100, fill: "#0bs", opacity: 1 }).add();
     sss.bind("mouseup", function (event) {
-        xml("hello");
+        
+        var toSend = {};
+        toSend.name = "Alen Marsh";
+        toSend.city = "Miami";
+        toSend.graph = JSON.stringify(GraphToJSON());
+        xml(toSend);
 
     });
 
 
 
-    function xml(str) {
-        if (str == "") {
+    function xml(queryObj) {
+        if (queryObj == "") {
             //document.getElementById("txtHint").innerHTML = "";
             return;
         }
@@ -131,10 +136,13 @@ jQuery(document).ready(function ($) {
                 sss.fill = "hsl(" + Math.random() * 360 + ", 50%, 50%)";
                 console.log(this.responseText);
                 var obje = JSON.parse(this.responseText);
+
             }
         };
-
-        xmlhttp.open("GET", "php/test.php?q=" + str, true);
+        var req = "php/test.php?";
+        var toQstring = jQuery.param(queryObj);
+        var full_url = req + toQstring;
+        xmlhttp.open("GET",full_url, true);
         xmlhttp.send();
     }
 

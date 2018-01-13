@@ -1,33 +1,45 @@
 <?php
 require 'vendor/autoload.php';
-// $myObj = new \stdClass();
-// $myObj->name = "John";
-// $myObj->age = 30;
-// $myObj->city = "New York";
+$name=$_GET["name"];
+$city=$_GET["city"];
+$jsonStringPetrinet = $_GET["graph"];
 
-// $myJSON = json_encode($myObj);
+$jsonGraph= json_decode($jsonPetrinet);
 
-// echo $myJSON;
+
+$myObj = new \stdClass();
+$myObj->name = $name;
+$myObj->city = $city;
+$myObj->graph = $$jsonGraph;
+
+
+
+
+$myJSON = json_encode($myObj);
+
+
+
+echo $myJSON;
 
 
 
 //code for sending json
 //new instance of manager
-$client = new MongoDB\Client;
+// $client = new MongoDB\Client;
 
-//select database
-$db = $client->test;
+// //select database
+// $db = $client->PetrinetDatabase;
 
-//select collection
-$inventory  = $db->inventory;
+// //select collection
+// $inventory  = $db->users;
 
-//find 
-$d = $inventory->find([]);
+// //find 
+// $d = $inventory->find([]);
 
-foreach ($d as $doc) 
-{
-    $bson = MongoDB\BSON\fromPHP($doc);
-    echo MongoDB\BSON\toJSON($bson);
-    //frontend will have to parse as json
-}
+// foreach ($d as $doc) 
+// {
+//     $bson = MongoDB\BSON\fromPHP($doc);
+//     echo MongoDB\BSON\toJSON($bson);
+//     //frontend will have to parse as json
+// }
 ?>

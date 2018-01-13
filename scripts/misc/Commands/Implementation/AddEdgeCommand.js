@@ -7,7 +7,7 @@ class AddEdgeCommand extends Command {
 
     Execute() {
         super.Execute();
-        var addTransButton = this.node.constructor.name == PetriNetState.name 
+        var addTransButton = this.node.constructor.name == PetriNetState.name ;
         createEdge(this.node, this.target, addTransButton);
 
     }

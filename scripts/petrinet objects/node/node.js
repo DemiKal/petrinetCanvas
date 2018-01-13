@@ -7,9 +7,19 @@ class Node extends DrawingObject {
         this.outgoingEdges = [];
         this.selectionCircle = null;
     }
+    // get name(){
+    //     //note petrinetstate doesnt have a nameplate!
+    //     return this.namePlate.text;
+    // }
+    // set name(newName){
+    //     //note petrinetstate doesnt have a nameplate!
+    //     this.namePlate.text = newName;
+    //     this.redraw();
+    // }
     get sameNodes() {
 
     }
+
     //only works with rect
     get sides() {
         var upperLeft = { x: this.center.x - this.width / 2, y: this.center.y - this.height / 2 };
@@ -106,8 +116,9 @@ class Node extends DrawingObject {
 
     get name() { return this.namePlate.text; }
     set name(newname) {
-        if (this.namePlate) namePlate.text = newname;
+        if (this.namePlate) this.namePlate.text = newname;
         else this.text = newname;
+        this.redraw();
     }
 
     ResetColors() {

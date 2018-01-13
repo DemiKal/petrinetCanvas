@@ -176,7 +176,7 @@ function createDropDown(x, y, width, height, text, subs, functions) {
         width: width,
         height: height,
         fill: "black",
-        zIndex : "front"
+        zIndex: "front"
     });
 
     var buttonText = $canvas.display.text({
@@ -186,7 +186,7 @@ function createDropDown(x, y, width, height, text, subs, functions) {
         font: "bold 10px sans-serif",
         text: text,
         fill: "#fff",
-        zIndex : "front"
+        zIndex: "front"
     });
     mainbutton.addChild(buttonText);
     mainbutton.add();
@@ -250,18 +250,17 @@ function AddSubButtons(mainbutton, names, functions) {
         sub.bind("mouseenter", function (event) { event.stopPropagation(); this.fill = "orange"; this.redraw(); });
         sub.bind("mouseleave", function (event) { event.stopPropagation(); this.fill = "black"; this.redraw(); });
         sub.bind("click", function (event) {
-             event.stopPropagation(); 
-             func(); });
+            event.stopPropagation();
+            func();
+        });
     });
 }
 
 function deleteAll() {
-    var nodes = $.extend([], $nodes);
-    nodes.forEach(function (element) { element.remove(); }, this);
-    $nodes = [];
-    $transitions = [];
-    $places = [];
-    $PNstates = [];
+    $nodes.forEach(function (e) {
+        var cmd = new DeleteNodeCommand(e);
+        cmd.Execute();
+    });
 }
 
 
@@ -303,49 +302,75 @@ function LoadGraph(graph) {
     var newPNstates = [];
 
     transitions.forEach(function (t) {
-        var x = new Transition(t.x, t.y, t.width, t.height);
-        newTransitions.push(x);
+        var cmd = new AddTransitionCommand();
+        cmd.Execute(false, false);
+        cmd.node.x = t.x;
+        cmd.node.y = t.y;
+        cmd.node.name = t.name;   //this should trigger a name change! ->get/set
+
+
+
+        // var x = new Transition(t.x, t.y, t.width, t.height);
+        // newTransitions.push(x);
     });
-    newNodes = newNodes.concat(newTransitions);
+    // newNodes = newNodes.concat(newTransitions);
 
     places.forEach(function (t) {
-        var x = new Place(t.x, t.y, t.radius, t.name, t.tokens);
-        newPlaces.push(x);
+        var cmd = new AddPlaceCommand();
+        cmd.Execute(false, false);
+        cmd.node.x = t.x;
+        cmd.node.y = t.y;
+        cmd.node.tokens = t.tokens;
+        //  var x = new Place(t.x, t.y, t.radius, t.name, t.tokens);
+        //  newPlaces.push(x);
     });
-    newNodes = newNodes.concat(newPlaces);
 
     PNstates.forEach(function (t) {
-        var x = new PetriNetState(t.x, t.y, t.width, t.height);
-        x.activePlaces = t.activePlaces;
-        x.name = t.name;
-        newPNstates.push(x);
+        var cmd = new AddPNStateCommand();
+        //var x = new PetriNetState(t.x, t.y, t.width, t.height);
+        cmd.Execute(false, false);
+        cmd.node.x = t.x;
+        cmd.node.y = t.y;
+        cmd.node.width = t.width;
+        cmd.node.activePlaces = t.activePlaces;
+        cmd.node.name = t.name;
+        //newPNstates.push(x);
     });
-    newNodes = newNodes.concat(newPNstates);
+
 
     edges.forEach(function (e) {
-        var from = findNode(newNodes, e.from);
-        var to = findNode(newNodes, e.to);
-        createEdge(from, to);
+        var from = findNode(e.from);
+        var to = findNode(e.to);
+        //createEdge(from, to);
+        var cmd = new AddEdgeCommand(from, to);
+        cmd.Execute();
     });
 
-    $nodes = newNodes;
-    $places = newPlaces;
-    $transitions = newTransitions;
-    $PNstates = newPNstates;
+    //$nodes = newNodes;
+    //$places = newPlaces;
+    //$transitions = newTransitions;
+    //$PNstates = newPNstates;
     $nodes.forEach(x => x.redraw());
     $("#fileinput").val("");
 
 }
 
-function findNode(array, name) {
-    for (var index = 0; index < array.length; index++) {
-        var element = array[index];
+function findNode(name) {
+    for (var index = 0; index < $nodes.length; index++) {
+        var element = $nodes[index];
         if (element.name == name)
             return element;
     }
 }
 
 function SaveGraph() {
+    var saveObject = GraphToJSON();
+    var objString = JSON.stringify(saveObject);
+    var blob = new Blob([objString], { type: "text/plain;charset=utf-8" });
+    saveAs(blob, "save file of user.json");
+}
+
+function GraphToJSON() {
     var allnodes = $.extend([], $nodes);
     var transitions = $.extend([], $transitions);
     var places = $.extend([], $places);
@@ -394,9 +419,7 @@ function SaveGraph() {
     saveObject.places = placeData;
     saveObject.PNstates = pnStateData;
     saveObject.edges = edgeData;
-    var objString = JSON.stringify(saveObject);
-    var blob = new Blob([objString], { type: "text/plain;charset=utf-8" });
-    saveAs(blob, "save file of user.json");
+    return saveObject;
 }
 
 function copygeneralObjData(original) {
