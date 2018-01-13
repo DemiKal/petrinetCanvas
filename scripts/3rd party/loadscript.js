@@ -4,6 +4,7 @@ $LAB
     .script("scripts/3rd party/ocanvas-2.8.9.js").wait()
     .script("scripts/3rd party/victor.js").wait()
     .script("scripts/3rd party/filesaver.js").wait()
+    .script("scripts/3rd party/bson.js").wait()
 
     //misc
     .script("scripts/misc/popup.js").wait()
