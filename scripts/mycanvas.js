@@ -1,5 +1,6 @@
+//this is the entry for js scripts
 jQuery(document).ready(function ($) {
-
+   // initColorSettings();
     //these are the original global color setting. 
     $colorSettings = {
         petrinetState:
@@ -102,51 +103,47 @@ jQuery(document).ready(function ($) {
     // cmd2.Execute({x: 800, y: 500}, false);  
 
     //test
-    initUI();
+    //initSandboxUI();
+    initMainMenu();
+    // var sss = $canvas.display.rectangle({ x: 400, y: 400, width: 100, height: 100, fill: "#0bs", opacity: 1 }).add();
+    // sss.bind("mouseup", function (event) {
+    //     var toSend = {};
+    //     toSend.name = "Alen Marsh";
+    //     toSend.city = "Miami";
+    //     toSend.graph = JSON.stringify(GraphToJSON());
+    //     xml(toSend);
+    // });
+});
 
-    var sss = $canvas.display.rectangle({ x: 400, y: 400, width: 100, height: 100, fill: "#0bs", opacity: 1 }).add();
-    sss.bind("mouseup", function (event) {
-        
-        var toSend = {};
-        toSend.name = "Alen Marsh";
-        toSend.city = "Miami";
-        toSend.graph = JSON.stringify(GraphToJSON());
-        xml(toSend);
-
-    });
-
-
-
-    function xml(queryObj) {
-        if (queryObj == "") {
-            //document.getElementById("txtHint").innerHTML = "";
-            return;
-        }
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {  // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-
-        xmlhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                //document.getElementById("txtHint").innerHTML = this.responseText;
-                console.log("GET request finished!");
-                sss.fill = "hsl(" + Math.random() * 360 + ", 50%, 50%)";
-                console.log(this.responseText);
-                var obje = JSON.parse(this.responseText);
-
-            }
-        };
-        var req = "php/test.php?";
-        var toQstring = jQuery.param(queryObj);
-        var full_url = req + toQstring;
-        xmlhttp.open("GET",full_url, true);
-        xmlhttp.send();
+function xml(queryObj) {
+    if (queryObj == "") {
+        //document.getElementById("txtHint").innerHTML = "";
+        return;
+    }
+    if (window.XMLHttpRequest) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    } else {  // code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
 
-});
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            //document.getElementById("txtHint").innerHTML = this.responseText;
+            console.log("GET request finished!");
+            sss.fill = "hsl(" + Math.random() * 360 + ", 50%, 50%)";
+            console.log(this.responseText);
+            var obje = JSON.parse(this.responseText);
+
+        }
+    };
+
+    var req = "php/test.php?";
+    var toQstring = jQuery.param(queryObj);
+    var full_url = req + toQstring;
+    xmlhttp.open("GET",full_url, true);
+    xmlhttp.send();
+}
 
 function testf() {
     // Get the Long type

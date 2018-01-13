@@ -10,6 +10,7 @@ $LAB
     .script("scripts/misc/popup.js").wait()
     .script("scripts/misc/logging.js").wait()
     .script("scripts/misc/UI.js").wait()
+    .script("scripts/misc/mainMenu.js").wait()
 
     //command patterns
     .script("scripts/misc/Commands/Command.js").wait()

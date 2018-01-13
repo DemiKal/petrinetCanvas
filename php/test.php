@@ -4,13 +4,13 @@ $name=$_GET["name"];
 $city=$_GET["city"];
 $jsonStringPetrinet = $_GET["graph"];
 
-$jsonGraph= json_decode($jsonPetrinet);
+$jsonGraph= json_decode($jsonStringPetrinet);
 
 
 $myObj = new \stdClass();
 $myObj->name = $name;
 $myObj->city = $city;
-$myObj->graph = $$jsonGraph;
+$myObj->graph = $jsonGraph;
 
 
 
@@ -19,24 +19,26 @@ $myJSON = json_encode($myObj);
 
 
 
-echo $myJSON;
+//echo $myJSON;
 
 
 
 //code for sending json
 //new instance of manager
-// $client = new MongoDB\Client;
+$client = new MongoDB\Client;
 
 // //select database
-// $db = $client->PetrinetDatabase;
+$db = $client->test;
 
 // //select collection
-// $inventory  = $db->users;
-
+$collection = $db->graphstest;
+//$result = $collection->insert($jsonGraph);
+//var_dump($result);
 // //find 
-// $d = $inventory->find([]);
+//$d = $inventory->find([]);
+echo $collection->count();
 
-// foreach ($d as $doc) 
+// foreach ($collection as $doc) 
 // {
 //     $bson = MongoDB\BSON\fromPHP($doc);
 //     echo MongoDB\BSON\toJSON($bson);

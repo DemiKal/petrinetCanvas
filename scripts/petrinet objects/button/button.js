@@ -11,17 +11,13 @@ class Button extends DrawingObject {
         if (this.namePlate) this.namePlate.text = newname;
         else this.text = newname;
     }
-    bindManual() {
-        
-        this.drawObject.bind("mouseenter", function (event) {
-            this.fill = "orange";
-            this.redraw();
-        });
-        this.drawObject.bind("mouseleave", function (event) {
-            this.fill = "black";
-            this.redraw();
-        });
+    bindManual(eventType, func) {
+        this.drawObject.bind(eventType, func);
     }
+    remove(){
+        this.drawObject.remove();
+    }
+
     fillColor(color) {
         this.drawObject.fill = color;
         this.redraw();
@@ -30,7 +26,7 @@ class Button extends DrawingObject {
     AddHelpMessage(text) {
         var pos = mousePos();
         var popupMessage = CreateFadingMessage(pos, text, this);
-        popupMessage.opacity=0;
+        popupMessage.opacity = 0;
         this.drawObject.addChild(popupMessage);
         popupMessage.zIndex = "front";
         return popupMessage;
