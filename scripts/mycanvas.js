@@ -101,6 +101,7 @@ jQuery(document).ready(function ($) {
     // let cmd2 = new AddPNStateCommand();
     // cmd2.Execute({x: 800, y: 500}, false);  
 
+    //test
     initUI();
 
     // var sss = $canvas.display.rectangle({ x: 400, y: 400, width: 100, height: 100, fill: "#0bs", opacity: 1 }).add();
@@ -136,19 +137,19 @@ jQuery(document).ready(function ($) {
     //     xmlhttp.open("GET", "php/test.php?q=" + str, true);
     //     xmlhttp.send();
     // }
-    
+
 });
 
-function testf(){
-        // Get the Long type
-        var Long = BSON.Long;
-        // Create a bson parser instance
-        var bson = new BSON();
-    
-        // Serialize document
-       // var doc = { long: Long.fromNumber(100), es: Long.fromNumber(2) };
-        
-       var doc =       `object(MongoDB\Model\CollectionInfo)[30]
+function testf() {
+    // Get the Long type
+    var Long = BSON.Long;
+    // Create a bson parser instance
+    var bson = new BSON();
+
+    // Serialize document
+    // var doc = { long: Long.fromNumber(100), es: Long.fromNumber(2) };
+
+    var doc = `object(MongoDB\Model\CollectionInfo)[30]
   public 'name' => string 'empcollection' (length=13)
   public 'type' => string 'collection' (length=10)
   public 'options' => 
@@ -170,11 +171,11 @@ function testf(){
       'name' => string '_id_' (length=4)
       'ns' => string 'companydb.empcollection' (length=23)
       `;
-      
-        // Serialize a document
-        //var data = bson.serialize(doc);
-        // De serialize it again
-        var doc_2 = bson.deserialize(doc);
+
+    // Serialize a document
+    //var data = bson.serialize(doc);
+    // De serialize it again
+    var doc_2 = bson.deserialize(doc);
 }
 
 
