@@ -24,7 +24,7 @@ $inventory  = $db->inventory;
 //find 
 $d = $inventory->find([]);
 
-foreach ($documents as $doc) 
+foreach ($d as $doc) 
 {
     $bson = MongoDB\BSON\fromPHP($doc);
     echo MongoDB\BSON\toJSON($bson);

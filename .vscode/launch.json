@@ -10,13 +10,6 @@
         },
         {
             "type": "chrome",
-            "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:1234",
-            "webRoot": "${workspaceRoot}/petrinetcanvas"
-        },
-        {
-            "type": "chrome",
             "request": "attach",
             "name": "Attach to Chrome",
             "port": 9222,
@@ -24,15 +17,8 @@
         },
         {
             "type": "chrome",
-            "request": "attach",
-            "name": "Attach to Chrome2",
-            "port": 9222,
-            "webRoot": "${workspaceFolder}"
-        },
-        {
-            "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against localhost2",
+            "name": "Launch Chrome against localhost",
             "url": "http://localhost:1234/petrinetCanvas",
             "webRoot": "${workspaceFolder}"
         }
