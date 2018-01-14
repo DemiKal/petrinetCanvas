@@ -36,8 +36,7 @@ $collection = $db->graphstest;
 //var_dump($result);
 // //find 
 //$d = $inventory->find([]);
-echo $collection->count();
-
+echo $collection.count();
 // foreach ($collection as $doc) 
 // {
 //     $bson = MongoDB\BSON\fromPHP($doc);

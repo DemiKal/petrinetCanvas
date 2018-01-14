@@ -12,19 +12,34 @@ $db = $client->test;
 $collection = $db->graphstest;
 
 $myObj = new \stdClass();
-$myObj->author = $name;
-$myObj->graph = $jsonGraph;
+$myObj->graphs = [];
 
-//$result = $collection->insert($jsonGraph);
-//var_dump($result);
-// //find 
-//$d = $inventory->find([]);
-echo $collection->count();
+$query = ['name' => $name];
 
-// foreach ($collection as $doc) 
+try {
+    $result = $collection->find($query);
+
+    $returnlist = [];
+
+    foreach ($result as $c) {
+        $returnlist[] = $c;
+    }
+    $myObj->graphs = $returnlist;
+    $myObj->status = "OK";
+    //$enc = json_encode($myObj);
+    $bson = MongoDB\BSON\fromPHP($myObj);
+    echo MongoDB\BSON\toJSON($bson);
+
+ 
+} catch (MongoCursorException $e) {
+    echo `{"status":"NOT OK"}`;
+}
+ 
+
+
+// foreach ($collection as $doc)
 // {
 //     $bson = MongoDB\BSON\fromPHP($doc);
 //     echo MongoDB\BSON\toJSON($bson);
 //     //frontend will have to parse as json
 // }
-?>

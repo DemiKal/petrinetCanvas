@@ -34,7 +34,7 @@ jQuery(document).ready(function ($) {
                 correctArrow: "green",
             }
     };
-
+    $username = "Tom";
     //global vars
     //the list of actions that should be written to a (database) file. 
     //Currently a huge string.

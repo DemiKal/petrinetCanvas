@@ -18,6 +18,7 @@ $myObj = new \stdClass();
 $myObj->name = $name;
 $myObj->title = $title;
 $myObj->graph = $graph;
+$myObj->dateTime =  date("d-m-y G:i T");
 
 try{
     $result = $collection->insertOne($myObj);

@@ -192,7 +192,8 @@ function saveGraphUser() {
     //     });
 
     var mygraph = GraphToJSON();
-    var mydata = { name: "Tom", title: "ggggraph", graph: mygraph };
+    var mydata = { name: $username, title: "graph" + Math.random() * 100, graph: mygraph };
+    if ($nodes.length == 0) return ErrorPopup("Can't save empty graphs!");
     $.ajax({
         type: "POST",
         dataType: "json",
@@ -201,17 +202,215 @@ function saveGraphUser() {
         //contentType: "application/json; charset=utf-8",
         success: function (data) {
             console.log("Items added!!!!");
+            ErrorPopup("Save succesful!");
         },
         error: function (e) {
             console.log("message:\n", e.message);
+            ErrorPopup("Something went wrong!");
         }
     });
 }
 
 function openGraphUser() {
+    if (window.XMLHttpRequest) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    } else {  // code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
 
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            //document.getElementById("txtHint").innerHTML = this.responseText;
+            console.log("GET request finished!");
+
+            var data = JSON.parse(this.responseText);
+            if (data.status == "OK") createDatabasePortfolio(data);
+            else ErrorPopup("something went wrong!");
+
+        }
+    };
+
+    var req = "php/getUserGraphs.php?";
+    var toQstring = "name=" + $username;//jQuery.param(queryObj);
+    var full_url = req + toQstring;
+    xmlhttp.open("GET", full_url, true);
+    xmlhttp.send();
+
+
+    // $.ajax({
+    //     type: "GET",
+    //     dataType: "json",
+    //     url: "php/getUserGraphs.php",
+    //     data: mydata,
+    //     //contentType: "application/json; charset=utf-8",
+    //     success: function (data) {
+    //         createDatabasePortfolio(data);
+    //     },
+    //     error: function (e) {
+    //         ErrorPopup("Something went wrong!");
+    //         console.log("message:\n", e.message);
+    //     }
+    // });
 }
 
+//create selection window
+function createDatabasePortfolio(data) {
+    data = data.graphs;
+    //$userDatabase = data.graphs;
+
+
+    var q = 5;
+    var start = { x: mycanvas.width / q, y: mycanvas.height / q };
+    var end = { x: mycanvas.width * ((q - 1) / q), y: mycanvas.height * ((q - 1) / q) };
+    var width = end.x - start.x;
+    var height = end.y - start.y;
+    var rect = $canvas.display.rectangle({
+        x: start.x, y: start.y,
+        width: width,
+        height: height,
+        fill: "black",
+        zIndex: "front"
+    }).add();
+    //var Opentext  = $canvas.display.text
+    var openText = $canvas.display.text({
+        x: 0,
+        y: 0,
+        origin: { x: "top", y: "left" },
+        font: "bold 20px sans-serif",
+        text: "Open a file",
+        fill: "#fff",
+        zIndex: "front"
+    });
+    rect.addChild(openText);
+    w = 5;
+    h = 2;
+    var marginW = 0.1 * width;
+    var marginH = 0.1 * height;
+    var margin = Math.min(marginW, marginH);
+    var startW = width / 5;
+    var buttonwidth = buttonheight = 200;
+
+    rect.width = margin * 2 + w * buttonwidth * 1.1;
+    rect.height = margin * 2 + h * buttonheight * 1.1;
+    rect.redraw();
+
+    var xpos = 0.1 * start.x;
+    var ypos = 0.1 * start.y;
+
+    var graphButtons = [];
+
+    for (let i = 0; i < data.length; i++) {
+        var graph = data[i];
+        var j_idx = Math.floor(i / w) % h;
+        var i_idx = i % w;
+        var graphButton = $canvas.display.rectangle({
+            x: margin + i_idx * buttonwidth * 1.1, y: margin + j_idx * buttonheight * 1.1,
+            width: buttonwidth,
+            height: buttonheight,
+            fill: "white",
+            zIndex: "front"
+        });
+
+        var t = $canvas.display.text({
+            x: buttonwidth / 2,
+            y: buttonheight / 2,
+            origin: { x: "center", y: "center" },
+            font: "bold 25px sans-serif",
+            text: i,
+            fill: "#000",
+            zIndex: "front"
+        });
+        graphButton.addChild(t);
+        rect.addChild(graphButton);
+        graphButtons.push(graphButton);
+        graphButton.graphdata = data[i];
+
+
+    }
+    //selection level;
+    $k = 0;
+    var hw = h * w;
+    graphbuttonselection(graphButtons, hw);
+
+    var goRight = $canvas.display.polygon({
+        x: width / 2 * 1.1, y: height * 0.9, sides: 3, radius: 30,
+        rotation: 0, fill: "white"
+    });
+    var goLeft = $canvas.display.polygon({
+        x: width / 2 * 0.9, y: height * 0.9, sides: 3, radius: 30,
+        rotation: 180, fill: "white"
+    });
+
+    goRight.bind("click", function () {
+        $k++;
+        $k = $k % Math.ceil(data.length / hw);
+        graphbuttonselection(graphButtons, hw);
+        counter.text = getCounterval();
+        counter.redraw();
+
+    });
+    var fo = function () { this.fill = "orange"; };
+    var fw = function () { this.fill = "white"; };
+    var getCounterval = () => "" + ($k + 1) + "/" + (Math.ceil(data.length / hw));
+    goRight.bind("mouseenter", fo);
+    goRight.bind("mouseleave", fw);
+    goLeft.bind("mouseenter", fo);
+    goLeft.bind("mouseleave", fw);
+
+
+
+    goLeft.bind("click", function () {
+        if ($k == 0) return;
+        else $k--;
+        graphbuttonselection(graphButtons, hw);
+        counter.text = getCounterval();
+        counter.redraw();
+    });
+
+    var counter = $canvas.display.text({
+        x: width / 2,
+        y: height * 0.9,
+        origin: { x: "center", y: "center" },
+        font: "bold 25px sans-serif",
+        text: getCounterval(),
+        fill: "#fff",
+        zIndex: "front"
+    });
+
+    rect.addChild(goLeft);
+    rect.addChild(goRight);
+    rect.addChild(counter);
+
+    rect.redraw();
+
+}
+function mousewhite(event) { this.fill = "white"; this.redraw(); }
+function mouseorange(event) { this.fill = "orange"; console.log("entered", this.children[0].text); }
+function graphButtonClick(event) { LoadGraph(this.graphdata.graph); this.parent.remove();}
+
+function graphbuttonselection(graphButtons, hw) {
+    for (let i = 0; i < graphButtons.length; i++) {
+        const element = graphButtons[i];
+        if (i < ($k + 1) * hw && i >= $k * hw) {
+            element.opacity = 1;
+            element.bind("mouseenter", mouseorange);
+            element.bind("mouseleave", mousewhite);
+            element.zIndex = "front";
+            element.bind("click", graphButtonClick);
+
+        }
+
+        else {
+            element.opacity = 0;
+            element.unbind("mouseenter", mouseorange);
+            element.unbind("mouseleave", mousewhite);
+            element.zIndex = "back";
+            element.unbind("click", graphButtonClick);
+        }
+        element.redraw();
+    }
+}
 function openOnlineDB() { }
 //refer to the commandmanager execution methods!
 function createFileDropdown() {
@@ -264,16 +463,10 @@ function createDropDown(x, y, width, height, text, subs, functions) {
     mainbutton.addChild(buttonText);
     mainbutton.add();
     mainbutton.zIndex = "front";
-
-
-
     AddSubButtons(mainbutton, subs, functions);
     mainbutton.bind("mouseenter", function (event) { showSubmenus(this.children, 1); });
     mainbutton.bind("mouseleave", function (event) { showSubmenus(this.children, 0); });
-
     var subButtons = mainbutton.children.slice(1);
-
-
     return mainbutton;
 
 }
@@ -371,70 +564,51 @@ function deleteUppernavBar() {
     $uppernavElements.forEach(e => e.remove());
 }
 
-
 //recreate the nodes from the JSON file
 function LoadGraph(graph) {
     deleteAll();
-    var newNodes = [];
-    var transitions = graph.transitions;
-    var places = graph.places;
-    var PNstates = graph.PNstates;
-    var edges = graph.edges;
-    var newTransitions = [];
-    var newPlaces = [];
-    var newPNstates = [];
+    if (graph.transitions)
+        graph.transitions.forEach(function (t) {
+            var cmd = new AddTransitionCommand();
+            cmd.Execute(false, false);
+            cmd.node.x = parseInt(t.x);
+            cmd.node.y = parseInt(t.y);
+            cmd.node.name = t.name;
 
-    transitions.forEach(function (t) {
-        var cmd = new AddTransitionCommand();
-        cmd.Execute(false, false);
-        cmd.node.x = t.x;
-        cmd.node.y = t.y;
-        cmd.node.name = t.name;   //this should trigger a name change! ->get/set
+        });
 
+    if (graph.places)
+        graph.places.forEach(function (t) {
+            var cmd = new AddPlaceCommand();
+            cmd.Execute(false, false);
+            cmd.node.x = parseInt(t.x);
+            cmd.node.y = parseInt(t.y);
+            cmd.node.tokens = parseInt(t.tokens);
 
+        });
+    if (graph.PNstates)//) != undefined /*|| PNstates.length > 0*/)
+        graph.PNstates.forEach(function (t) {
+            var cmd = new AddPNStateCommand();
+            cmd.Execute(false, false);
+            cmd.node.x = parseInt(t.x);
+            cmd.node.y = parseInt(t.y);
+            cmd.node.width = parseInt(t.width);
+            cmd.node.activePlaces = parseInt(t.activePlaces);
+            cmd.node.name = t.name;
 
-        // var x = new Transition(t.x, t.y, t.width, t.height);
-        // newTransitions.push(x);
-    });
-    // newNodes = newNodes.concat(newTransitions);
+        });
 
-    places.forEach(function (t) {
-        var cmd = new AddPlaceCommand();
-        cmd.Execute(false, false);
-        cmd.node.x = t.x;
-        cmd.node.y = t.y;
-        cmd.node.tokens = t.tokens;
-        //  var x = new Place(t.x, t.y, t.radius, t.name, t.tokens);
-        //  newPlaces.push(x);
-    });
+    if (graph.edges)
+        graph.edges.forEach(function (e) {
+            var from = findNode(e.from);
+            var to = findNode(e.to);
+            //createEdge(from, to);
+            var cmd = new AddEdgeCommand(from, to);
+            cmd.Execute();
+        });
 
-    PNstates.forEach(function (t) {
-        var cmd = new AddPNStateCommand();
-        //var x = new PetriNetState(t.x, t.y, t.width, t.height);
-        cmd.Execute(false, false);
-        cmd.node.x = t.x;
-        cmd.node.y = t.y;
-        cmd.node.width = t.width;
-        cmd.node.activePlaces = t.activePlaces;
-        cmd.node.name = t.name;
-        //newPNstates.push(x);
-    });
-
-
-    edges.forEach(function (e) {
-        var from = findNode(e.from);
-        var to = findNode(e.to);
-        //createEdge(from, to);
-        var cmd = new AddEdgeCommand(from, to);
-        cmd.Execute();
-    });
-
-    //$nodes = newNodes;
-    //$places = newPlaces;
-    //$transitions = newTransitions;
-    //$PNstates = newPNstates;
     $nodes.forEach(x => x.redraw());
-    $("#fileinput").val("");
+    $("#fileinput").val("");    //fix??
 
 }
 
