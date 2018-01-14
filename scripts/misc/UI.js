@@ -103,6 +103,7 @@ function createUpperNavBar() {
     $selectedButton = new Button((3 * (75 + 5)) + 10, 10, 75, 25, "None selected"); //createSelectionButton((3 * (75 + 5)) + 10, 10, 75, 25, "None selected");
     $selected = null;
     $coordDisplay = createCoordLabel((4 * (75 + 5)) + 10, 10, 75, 25, "X:0/Y:0");
+    $uppernavElements = [upperBar, $fileButton, $graphButton, $selectedButton, $addButton, $selectedButton, $coordDisplay];
 }
 
 function placeholder() { }
@@ -113,7 +114,7 @@ function createCoordLabel(x, y, width, height, text) {
         label.children[0].text = `X:${mousepos.x}/Y:${mousepos.y}`;
         this.redraw();
     }).start();
-
+    return label;
 }
 
 function createSelectionButton(x, y, width, height, text) {
@@ -138,12 +139,84 @@ function createSelectionButton(x, y, width, height, text) {
     return rect;
 }
 
+function selectSavedGraphs() {
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var userGraphs = JSON.parse(this.responseText);
+
+        }
+    };
+
+    var req = "php/getUserGraphs.php?";
+    var param = "q=" + $userName;
+    //var toQstring = jQuery.param(queryObj);
+    //var full_url = req + toQstring;
+    xmlhttp.open("GET", req, true);
+    xmlhttp.send();
+}
+
+function saveGraphUser() {
+    // 
+    // var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+    // xmlhttp.open("POST", "php/test2.php"); //why root folder so low?
+    // xmlhttp.setRequestHeader("Content-Type", "application/json");
+    // xmlhttp.onreadystatechange = function () {
+    //     if (this.readyState == 4 && this.status == 200) {
+    //         console.log(this.responseText);
+    //     }
+    // };
+    // xmlhttp.send(JSON.stringify({ name: "John Rambo", title: "2pm", graph:mygraph }));
+
+    // $.post("php/test2.php", { json_string: JSON.stringify({ name: "John", time: "2pm" }) });
 
 
+    // xmlhttp = new XMLHttpRequest();
+    // xmlhttp.onreadystatechange = function () {
+    //     if (this.readyState == 4 && this.status == 200) {
+    //         var userGraphs = JSON.parse(this.responseText);
+    //     }
+    // };
+
+    // var req = "php/test2.php?";
+    // var param = "q=" + $userName;
+    // //var toQstring = jQuery.param(queryObj);
+    // //var full_url = req + toQstring;
+    // xmlhttp.open("POST", req, true);
+    // xmlhttp.send();
+    // var mygraph = GraphToJSON();
+    // $.post("test2.php",
+    //     {name: "John", title: "2pm", graph: mygraph })
+    //     .done(function (data) {
+    //         alert("Data Loaded: " + data);
+    //     });
+
+    var mygraph = GraphToJSON();
+    var mydata = { name: "Tom", title: "ggggraph", graph: mygraph };
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "php/test2.php",
+        data: mydata,
+        //contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            console.log("Items added!!!!");
+        },
+        error: function (e) {
+            console.log("message:\n", e.message);
+        }
+    });
+}
+
+function openGraphUser() {
+
+}
+
+function openOnlineDB() { }
 //refer to the commandmanager execution methods!
 function createFileDropdown() {
-    var submenus = ["New file", "Open", "Save"];
-    var functions = [deleteAll, triggerOpenFile, SaveGraph];
+    var submenus = ["New file", "Open offline", "Save offline", "Open online", "Upload graph", "Main menu"];
+    var functions = [deleteAll, triggerOpenFile, SaveGraph, openGraphUser, saveGraphUser, enterMainMenu];
     var button = createDropDown(10, 10, 75, 25, "File", submenus, functions);
     return button;
 }
@@ -287,6 +360,16 @@ function OpenNewGraph(evt) {
     reader.readAsText(file);
 }
 
+//TODO: prompt to save
+function enterMainMenu() {
+    deleteAll();
+    deleteUppernavBar();
+    initMainMenu();
+}
+
+function deleteUppernavBar() {
+    $uppernavElements.forEach(e => e.remove());
+}
 
 
 //recreate the nodes from the JSON file
