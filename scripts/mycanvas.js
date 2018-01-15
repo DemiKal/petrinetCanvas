@@ -106,6 +106,7 @@ jQuery(document).ready(function ($) {
 
     //test
     //initSandboxUI();
+    createAchievements();
     initMainMenu();
     // var sss = $canvas.display.rectangle({ x: 400, y: 400, width: 100, height: 100, fill: "#0bs", opacity: 1 }).add();
     // sss.bind("mouseup", function (event) {

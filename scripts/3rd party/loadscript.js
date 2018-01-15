@@ -5,6 +5,7 @@ $LAB
     .script("scripts/3rd party/victor.js").wait()
     .script("scripts/3rd party/filesaver.js").wait()
     .script("scripts/3rd party/bson.js").wait()
+    .script("scripts/3rd party/CanvasInput.js").wait()
 
     //misc
     .script("scripts/misc/popup.js").wait()

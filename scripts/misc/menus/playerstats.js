@@ -1,5 +1,6 @@
 function goToPlayerStats() {
     removeButtons();
+
     var data = getUserdata();
     var user = data.user;
     var p = 0.1;
@@ -13,8 +14,20 @@ function goToPlayerStats() {
         height: $canvas.height * (pi - p),
         fill: "rgb(4, 22, 41)"
     }).add();
-
     var font = "bold 30px sans-serif";
+    var backmenu = new Button(rect.x - 200, rect.y, 200, 100, "Back to main menu", font);
+
+ 
+    backmenu.bindManual("mouseenter", function () { this.fill = "orange"; this.redraw(); });
+    backmenu.bindManual("mouseleave", function () { this.fill = "black"; this.redraw(); });
+    backmenu.bindManual("click", function () {
+        rect.remove();
+        this.remove();
+        initMainMenu();
+        //$gamemode = "Campaign";
+    });
+
+
     var text = $username + "\n" +
         "Level: " + user.level + "\n" +
         "XP: " + user.xp + "\n" +

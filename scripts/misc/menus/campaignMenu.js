@@ -6,8 +6,8 @@ function initCampaignUI() {
         var gb = graphButtons[j];
         var rad = 25;
         var completed = $canvas.display.text({
-            x: gb.width*0.05,
-            y: gb.width*0.05,
+            x: gb.width * 0.05,
+            y: gb.width * 0.05,
             origin: { x: "left", y: "top" },
             font: "bold 17px sans-serif",
             text: "Completed!",
@@ -25,11 +25,14 @@ function initCampaignUI() {
     var backmenu = new Button(p * $canvas.width, p * $canvas.height, 200, 100, "Back to main menu", font);
     backmenu.bindManual("click", initMainMenu);
     backmenu.bindManual("click", function () {
-        data.remove();
+        data.rect.remove();
         this.remove();
         $gamemode = "Campaign";
     });
-    graphButtons.forEach(o => o.bind("click", function () { initUI(); backmenu.remove(); }));
+    graphButtons.forEach(o => o.bind("click", function () {
+        initUI();
+        backmenu.remove(); 
+    }));
 }
 
 function getCampaignlvls() {
