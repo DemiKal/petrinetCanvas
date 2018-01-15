@@ -1,4 +1,3 @@
-
 function initUI() {
     //file input has to be triggered via javascript
     $("#fileinput").change(function (e) { onChange(e); });
@@ -42,6 +41,17 @@ function initUI() {
 
     // $buttons.push($addPlaceButton, $addEdgeButton, $selectedButton, $executionButton, $validationButton);
 
+}
+function fontToString(obj) {
+    var str = "";
+    if (obj.style)
+        str += "" + obj.style;
+    if (obj.size)
+        str += " " + obj.size + "px";
+    if (obj.type)
+        str += " " + obj.type;
+
+    return str;
 }
 function triggerOpenFile() {
     $("#fileinput").trigger("click");
@@ -157,40 +167,6 @@ function selectSavedGraphs() {
 }
 
 function saveGraphUser() {
-    // 
-    // var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
-    // xmlhttp.open("POST", "php/test2.php"); //why root folder so low?
-    // xmlhttp.setRequestHeader("Content-Type", "application/json");
-    // xmlhttp.onreadystatechange = function () {
-    //     if (this.readyState == 4 && this.status == 200) {
-    //         console.log(this.responseText);
-    //     }
-    // };
-    // xmlhttp.send(JSON.stringify({ name: "John Rambo", title: "2pm", graph:mygraph }));
-
-    // $.post("php/test2.php", { json_string: JSON.stringify({ name: "John", time: "2pm" }) });
-
-
-    // xmlhttp = new XMLHttpRequest();
-    // xmlhttp.onreadystatechange = function () {
-    //     if (this.readyState == 4 && this.status == 200) {
-    //         var userGraphs = JSON.parse(this.responseText);
-    //     }
-    // };
-
-    // var req = "php/test2.php?";
-    // var param = "q=" + $userName;
-    // //var toQstring = jQuery.param(queryObj);
-    // //var full_url = req + toQstring;
-    // xmlhttp.open("POST", req, true);
-    // xmlhttp.send();
-    // var mygraph = GraphToJSON();
-    // $.post("test2.php",
-    //     {name: "John", title: "2pm", graph: mygraph })
-    //     .done(function (data) {
-    //         alert("Data Loaded: " + data);
-    //     });
-
     var mygraph = GraphToJSON();
     var mydata = { name: $username, title: "graph" + Math.random() * 100, graph: mygraph };
     if ($nodes.length == 0) return ErrorPopup("Can't save empty graphs!");
@@ -212,54 +188,32 @@ function saveGraphUser() {
 }
 
 function openGraphUser() {
-    if (window.XMLHttpRequest) {
-        // code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
-    } else {  // code for IE6, IE5
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            //document.getElementById("txtHint").innerHTML = this.responseText;
-            console.log("GET request finished!");
-
-            var data = JSON.parse(this.responseText);
-            if (data.status == "OK") createDatabasePortfolio(data);
-            else ErrorPopup("something went wrong!");
-
-        }
-    };
-
     var req = "php/getUserGraphs.php?";
     var toQstring = "name=" + $username;//jQuery.param(queryObj);
     var full_url = req + toQstring;
-    xmlhttp.open("GET", full_url, true);
-    xmlhttp.send();
 
-
-    // $.ajax({
-    //     type: "GET",
-    //     dataType: "json",
-    //     url: "php/getUserGraphs.php",
-    //     data: mydata,
-    //     //contentType: "application/json; charset=utf-8",
-    //     success: function (data) {
-    //         createDatabasePortfolio(data);
-    //     },
-    //     error: function (e) {
-    //         ErrorPopup("Something went wrong!");
-    //         console.log("message:\n", e.message);
-    //     }
-    // });
+    var data = null;
+    jQuery.ajax({
+        url: full_url,
+        success: function (result) {
+            var res = JSON.parse(result);
+            if (res.status != "OK") ErrorPopup("something went wrong!");
+            else {
+                data = createDatabasePortfolio(res);
+            }
+        },
+        error: function (e) {
+            console.log("message:\n", e.message);
+            ErrorPopup("Something went wrong!");
+        },
+        async: false
+    });
+    return data;
 }
 
 //create selection window
-function createDatabasePortfolio(data) {
-    data = data.graphs;
-    //$userDatabase = data.graphs;
-
-
+function createDatabasePortfolio(alldata) {
+    var data = alldata.graphs;
     var q = 5;
     var start = { x: mycanvas.width / q, y: mycanvas.height / q };
     var end = { x: mycanvas.width * ((q - 1) / q), y: mycanvas.height * ((q - 1) / q) };
@@ -321,6 +275,7 @@ function createDatabasePortfolio(data) {
             fill: "#000",
             zIndex: "front"
         });
+
         graphButton.addChild(t);
         rect.addChild(graphButton);
         graphButtons.push(graphButton);
@@ -358,8 +313,6 @@ function createDatabasePortfolio(data) {
     goLeft.bind("mouseenter", fo);
     goLeft.bind("mouseleave", fw);
 
-
-
     goLeft.bind("click", function () {
         if ($k == 0) return;
         else $k--;
@@ -381,13 +334,14 @@ function createDatabasePortfolio(data) {
     rect.addChild(goLeft);
     rect.addChild(goRight);
     rect.addChild(counter);
-
+    rect.graphButtons = graphButtons;
     rect.redraw();
-
+    alldata.rect = rect;
+    return alldata;
 }
 function mousewhite(event) { this.fill = "white"; this.redraw(); }
-function mouseorange(event) { this.fill = "orange"; console.log("entered", this.children[0].text); }
-function graphButtonClick(event) { LoadGraph(this.graphdata.graph); this.parent.remove();}
+function mouseorange(event) { this.fill = "orange"; console.log("entered", this.children[0].text); this.redraw(); }
+function graphButtonClick(event) { LoadGraph(this.graphdata.graph); this.parent.remove(); }
 
 function graphbuttonselection(graphButtons, hw) {
     for (let i = 0; i < graphButtons.length; i++) {

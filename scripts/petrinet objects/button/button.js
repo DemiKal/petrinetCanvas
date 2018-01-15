@@ -1,7 +1,7 @@
 class Button extends DrawingObject {
-    constructor(x, y, width, height, text) {
+    constructor(x, y, width, height, text, fontsize) {
         super(x, y);
-        this.drawObject = this.createButton(x, y, width, height, text);
+        this.drawObject = this.createButton(x, y, width, height, text, fontsize);
         this.drawObject.classPointer = this;
     }
 
@@ -14,7 +14,7 @@ class Button extends DrawingObject {
     bindManual(eventType, func) {
         this.drawObject.bind(eventType, func);
     }
-    remove(){
+    remove() {
         this.drawObject.remove();
     }
 
@@ -32,7 +32,8 @@ class Button extends DrawingObject {
         return popupMessage;
     }
 
-    createButton(x, y, width, height, text) {
+    
+    createButton(x, y, width, height, text, font) {
         var button = $canvas.display.rectangle({
             x: x,
             y: y,
@@ -40,12 +41,15 @@ class Button extends DrawingObject {
             height: height,
             fill: "#000"
         }).add();
-
+        var _font = "bold 10px sans-serif";
+        if(font) 
+        _font = fontToString(font);
+        
         var buttonText = $canvas.display.text({
             x: button.width / 2,
             y: button.height / 2,
             origin: { x: "center", y: "center" },
-            font: "bold 10px sans-serif",
+            font: _font,
             text: text,
             fill: "#fff"
         });

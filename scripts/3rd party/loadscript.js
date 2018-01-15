@@ -9,8 +9,12 @@ $LAB
     //misc
     .script("scripts/misc/popup.js").wait()
     .script("scripts/misc/logging.js").wait()
-    .script("scripts/misc/UI.js").wait()
-    .script("scripts/misc/mainMenu.js").wait()
+    .script("scripts/misc/achievementSystem.js").wait()
+
+    .script("scripts/misc/menus/UI.js").wait()
+    .script("scripts/misc/menus/mainMenu.js").wait()
+    .script("scripts/misc/menus/playerstats.js").wait()
+    .script("scripts/misc/menus/campaignMenu.js").wait()
 
     //command patterns
     .script("scripts/misc/Commands/Command.js").wait()

@@ -1,6 +1,6 @@
 //this is the entry for js scripts
 jQuery(document).ready(function ($) {
-   // initColorSettings();
+    // initColorSettings();
     //these are the original global color setting. 
     $colorSettings = {
         petrinetState:
@@ -34,10 +34,12 @@ jQuery(document).ready(function ($) {
                 correctArrow: "green",
             }
     };
-    $username = "Tom";
+    //$currentPortfolio = null;   //db portfolio for level selection
+    $username = "John";
     //global vars
     //the list of actions that should be written to a (database) file. 
     //Currently a huge string.
+    $achievements = [];
     $actions = "";
     $nodes = [];
     $transitions = [];
@@ -141,7 +143,7 @@ function xml(queryObj) {
     var req = "php/test.php?";
     var toQstring = jQuery.param(queryObj);
     var full_url = req + toQstring;
-    xmlhttp.open("GET",full_url, true);
+    xmlhttp.open("GET", full_url, true);
     xmlhttp.send();
 }
 

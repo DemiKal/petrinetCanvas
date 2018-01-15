@@ -1,6 +1,8 @@
-function CreatePopupMessage(pos, text) {
+function CreatePopupMessage(pos, text,_font) {
     //TODO: get font from general variable
-    var font = "13px sans-serif";
+    
+    var font = "16px sans-serif";
+    if(_font !== undefined) font = _font;
     //if there is a style like bold or italic in front of NRpx, then index is 1.  
     var pxIndex = isDigitCode(font[0]) ? 0 : 1;
     var fontpx = 1.1 * font.split(" ")[pxIndex].split("px")[0];
@@ -20,11 +22,14 @@ function CreatePopupMessage(pos, text) {
 
     var nodeText = $canvas.display.text({
         x: rect.width / 2, y: 0, origin: { x: "center", y: "top" },
-        font: font, text: text, fill: $colorSettings.place.nameColor
+        font: font, text: text, fill: "white"
     });
 
     rect.addChild(nodeText);
     rect.add();
+    // rect.bind("mouseenter", function () {
+    //     console.log("entered via new bind");
+    // });
     return rect;
 }
 
@@ -35,7 +40,7 @@ function ErrorPopup(errorMessage) {
     var fontpx = 1.1 * font.split(" ")[pxIndex].split("px")[0];
     var textlines = errorMessage.split("\n");
     var width = measureStringWidth(textlines, font);
-    
+
     $errorMessage.width = width;
     $errorMessage.height = 1.1 * font.split(" ")[pxIndex].split("px")[0];
     $errorMessage.x = pos.x;
