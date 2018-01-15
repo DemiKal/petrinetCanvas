@@ -51,9 +51,18 @@ class Button extends DrawingObject {
             origin: { x: "center", y: "center" },
             font: _font,
             text: text,
-            fill: "#fff"
+            fill: "orange"
         });
+        var textwrap = $canvas.display.rectangle({
+            x: 0, 
+            y: 0, 
+            width: buttonText.width,
+            height: buttonText.height,
+            origin: { x: "center", y: "center" },
+            stroke: "2px red"
 
+        });
+        buttonText.addChild(textwrap);
         this.namePlate = buttonText;
         button.addChild(buttonText);
         button.classPointer = null;

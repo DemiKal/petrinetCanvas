@@ -35,4 +35,4 @@ jQuery(document).ready(function ($) {
 
 
     }
-}
+});

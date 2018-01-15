@@ -1,8 +1,8 @@
-function CreatePopupMessage(pos, text,_font) {
+function CreatePopupMessage(pos, text, _font) {
     //TODO: get font from general variable
-    
+
     var font = "16px sans-serif";
-    if(_font !== undefined) font = _font;
+    if (_font !== undefined) font = _font;
     //if there is a style like bold or italic in front of NRpx, then index is 1.  
     var pxIndex = isDigitCode(font[0]) ? 0 : 1;
     var fontpx = 1.1 * font.split(" ")[pxIndex].split("px")[0];
@@ -13,7 +13,7 @@ function CreatePopupMessage(pos, text,_font) {
         x: pos.x, y: pos.y,
         width: width * 1.05,
         height: height,
-        stroke: "2px orange",
+        stroke: "outside 2px grey",
         zIndex: "front",
         opacity: 0,
         fill: "black"
@@ -56,27 +56,28 @@ function ErrorPopup(errorMessage) {
     $errorMessage.fadeIn(100, "linear", function () { $errorMessage.fadeOut("long", "ease-in-cubic"); });
 }
 
-function CreateClickablePopup(pos, text, obj) {
+function CreateClickablePopup(pos, text, obj, opacity) {
     var rect = CreatePopupMessage(pos, text);
     rect.opacity = 1;
+    if (opacity != null) rect.opacity = 0;
     //make a clickable box to remove the message
     var boxSize = 25;//fontpx < 25 ? fontpx : 25;
     var xButton = $canvas.display.rectangle({
         x: rect.width, y: 0,
         width: boxSize,
         height: boxSize,
-        stroke: "2px orange",
+        stroke: "inside 2px grey",
     });
 
-    var ul = { x: 0, y: 0 };
-    var ur = { x: xButton.width, y: 0 };
-    var lr = { x: xButton.width, y: xButton.height };
-    var ll = { x: 0, y: xButton.height };
+    var ul = { x: 1, y: 1 };
+    var ur = { x: xButton.width - 1, y: 1 };
+    var lr = { x: xButton.width - 1, y: xButton.height - 1 };
+    var ll = { x: 1, y: xButton.height - 1 };
 
     var line1 = $canvas.display.line({
         start: ul,
         end: lr,
-        stroke: "2px red",
+        stroke: "2px grey",
         cap: "square"
     });
     var line2 = line1.clone({ start: ll, end: ur });
@@ -84,7 +85,7 @@ function CreateClickablePopup(pos, text, obj) {
     xButton.addChild(line1);
     xButton.addChild(line2);
     xButton.bind("click tap", function (event) {
-        rect.opacity = 0;
+        this.parent.remove();
         $canvas.redraw();
     });
     rect.addChild(xButton);
@@ -113,6 +114,7 @@ function CreateClickablePopup(pos, text, obj) {
             end: function () { }
         });
     }
+    $clickablePopups.push(rect);
     return rect;
 }
 
@@ -160,5 +162,11 @@ function measureStringWidth(textlines, font) {
     ctx.font = font;
     var list = textlines.map(function (element) { return ctx.measureText(element).width; });
     return Math.max.apply(null, list);
+
+}
+
+function removeAllClickablePopups() {
+    $clickablePopups.forEach(o => o.remove());
+    $clickablePopups = [];
 
 }

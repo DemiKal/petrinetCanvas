@@ -11,7 +11,7 @@ function initSimulation() {
 
     //     }
     // }
-
+    removeAllClickablePopups();  
     var transitions = [];
     var simulationPlaces = {};
     var simulationStates = [];

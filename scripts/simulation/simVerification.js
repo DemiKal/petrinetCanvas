@@ -114,7 +114,7 @@ function calcScore(correct, incorrect, missing, total) {
 }
 
 function summarize(missingEdges, correctStates, incorrectStates, PNsimulatedStateEdges, PNstateEdges, nrIncorrectEdges, nrCorrectEdges) {
-   // var xx = calcScore(correct, incorrect, missing, total);
+    // var xx = calcScore(correct, incorrect, missing, total);
 
     var nrOfTotalSimStates = Object.keys(PNsimulatedStateEdges).length;
     var nrOfTotalUserStates = Object.keys(PNstateEdges).length;
@@ -124,33 +124,68 @@ function summarize(missingEdges, correctStates, incorrectStates, PNsimulatedStat
 
     //var stateRating = Math.round(nrOfCorrStates / nrOfTotalSimStates * 100);
     //var stateRating = Math.round(nrOfCorrStates / nrOfTotalSimStates * 100);
-    var stateRating = nrOfCorrStates / (nrOfCorrStates + nrOfIncStates + nrOfMissingStates)*100;
+    var stateRating = Math.round(nrOfCorrStates / (nrOfCorrStates + nrOfIncStates + nrOfMissingStates) * 100);
     var nrOfMissingEdges = missingEdgesCount(missingEdges);
 
     //this has to be a correct edge!
     //var nrOfUserEdges = getEdgeCount(getCorrectEdges(PNstateEdges, PNsimulatedStateEdges));
     var nrOfSimEdges = getEdgeCount(PNsimulatedStateEdges);
-    var edgeRating = nrCorrectEdges /(nrCorrectEdges + nrIncorrectEdges + nrOfMissingEdges)*100;//nrCorrectEdges - nrIncorrectEdges - / nrOfSimEdges * 100;
+    var sumprime = nrCorrectEdges + nrIncorrectEdges + nrOfMissingEdges;
+    var edgeRating = nrCorrectEdges / (nrCorrectEdges + nrIncorrectEdges + nrOfMissingEdges) * 100;//nrCorrectEdges - nrIncorrectEdges - / nrOfSimEdges * 100;
+    if (nrCorrectEdges == nrOfSimEdges && nrIncorrectEdges + nrOfMissingEdges == 0) edgeRating = 100; //small edge case
+    edgeRating = Math.round(edgeRating);
+
     //TODO: edgerating - wrong edges
     //edgeRating = edgeRating > 100 ? Math.round(edgeRating - (edgeRating - 100)) : Math.round(edgeRating);
     var totalRating = Math.round(0.5 * (edgeRating + stateRating));
 
     //youve made nrOfCorrStates out of nrOfTotalSimStates => score
     var text = "Summary:\n";
+
     text += "You have made " + nrOfCorrStates + "/" + nrOfTotalSimStates + " correct state(s)\n";
     text += "You have made " + nrOfIncStates + " incorrect state(s)\n";
     text += "You are missing " + nrOfMissingStates + " state(s)\n";
     text += "this rates " + stateRating + "%\n";
+
     text += "You have made " + nrCorrectEdges + "/" + nrOfSimEdges + " correct edge(s)\n";
     text += "You have made " + nrIncorrectEdges + " incorrect edge(s)\n";
-    text += "You are missing" + nrOfMissingEdges + " edge(s)\n";
+    text += "You are missing " + nrOfMissingEdges + " edge(s)\n";
     text += "this rates " + edgeRating + "%\n";
     //text += "there are in total " + nrOfSimEdges + " edges. You made " + nrCorrectEdges + "correct edges, which rates " + edgeRating + "%\n";
     text += "Total score is avg of the above: " + totalRating + "%";
 
-    CreateClickablePopup(mousePos(), text);
+
+    createSummaryPopup(text);
+
 }
 
+
+function createSummaryPopup(text) {
+    var topscreen = { x: $canvas.width / 2, y: $canvas.height * 0.05 };
+
+    var heightCheck = $canvas.display.text({ text: text });
+    height = heightCheck.height;
+    var abovescrn = { x: topscreen.x, y: -height * 1.5 };
+    var summaryPopup = CreateClickablePopup(abovescrn, text);
+
+    summaryPopup.x -= summaryPopup.width / 2;
+    topscreen.x = summaryPopup.x;
+
+    summaryPopup.animate({
+        //rotation: echo.rotation + 360
+        y: topscreen.y,
+        x: topscreen.x,
+        // opacity: 1
+    }, {
+            duration: "short",
+            easing: "ease-in-out-back",
+            callback: function () {
+                //echo.remove();
+                //this.fill = "#fff";
+                //canvas.redraw();
+            }
+        });
+}
 function getCorrectEdges(PNstateEdges, PNsimulatedStateEdges) {
 
 }
@@ -209,15 +244,20 @@ function popupMessageMissingEdges(missingEdges, signatureLookup) {
             var obj = signatureLookup[key];
             var text = "this state is missing " + nrMissing + " edge(s)!\n";
             var alreadyExisting = 0;
-            PNStates.forEach(function (element) { if (Signature(element) in missingStates) alreadyExisting++; }, this);
+            PNStates.forEach(function (element) {
+                var sig = Signature(element);
+                if (sig in missingStates || $.inArray(sig, missingStates) != -1)
+                    alreadyExisting++;
+            }, this);
+
             var nrOfnewStates = (nrMissing - alreadyExisting);
             if (alreadyExisting == 0) {
-                text += "Therefore, " + nrOfnewStates + " new state(s) should be made.";
+                text += "" + nrOfnewStates + " new state(s) should be made.";
             }
             else {
                 text += "You have already made " + alreadyExisting + " states\nThat this one should point to.\nFigure out which one to connect!\n";
             }
-            CreateClickablePopup(mousePos(), text, obj);
+            CreateClickablePopup({ x: obj.x, y: obj.y }, text, obj);
         }
     }
 }

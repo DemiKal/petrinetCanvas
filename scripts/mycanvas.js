@@ -34,6 +34,10 @@ jQuery(document).ready(function ($) {
                 correctArrow: "green",
             }
     };
+
+    //collection of all clickable popups that should be all deleted at once at will
+    $clickablePopups = [];
+    
     //$currentPortfolio = null;   //db portfolio for level selection
     $username = "John";
     //global vars

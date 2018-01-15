@@ -63,7 +63,32 @@ class PetriNetState extends Node {
                 CreateClickablePopup({ x: element.x, y: element.y }, txt, element);
             }, this);
         }
+        else {
+            var echo = $canvas.display.rectangle({
+                x: this.drawObject.x + this.drawObject.width / 2,
+                y: this.drawObject.y + this.drawObject.height / 2,
+                width: this.drawObject.width,
+                height: this.drawObject.height,
+                stroke: this.drawObject.stroke,
+                origin: { x: "center", y: "center" }
+            }).add();
 
+            echo.animate({
+                //rotation: echo.rotation + 360
+                width: echo.width * 1.3,
+                height: echo.width * 1.3,
+                opacity: 0
+            }, {
+                    duration: "short",
+                    easing:  "ease-out-quad",
+                    callback: function () {
+                        echo.remove();
+                        //this.fill = "#fff";
+                        //canvas.redraw();
+                    }
+                });
+
+        }
         this.redraw();
     }
 
@@ -433,7 +458,7 @@ class PetriNetState extends Node {
             width: width,
             height: height,
             stroke: $colorSettings.petrinetState.stroke,
-            zIndex : "back"
+            zIndex: "back"
         }).add();
         obj.zIndex = "back";
         return obj;
