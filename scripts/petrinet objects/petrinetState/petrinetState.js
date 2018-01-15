@@ -74,24 +74,44 @@ class PetriNetState extends Node {
             }).add();
 
             echo.animate({
-                //rotation: echo.rotation + 360
                 width: echo.width * 1.3,
                 height: echo.width * 1.3,
                 opacity: 0
             }, {
                     duration: "short",
-                    easing:  "ease-out-quad",
+                    easing: "ease-out-quad",
                     callback: function () {
                         echo.remove();
-                        //this.fill = "#fff";
-                        //canvas.redraw();
+                    }
+                });
+
+            var center = this.center;
+            var xpText = $canvas.display.text({
+                x: center.x,
+                y: this.y,
+                text: this.xpValue + " XP",
+                origin: { x: "center", y: "center" },
+                font: "bold 18px sans-serif",
+                fill: "black"
+
+            }).add();
+
+            var yPath = 50;//pixels to go up
+            xpText.animate({
+                opacity: 0,
+                y: xpText.y - yPath
+            }, {
+                    duration: "long",
+                    easing: "ease-out-quad",
+                    callback: function () {
+                        xpText.remove();
                     }
                 });
 
         }
         this.redraw();
     }
-
+    get xpValue() { return 100; }
     get nextStates() {
         var result = [];
         this.outgoingEdges.forEach(function (element) {
