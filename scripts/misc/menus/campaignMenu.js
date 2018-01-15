@@ -1,7 +1,6 @@
 function initCampaignUI() {
     var data = getCampaignlvls();
     graphButtons = data.rect.graphButtons;
-    graphButtons.forEach(o => o.bind("click", initUI));
     data.user.completedLvls.forEach(function (j) {
         var gb = graphButtons[j];
         var rad = 25;

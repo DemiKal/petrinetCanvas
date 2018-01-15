@@ -24,21 +24,14 @@ function initMainMenu() {
 
     $mainMenuButtons[0].bindManual("click", startSandboxMode);
     $mainMenuButtons[1].bindManual("click", goToCampaignMenu);
-    $mainMenuButtons[2].bindManual("click", function () {
-        var input = new CanvasInput({
-            canvas: document.getElementById("canvas"),
-            fontSize: 18,
-            x:this.x,
-            y:this.y
-
-        });
-        input.focus();
-    });
+    $mainMenuButtons[2].bindManual("click", goToCommunityMenu);
     $mainMenuButtons[3].bindManual("click", goToPlayerStats);
 
 
 }
+function goToCommunityMenu(){
 
+}
 function startSandboxMode() {
     removeButtons();
     $gamemode = "Sandbox";
