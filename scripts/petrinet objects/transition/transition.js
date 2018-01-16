@@ -69,15 +69,15 @@ class Transition extends Node {
     //consume a token from incoming edges, then distribute
     fire() {
         //consume
-        var duration =  450;
+        var duration = 450;
         this.incomingEdges.forEach(function (edge) {
             var adj = edge.From;
             adj.tokens -= 1;
-            //adj.children[1].text = adj.tokens;
 
             var ball = $canvas.display.ellipse({
                 x: edge.start.x, y: edge.start.y,
-                radius: 20, fill: "red",
+                radius: 18, fill: "red",
+                //stroke: "3px red"
             }).add();
 
             ball.animate({
@@ -89,9 +89,6 @@ class Transition extends Node {
                     easing: "linear",
                     callback: function () {
                         ball.remove();
-                        //echo.remove();
-                        //this.fill = "#fff";
-                        //canvas.redraw();
                     }
                 });
         });
@@ -104,16 +101,18 @@ class Transition extends Node {
                 opacity: 0,
                 x: element.start.x,
                 y: element.start.y,
-                radius: 20,
-                fill: "red",
+                radius: 18,
+                fill: "red" 
+                //stroke: "3px red"
+            }).add();
+
+            ball.animate({ x: ball.x }, {
+                duration: duration, easing: "linear", callback: function () { ball.opacity = 1; }
             });
 
-            ball.delay(duration);
-            ball.add();
             ball.animate({
                 x: element.end.x,
                 y: element.end.y,
-                opacity: 1
             },
                 {
                     duration: duration,
