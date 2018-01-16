@@ -11,9 +11,7 @@ class Button extends DrawingObject {
         if (this.namePlate) this.namePlate.text = newname;
         else this.text = newname;
     }
-    bindManual(eventType, func) {
-        this.drawObject.bind(eventType, func);
-    }
+  
     remove() {
         this.drawObject.remove();
     }

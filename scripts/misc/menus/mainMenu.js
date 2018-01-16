@@ -1,10 +1,9 @@
 function initMainMenu() {
-
-
+    $gamemode = "Main menu";
     var width = 300;
     var height = 75;
     $mainMenuButtons = [];
-    var mainMenuOptions = ["Sandbox Mode", "Campaign Mode", "Community levels", "Player Stats"];
+    var mainMenuOptions = ["Sandbox Mode", "Campaign Mode", "Community levels", "Player Stats", "Tutorial"];
     var midScreen = { x: mycanvas.width / 2 - width / 2, y: mycanvas.height / (mainMenuOptions.length + 1) };
 
     var redHover = function () { this.fill = "orange"; this.redraw(); };
@@ -26,9 +25,19 @@ function initMainMenu() {
     $mainMenuButtons[1].bindManual("click", goToCampaignMenu);
     $mainMenuButtons[2].bindManual("click", goToCommunityMenu);
     $mainMenuButtons[3].bindManual("click", goToPlayerStats);
+    $mainMenuButtons[4].bindManual("click", goToTutorial);
 
 
 }
+
+function goToTutorial(){
+    removeButtons();
+    $gamemode = "Sandbox";
+    $canvas.redraw();
+    initUI();
+    initTutorial();
+}
+
 function goToCommunityMenu(){
 
 }

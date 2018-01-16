@@ -37,12 +37,13 @@ jQuery(document).ready(function ($) {
 
     //collection of all clickable popups that should be all deleted at once at will
     $clickablePopups = [];
-    
+
     //$currentPortfolio = null;   //db portfolio for level selection
     $username = "John";
     //global vars
     //the list of actions that should be written to a (database) file. 
     //Currently a huge string.
+    $validateButton = null; //for tutorial purpose
     $achievements = [];
     $actions = "";
     $nodes = [];
@@ -102,6 +103,15 @@ jQuery(document).ready(function ($) {
     $canvas.bind("keydown", function (event) { $canvas.currentState.KeyDown(event); });
     $canvas.bind("keypress", function (event) { $canvas.currentState.KeyPress(event); });
     $canvas.bind("keyup", function (event) { $canvas.currentState.KeyUp(event); });
+
+    var ssss = "a";
+    var b = "b";
+    var e = "a" === "b";
+    var d = "a" === "";
+    var de = "a" == "";
+
+    var aa = "1*P1" == "";
+    var aaa = "1*P1" === "";
 
     // let cmd = new AddPNStateCommand();
     // cmd.Execute({x: 200, y: 500}, false);

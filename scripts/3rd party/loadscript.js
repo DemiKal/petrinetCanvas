@@ -16,6 +16,7 @@ $LAB
     .script("scripts/misc/menus/mainMenu.js").wait()
     .script("scripts/misc/menus/playerstats.js").wait()
     .script("scripts/misc/menus/campaignMenu.js").wait()
+    .script("scripts/misc/menus/tutorial.js").wait()
 
     //command patterns
     .script("scripts/misc/Commands/Command.js").wait()

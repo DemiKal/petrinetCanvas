@@ -122,17 +122,18 @@ function summarize(missingEdges, correctStates, incorrectStates, PNsimulatedStat
     var nrOfIncStates = incorrectStates.length;
     var nrOfMissingStates = nrOfTotalSimStates - nrOfCorrStates;
 
-    //var stateRating = Math.round(nrOfCorrStates / nrOfTotalSimStates * 100);
-    //var stateRating = Math.round(nrOfCorrStates / nrOfTotalSimStates * 100);
     var stateRating = Math.round(nrOfCorrStates / (nrOfCorrStates + nrOfIncStates + nrOfMissingStates) * 100);
-    var nrOfMissingEdges = missingEdgesCount(missingEdges);
+    //var nrOfMissingEdges = missingEdgesCount(missingEdges);
+    
 
     //this has to be a correct edge!
     //var nrOfUserEdges = getEdgeCount(getCorrectEdges(PNstateEdges, PNsimulatedStateEdges));
     var nrOfSimEdges = getEdgeCount(PNsimulatedStateEdges);
+    var nrOfMissingEdges = nrOfSimEdges - nrCorrectEdges;
     var sumprime = nrCorrectEdges + nrIncorrectEdges + nrOfMissingEdges;
     var edgeRating = nrCorrectEdges / (nrCorrectEdges + nrIncorrectEdges + nrOfMissingEdges) * 100;//nrCorrectEdges - nrIncorrectEdges - / nrOfSimEdges * 100;
     if (nrCorrectEdges == nrOfSimEdges && nrIncorrectEdges + nrOfMissingEdges == 0) edgeRating = 100; //small edge case
+    
     edgeRating = Math.round(edgeRating);
 
     //TODO: edgerating - wrong edges
@@ -155,23 +156,23 @@ function summarize(missingEdges, correctStates, incorrectStates, PNsimulatedStat
     text += "Total score is avg of the above: " + totalRating + "%";
 
 
-    createSummaryPopup(text);
+    createSummaryPopup(text,totalRating);
 
 }
 
 
-function createSummaryPopup(text) {
+function createSummaryPopup(text,totalRating) {
     var topscreen = { x: $canvas.width / 2, y: $canvas.height * 0.05 };
 
     var heightCheck = $canvas.display.text({ text: text });
     height = heightCheck.height;
     var abovescrn = { x: topscreen.x, y: -height * 1.5 };
-    var summaryPopup = CreateClickablePopup(abovescrn, text);
+    $summaryPopup = CreateClickablePopup(abovescrn, text);
 
-    summaryPopup.x -= summaryPopup.width / 2;
-    topscreen.x = summaryPopup.x;
-
-    summaryPopup.animate({
+    $summaryPopup.x -= $summaryPopup.width / 2;
+    topscreen.x = $summaryPopup.x;
+    $summaryPopup.totalRating = totalRating;
+    $summaryPopup.animate({
         //rotation: echo.rotation + 360
         y: topscreen.y,
         x: topscreen.x,
@@ -252,7 +253,7 @@ function popupMessageMissingEdges(missingEdges, signatureLookup) {
 
             var nrOfnewStates = (nrMissing - alreadyExisting);
             if (alreadyExisting == 0) {
-                text += "" + nrOfnewStates + " new state(s) should be made.";
+                text += "" + nrOfnewStates + " new state(s) should be made or modified.";
             }
             else {
                 text += "You have already made " + alreadyExisting + " states\nThat this one should point to.\nFigure out which one to connect!\n";

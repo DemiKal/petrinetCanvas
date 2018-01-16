@@ -285,3 +285,11 @@ function anchorHoverMouse(anchor) {
         aRect.top <= mp.y &&
         mp.y <= aRect.bottom));
 }
+
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}

@@ -371,6 +371,7 @@ function createFileDropdown() {
     var submenus = ["New file", "Open offline", "Save offline", "Open online", "Upload graph", "Main menu"];
     var functions = [deleteAll, triggerOpenFile, SaveGraph, openGraphUser, saveGraphUser, enterMainMenu];
     var button = createDropDown(10, 10, 75, 25, "File", submenus, functions);
+    $enterMainMenuButton = button.children[6];
     return button;
 }
 
@@ -378,6 +379,7 @@ function createGraphDropdown() {
     var submenus = ["Execute", "Reset colors", "Validate"];
     var functions = [ExecuteGraph, ResetAllColors, initSimulation];
     var button = createDropDown((1 * 75 + 5) + 10, 10, 75, 25, "Graph", submenus, functions);
+    $validateButton = button.children[3];
     return button;
 }
 
@@ -481,6 +483,7 @@ function deleteAll() {
         var cmd = new DeleteNodeCommand(e);
         cmd.Execute();
     });
+    $clickablePopups.forEach(o => o.remove());
 }
 
 
@@ -512,6 +515,7 @@ function enterMainMenu() {
     deleteAll();
     deleteUppernavBar();
     initMainMenu();
+
 }
 
 function deleteUppernavBar() {
