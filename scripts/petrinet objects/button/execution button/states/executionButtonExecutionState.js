@@ -11,6 +11,7 @@ class ExecutionButtonExecutionState extends IEventHandler {
         // state.currentState = state.defaultState;
         // event.stopPropagation();
         $transitions.forEach(t => t.ResetColors());
+        $places.forEach(t => t.ResetColors());
         $places.forEach(p => p.tokens = p.originalTokens);
         $nodes.forEach(n => n.AddDragAndDrop());
 

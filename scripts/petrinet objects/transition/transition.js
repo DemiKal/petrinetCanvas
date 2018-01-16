@@ -73,7 +73,9 @@ class Transition extends Node {
         this.incomingEdges.forEach(function (edge) {
             var adj = edge.From;
             adj.tokens -= 1;
-
+            //adj.color = "red";
+            adj.tokensPlate.fill = "red";
+            
             var ball = $canvas.display.ellipse({
                 x: edge.start.x, y: edge.start.y,
                 radius: 18, fill: "red",
@@ -96,7 +98,10 @@ class Transition extends Node {
         //produce
         this.outgoingEdges.forEach(function (element) {
             var adj = element.To;
+            
+            //update token
             adj.tokens++;
+            adj.tokensPlate.fill = "#5fd80f";
             var ball = $canvas.display.ellipse({
                 opacity: 0,
                 x: element.start.x,

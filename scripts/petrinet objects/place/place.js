@@ -52,7 +52,9 @@ class Place extends Node {
         this.tokensPlate.text = amount;
         this.redraw();
     }
-
+    ResetColors(){
+        this.tokensPlate.fill = "#0ba";
+    }
     removePointers() {
         super.removePointers();
         $places = $places.filter(x => x !== this);

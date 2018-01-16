@@ -88,6 +88,7 @@ function ExecuteGraph() {
 
         $transitions.forEach(t => t.ResetColors());
         $places.forEach(p => p.tokens = p.originalTokens);
+        $places.forEach(t => t.ResetColors());
         $nodes.forEach(n => n.AddDragAndDrop());
 
         execButton.fill = "black";
@@ -416,7 +417,7 @@ function createDropDown(x, y, width, height, text, subs, functions) {
         fill: "#fff",
         zIndex: "front"
     });
-    
+
     mainbutton.addChild(buttonText);
     mainbutton.add();
     mainbutton.zIndex = "front";
