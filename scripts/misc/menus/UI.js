@@ -416,6 +416,7 @@ function createDropDown(x, y, width, height, text, subs, functions) {
         fill: "#fff",
         zIndex: "front"
     });
+    
     mainbutton.addChild(buttonText);
     mainbutton.add();
     mainbutton.zIndex = "front";
