@@ -75,7 +75,7 @@ class Transition extends Node {
             adj.tokens -= 1;
             //adj.color = "red";
             adj.tokensPlate.fill = "red";
-            
+
             var ball = $canvas.display.ellipse({
                 x: edge.start.x, y: edge.start.y,
                 radius: 18, fill: "red",
@@ -98,16 +98,14 @@ class Transition extends Node {
         //produce
         this.outgoingEdges.forEach(function (element) {
             var adj = element.To;
-            
-            //update token
-            adj.tokens++;
-            adj.tokensPlate.fill = "#5fd80f";
+
+
             var ball = $canvas.display.ellipse({
                 opacity: 0,
                 x: element.start.x,
                 y: element.start.y,
                 radius: 18,
-                fill: "red" 
+                fill: "red"
                 //stroke: "3px red"
             }).add();
 
@@ -122,7 +120,19 @@ class Transition extends Node {
                 {
                     duration: duration,
                     easing: "linear",
-                    callback: function () { ball.remove(); }
+                    callback: function () {
+                        ball.remove();
+                        //update token
+                        adj.tokens++;
+                        adj.tokensPlate.fill = "#5fd80f";
+                        var a = adj.drawObject;
+                        var c = $canvas.display.ellipse({ x: a.x, y: a.y, radius: a.radius, stroke: a.stroke }).add();
+                        c.animate({ radius: c.radius * 1.4, opacity: 0 }, {
+                            duration: "short",
+                            easing: "ease-out-quad",
+                            callback: function () { c.remove(); }
+                        });
+                    }
                 });
         });
     }
