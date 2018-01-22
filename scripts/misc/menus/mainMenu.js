@@ -13,7 +13,7 @@ function initMainMenu() {
     for (let i = 0; i < mainMenuOptions.length; i++) {
         let j = i + 1;
         const text = mainMenuOptions[i];
-        let button = new Button(midScreen.x, y, width, height, text);
+        let button = new Button(midScreen.x, y, width, height, text, "bold 40px sans-serif");
         //+((i+1)*height*1.25))
         button.bindManual("mouseenter", redHover);
         button.bindManual("mouseleave", resetColor);

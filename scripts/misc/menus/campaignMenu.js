@@ -20,7 +20,7 @@ function initCampaignUI() {
     var result = str1.fontsize(7);
 
     var p = 0.01;
-    var font = { style: "bold", size: 17, type: "sans-serif" };
+    var font = { style: "bold", size: 30, type: "sans-serif" };
     var backmenu = new Button(p * $canvas.width, p * $canvas.height, 200, 100, "Back to main menu", font);
     backmenu.bindManual("click", initMainMenu);
     backmenu.bindManual("click", function () {

@@ -101,21 +101,144 @@ function ExecuteGraph() {
 
 function createUpperNavBar() {
     var height = 0.075 * mycanvas.height;
+    $UImenuWidth = 125;
+    $UImenuHeight = 35;
+    var buttonMargin = 10;
     var upperBar = $canvas.display.rectangle({
         x: 0, y: 0,
         width: mycanvas.width,
-        height: height,
+        height: $UImenuHeight + buttonMargin * 2,
         fill: "#99c0ff"
     }).add();
+
 
     $fileButton = createFileDropdown();
     $graphButton = createGraphDropdown();
     $addButton = createAddDropdown();
-    $selectedButton = new Button((3 * (75 + 5)) + 10, 10, 75, 25, "None selected"); //createSelectionButton((3 * (75 + 5)) + 10, 10, 75, 25, "None selected");
+    $selectedButton = new Button((3 * ($UImenuWidth + 5)) + buttonMargin, buttonMargin, $UImenuWidth, $UImenuHeight, "None selected"); //createSelectionButton((3 * (75 + 5)) + 10, 10, 75, 25, "None selected");
     $selected = null;
-    $coordDisplay = createCoordLabel((4 * (75 + 5)) + 10, 10, 75, 25, "X:0/Y:0");
-    $uppernavElements = [upperBar, $fileButton, $graphButton, $selectedButton, $addButton, $selectedButton, $coordDisplay];
+    $coordDisplay = createCoordLabel((4 * ($UImenuWidth + 5)) + buttonMargin, buttonMargin, $UImenuWidth, $UImenuHeight, "X:0/Y:0");
+    $playerTag = createPlayertag($coordDisplay, upperBar, buttonMargin);
+    $uppernavElements = [upperBar, $fileButton, $graphButton, $selectedButton, $addButton, $selectedButton, $coordDisplay, $playerTag];
+
 }
+function createPlayertag(cd, upperBar, buttonMargin) {
+    $userLevel = 1; //dummy var, this should be from database
+    $currentXp = 100;
+    $xpToLvl = 400;
+
+    var x = cd.x + cd.width + buttonMargin;
+    var y = cd.y;
+    var width = 50;
+    var height = 50;
+    var image = $canvas.display.image({
+        x: x, y: y,
+        image: "img/user_icon.png",
+        width: width,
+        height: height,
+        stroke: "outside 3px black",
+    }).add();
+
+    var xpbar = $canvas.display.rectangle({
+        x: image.width + buttonMargin, y: 0,
+        width: 100,
+        height: 25,
+        stroke: "outside 3px black",
+    });
+    var percent = ($currentXp / $xpToLvl % 1) * xpbar.width;
+
+    var gradient = "linear-gradient(0deg, purple, green)";
+    var xpbarFill = $canvas.display.rectangle({
+        x: 0, y: 0,
+        width: percent,
+        height: 25,
+        fill: gradient
+    });
+
+    var xptext = $canvas.display.text({
+        x: xpbar.width + buttonMargin, y: 0,
+        width: 100,
+        height: 25,
+        origin: { x: "left", y: "top" },
+        font: "17px sans-serif",
+        text: "" + $currentXp + "/" + $xpToLvl + " XP",
+        fill: "#000"
+    });
+
+    var usertxt = $canvas.display.text({
+        x: image.width + buttonMargin, y: image.height * (2 / 3),
+        origin: { x: "left", y: "top" },
+        font: "bold 18px sans-serif",
+        text: $username + ", lvl " + $userLevel,
+        fill: "#000"
+    });
+
+
+    upperBar.height = image.y + image.height + buttonMargin;
+
+    image.addChild(xpbar);
+    image.addChild(usertxt);
+    xpbar.addChild(xptext);
+    xpbar.addChild(xpbarFill);
+
+    //quickrefs
+    xpbar.fillbar = xpbarFill;
+    xpbar.xptext = xptext;
+    xpbar.usertxt = usertxt;
+
+
+    $xpbar = xpbar;
+
+    return image;
+}
+
+function updateXpbar(val) {
+    var prevxp = $currentXp;
+    $currentXp = ($currentXp + val) % $xpToLvl;
+    var s = $currentXp;
+    if (prevxp + val >= $xpToLvl) {
+       // $currentXp = $xpToLvl - $currentXp;
+        $xpToLvl = Math.round($xpToLvl * 1.1);
+        $userLevel++;
+        $xpbar.usertxt.text = $username + ", lvl " + $userLevel;
+    }
+
+    var perc = $currentXp / $xpToLvl * $xpbar.width;
+
+    $xpbar.xptext.text = "" + $currentXp + "/" + $xpToLvl + " XP";
+    $xpbar.fillbar.animate({
+        width: perc
+    },
+
+        {
+            duration: "medium",
+            easing: "ease-in-out-back",
+            callback: function () {
+                //echo.remove();
+                //this.fill = "#fff";
+                //canvas.redraw();
+            }
+        });
+
+
+}
+
+
+// $summaryPopup.animate({
+//     //rotation: echo.rotation + 360
+//     y: topscreen.y,
+//     x: topscreen.x,
+//     // opacity: 1
+// }, {
+//         duration: "short",
+//         easing: "ease-in-out-back",
+//         callback: function () {
+//             //echo.remove();
+//             //this.fill = "#fff";
+//             //canvas.redraw();
+//         }
+//     });
+
 
 function placeholder() { }
 function createCoordLabel(x, y, width, height, text) {
@@ -368,10 +491,11 @@ function graphbuttonselection(graphButtons, hw) {
 }
 function openOnlineDB() { }
 //refer to the commandmanager execution methods!
+
 function createFileDropdown() {
-    var submenus = ["New file", "Open offline", "Save offline", "Open online", "Upload graph", "Main menu"];
+    var submenus = ["New file", "Import JSON", "Export JSON", "Open Online", "Save Online", "Main menu"];
     var functions = [deleteAll, triggerOpenFile, SaveGraph, openGraphUser, saveGraphUser, enterMainMenu];
-    var button = createDropDown(10, 10, 75, 25, "File", submenus, functions);
+    var button = createDropDown(10, 10, $UImenuWidth, $UImenuHeight, "File", submenus, functions);
     $enterMainMenuButton = button.children[6];
     return button;
 }
@@ -379,15 +503,15 @@ function createFileDropdown() {
 function createGraphDropdown() {
     var submenus = ["Execute", "Reset colors", "Validate"];
     var functions = [ExecuteGraph, ResetAllColors, initSimulation];
-    var button = createDropDown((1 * 75 + 5) + 10, 10, 75, 25, "Graph", submenus, functions);
+    var button = createDropDown((1 * $UImenuWidth + 5) + 10, 10, $UImenuWidth, $UImenuHeight, "Graph", submenus, functions);
     $validateButton = button.children[3];
     return button;
 }
 
 function createAddDropdown() {
-    var submenus = ["+ node", "+ Transition", "+ Petrin. state"];
+    var submenus = ["+ Place", "+ Transition", "+ Petri. state"];
     var functions = [AddPlaceRef, AddTransitionRef, SpawnPNState];
-    var button = createDropDown((2 * (75 + 5)) + 10, 10, 75, 25, "Add", submenus, functions);
+    var button = createDropDown((2 * ($UImenuWidth + 5)) + 10, 10, $UImenuWidth, $UImenuHeight, "Add", submenus, functions);
     return button;
 }
 
@@ -412,7 +536,7 @@ function createDropDown(x, y, width, height, text, subs, functions) {
         x: mainbutton.width / 2,
         y: mainbutton.height / 2,
         origin: { x: "center", y: "center" },
-        font: "bold 10px sans-serif",
+        font: "bold 20px sans-serif",
         text: text,
         fill: "#fff",
         zIndex: "front"
@@ -453,7 +577,7 @@ function AddSubButtons(mainbutton, names, functions) {
             x: sub1.width / 2,
             y: sub1.height / 2,
             origin: { x: "center", y: "center" },
-            font: "bold 10px sans-serif",
+            font: "17px sans-serif",
             text: txt,
             fill: "#fff"
         });

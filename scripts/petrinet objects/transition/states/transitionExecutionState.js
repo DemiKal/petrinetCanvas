@@ -22,7 +22,7 @@ class TransitionExecutionState extends IEventHandler {
             // petrinetStates.push(currentState);
         }
 
-        $transitions.forEach(function (elem) { elem.readyCheck(); /*set color */ })
+        $transitions.forEach(function (elem) { elem.readyCheck(); /*set color */ });
     }
 
     DoubleClick(event) { }

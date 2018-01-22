@@ -52,7 +52,7 @@ class Place extends Node {
         this.tokensPlate.text = amount;
         this.redraw();
     }
-    ResetColors(){
+    ResetColors() {
         this.tokensPlate.fill = "#0ba";
     }
     removePointers() {
@@ -64,18 +64,31 @@ class Place extends Node {
         super.Readd();
         $places.push(this);
     }
-    
+
     createSelectionCircle() {
-        var selectionCircle = $canvas.display.ellipse({ x: 0, y: 0, radius: this.radius * 1.1, stroke: $colorSettings.place.selectionCircle, opacity: 0 });
+        var selectionCircle = $canvas.display.ellipse(
+            {
+                x: 0, y: 0,
+                radius: this.radius * 1.1,
+                stroke: $colorSettings.place.selectionCircle,
+                opacity: 0
+            });
         this.drawObject.addChild(selectionCircle);
         return selectionCircle;
     }
 
     createNode(x, y, radius, text, tokens) {
-        var place = $canvas.display.ellipse({ x: x, y: y, radius: radius, stroke: $colorSettings.place.stroke, name: text });
+        var place = $canvas.display.ellipse({
+            x: x, y: y, radius: radius,
+            stroke: $colorSettings.place.stroke,
+            name: text,
+            shadow: "3 6 6px #aaa",
+
+        });
         var nodeText = $canvas.display.text({
             x: 0, y: radius, origin: { x: "center", y: "top" },
             font: "bold 30px sans-serif", text: text, fill: $colorSettings.place.nameColor
+
         });
 
 
@@ -87,6 +100,7 @@ class Place extends Node {
         place.addChild(nodeText);
         place.addChild(tokenText);
         place.add();
+        place.zIndex = "back";
         //remove!
         place.tokens = tokens;
         place.originalTokens = tokens;

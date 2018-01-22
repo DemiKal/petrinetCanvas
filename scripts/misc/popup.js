@@ -26,7 +26,7 @@ function CreatePopupMessage(pos, text, _font) {
     });
 
     rect.addChild(nodeText);
-    rect.add();
+     
     // rect.bind("mouseenter", function () {
     //     console.log("entered via new bind");
     // });

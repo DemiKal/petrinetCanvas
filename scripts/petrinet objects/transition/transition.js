@@ -69,6 +69,7 @@ class Transition extends Node {
     //consume a token from incoming edges, then distribute
     fire() {
         //consume
+        var ref = this;
         var duration = 450;
         this.incomingEdges.forEach(function (edge) {
             var adj = edge.From;
@@ -91,6 +92,7 @@ class Transition extends Node {
                     easing: "linear",
                     callback: function () {
                         ball.remove();
+                        //ref.readyCheck();
                     }
                 });
         });
@@ -125,12 +127,17 @@ class Transition extends Node {
                         //update token
                         adj.tokens++;
                         adj.tokensPlate.fill = "#5fd80f";
+                        adj.outgoingEdges.forEach(o => o.To.readyCheck());
+                        //  ref.readyCheck();
                         var a = adj.drawObject;
                         var c = $canvas.display.ellipse({ x: a.x, y: a.y, radius: a.radius, stroke: a.stroke }).add();
                         c.animate({ radius: c.radius * 1.4, opacity: 0 }, {
                             duration: "short",
                             easing: "ease-out-quad",
-                            callback: function () { c.remove(); }
+                            callback: function () {
+                                c.remove();
+                                // ref.readyCheck();
+                            }
                         });
                     }
                 });
@@ -143,7 +150,8 @@ class Transition extends Node {
             width: width,
             height: height,
             stroke: $colorSettings.transition.stroke,
-            name: text
+            name: text,
+            shadow: "3 6 6px #aaa"
         });
 
         var nodeText = $canvas.display.text({

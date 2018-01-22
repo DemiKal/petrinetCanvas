@@ -91,7 +91,7 @@ class PetriNetState extends Node {
                 y: this.y,
                 text: this.xpValue + " XP",
                 origin: { x: "center", y: "center" },
-                font: "bold 18px sans-serif",
+                font: "bold 25px sans-serif",
                 fill: "black"
 
             }).add();
@@ -109,6 +109,7 @@ class PetriNetState extends Node {
                 });
 
         }
+        updateXpbar(this.xpValue);
         this.redraw();
     }
     get xpValue() { return 100; }
@@ -277,7 +278,7 @@ class PetriNetState extends Node {
             popup.classPointer = this;
             popup.bind("click tap", function (event) {
                 this.classPointer.addPlaceToState(event, this);
-                
+
                 //event.stopPropagation();
 
             });
@@ -352,7 +353,7 @@ class PetriNetState extends Node {
             if (!this.parent.parent.classPointer.selected)
                 return;
             var val = 0;
-           //event.stopPropagation();
+            //event.stopPropagation();
 
             if (event.which === 1)
                 val = 1;
@@ -377,7 +378,7 @@ class PetriNetState extends Node {
                 delete parent.activePlaces[key];
                 parent.redraw();
             }
-        }); 
+        });
         return obj;
 
     }

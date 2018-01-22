@@ -34,13 +34,13 @@ jQuery(document).ready(function ($) {
                 correctArrow: "green",
             }
     };
-
+    //global vars
     //collection of all clickable popups that should be all deleted at once at will
     $clickablePopups = [];
 
     //$currentPortfolio = null;   //db portfolio for level selection
     $username = "John";
-    //global vars
+
     //the list of actions that should be written to a (database) file. 
     //Currently a huge string.
     $validateButton = null; //for tutorial purpose
@@ -72,7 +72,7 @@ jQuery(document).ready(function ($) {
 
     $canvas = oCanvas.create({
         canvas: "#canvas",
-        background: "#2c3e50",
+        background: "linear-gradient(#e5efff, white)",
         fps: 60,
     });
 
@@ -104,32 +104,9 @@ jQuery(document).ready(function ($) {
     $canvas.bind("keypress", function (event) { $canvas.currentState.KeyPress(event); });
     $canvas.bind("keyup", function (event) { $canvas.currentState.KeyUp(event); });
 
-    var ssss = "a";
-    var b = "b";
-    var e = "a" === "b";
-    var d = "a" === "";
-    var de = "a" == "";
 
-    var aa = "1*P1" == "";
-    var aaa = "1*P1" === "";
-
-    // let cmd = new AddPNStateCommand();
-    // cmd.Execute({x: 200, y: 500}, false);
-    // let cmd2 = new AddPNStateCommand();
-    // cmd2.Execute({x: 800, y: 500}, false);  
-
-    //test
-    //initSandboxUI();
     createAchievements();
     initMainMenu();
-    // var sss = $canvas.display.rectangle({ x: 400, y: 400, width: 100, height: 100, fill: "#0bs", opacity: 1 }).add();
-    // sss.bind("mouseup", function (event) {
-    //     var toSend = {};
-    //     toSend.name = "Alen Marsh";
-    //     toSend.city = "Miami";
-    //     toSend.graph = JSON.stringify(GraphToJSON());
-    //     xml(toSend);
-    // });
 });
 
 function xml(queryObj) {
@@ -162,20 +139,7 @@ function xml(queryObj) {
     xmlhttp.send();
 }
 
-function testf() {
-    // Get the Long type
-    var Long = BSON.Long;
-    // Create a bson parser instance
-    var bson = new BSON();
 
-    // Serialize document
-    // var doc = { long: Long.fromNumber(100), es: Long.fromNumber(2) };
-
-    // Serialize a document
-    //var data = bson.serialize(doc);
-    // De serialize it again
-    var doc_2 = bson.deserialize(doc);
-}
 
 
 
