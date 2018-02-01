@@ -1,6 +1,19 @@
 function reconstruct(graph) {
 }
 
+function spawnPendingEdge() {
+    var line = $canvas.display.line({
+        start: $selected.center,
+        end: { x: $canvas.mouse.x, y: $canvas.mouse.y },
+        stroke: $colorSettings.edge.stroke,
+        cap: "round"
+    }).add();
+
+    edgePending = line;
+
+    $stateManager.SwitchToEdgePendingState();
+}
+
 function comparePosition(a, b) {
     return (a.x == b.x && a.y == b.y);
 }
@@ -119,6 +132,7 @@ function edgePlacementValidation(node) {
 
 function deselect() {
     $nodes.forEach(function (item) { item.selected = false; });
+    //if ($selected) if ($selected.contextMenu) $selected.deactivateContextMenu();
     $selected = null;
     $selectedButton.name = "None selected";
     $selectedButton.redraw();
@@ -183,12 +197,12 @@ function CreateTransButton(line) {
     Trans.clicked = false;
     Trans.lineref = line;
     var anchor = $canvas.display.rectangle({
-        x: 0, y: 0,   
+        x: 0, y: 0,
         height: $transitions.length * width, width: width * 2
     });
     anchor.isAnchor = true;
 
-   // Trans.addChild(anchor);
+    // Trans.addChild(anchor);
     anchor.TransButtons = [];
     anchor.bind("mouseleave", function () {
         // var asds = anchor.TransButton.some(function (element, index, array) { return element.MouseHovered; });
@@ -208,7 +222,7 @@ function CreateTransButton(line) {
 
     Trans.bind("mouseenter", function () {
         console.log("trans enter");
-        if($transitions.length == 0) return;
+        if ($transitions.length == 0) return;
         var hasEntered = false;
         for (var j = 0; j < anchor.TransButtons.length; j++) {
             if (anchor.TransButtons.mouseHover)
@@ -239,7 +253,7 @@ function CreateTransButton(line) {
             tButton.Transref = Trans;
             tButton.mouseHover = false;
             var ttext = $canvas.display.text({
-                x: tButton.width/2 , y:tButton.width/2,
+                x: tButton.width / 2, y: tButton.width / 2,
                 origin: { x: "center", y: "center" },
                 font: "bold 25px sans-serif",
                 text: transition.name,
@@ -253,7 +267,7 @@ function CreateTransButton(line) {
                 this.mouseHover = true;
                 this.children[0].fill = "green";
                 var s = this.Transref.lineref;
-                if(!s.added){
+                if (!s.added) {
                     this.remove();
                 }
             });
@@ -264,7 +278,7 @@ function CreateTransButton(line) {
             });
             tButton.bind("click", function () {
                 transText.text = this.Tname;
-                               
+
                 transText.redraw();
             });
             anchor.TransButtons.push(tButton);
@@ -287,8 +301,8 @@ function anchorHoverMouse(anchor) {
 }
 
 function isEmpty(obj) {
-    for(var key in obj) {
-        if(obj.hasOwnProperty(key))
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key))
             return false;
     }
     return true;

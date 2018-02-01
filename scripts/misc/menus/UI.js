@@ -509,7 +509,7 @@ function createGraphDropdown() {
 }
 
 function createAddDropdown() {
-    var submenus = ["+ Place", "+ Transition", "+ Petri. state"];
+    var submenus = ["+ Place (P)", "+ Transition (T)", "+ Petri. state (Q)"];
     var functions = [AddPlaceRef, AddTransitionRef, SpawnPNState];
     var button = createDropDown((2 * ($UImenuWidth + 5)) + 10, 10, $UImenuWidth, $UImenuHeight, "Add", submenus, functions);
     return button;

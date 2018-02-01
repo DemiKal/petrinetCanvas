@@ -19,8 +19,7 @@ class Place extends Node {
         this.selectionState = new placeSelectionState(this);
         this.executionState = new placeExecutionState(this);
         this.currentState = this.defaultState;
-
-
+        this.contextMenu = this.createContextMenu();
 
         this.initEventHandlers();
     }
@@ -48,10 +47,15 @@ class Place extends Node {
     get center() { return { x: this.x, y: this.y }; }
     get tokens() { return this.tokenAmount; }
     set tokens(amount) {
+        if (amount < 0) return;
         this.tokenAmount = amount;
         this.tokensPlate.text = amount;
         this.redraw();
     }
+
+    incrementTokens() { this.tokens++; }
+    decrementTokens() { this.tokens--; }
+
     ResetColors() {
         this.tokensPlate.fill = "#0ba";
     }
@@ -145,6 +149,66 @@ class Place extends Node {
         //TODO: MAKE OWN CLASS WITH STATE
         line.bind("click tap", function (event) { this.parent.classPointer.tokens++; });
     }
+        createContextMenu() {
+        var height = 25;
+        var width = 100;
+        var newMenu = new ContextMenu(0, 0, height, width, this);
+        var actions = ["Remove", "Create edge", "+1 token", "-1 token", "Change tokens", "Rename", "Clone"];
+
+        for (let i = 0; i < actions.length; i++) {
+            const act = actions[i];
+            const button = new Button(0, i * height, width, height, act);
+            button.remove();
+            newMenu.addSubObj(button);
+            newMenu.height += height;
+
+            button.bindManual("mouseenter", function () { this.fill = "orange"; });
+            button.bindManual("mouseleave", function () { this.fill = "black"; });
+            button.placeref = this;
+        }
+
+        //remove button
+        newMenu.children[0].drawObject.bind("click", function (event) {
+            var cmd = new DeleteNodeCommand(newMenu.objref);
+            cmd.Execute();
+            newMenu.remove();
+            event.stopPropagation();
+        });
+
+        newMenu.children[1].drawObject.bind("click", function (event) {
+            spawnPendingEdge();
+            newMenu.remove();
+            event.stopPropagation();
+        });
+
+        newMenu.children[2].drawObject.bind("click", function (event) {
+            newMenu.objref.incrementTokens();
+            event.stopPropagation();
+        });
+
+        newMenu.children[3].drawObject.bind("click", function (event) {
+            newMenu.objref.decrementTokens();
+            event.stopPropagation();
+        });
+
+        newMenu.children[4].drawObject.bind("click", function (event) {
+            //craete popup!
+            event.stopPropagation();
+        });
+
+        newMenu.children[5].drawObject.bind("click", function (event) {
+            //rename token popup!
+            event.stopPropagation();
+        });
+
+        newMenu.children[6].drawObject.bind("click", function (event) {
+            // add new place
+            event.stopPropagation();
+        });
+
+        return newMenu;
+    }
+
 
 }
 

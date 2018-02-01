@@ -4,6 +4,9 @@ class canvasDefaultState {
     Click(event) {
         /// /set current place as selected
         console.log("clicked canvas in default state");
+        if ($selected) if ($selected.contextMenu) $selected.deactivateContextMenu();
+
+        //create canvas context menu
     }
 
     DoubleClick(event) { }
@@ -21,6 +24,20 @@ class canvasDefaultState {
     KeyDown(event) {
         var mousepos = mousePos();
         var key = String.fromCharCode(event.which);
+
+        if ($inputPopup) {
+            //backspace
+            if (event.which == 8) {
+                $inputPopup.text.text = $inputPopup.text.text.slice(0, -1);
+            } else
+                $inputPopup.text.text += key;
+
+            $inputPopup.resize();
+            $inputPopup.redraw();
+
+            return;
+        }
+
         switch (key) {
             case "T":
                 var cmd = new AddTransitionCommand();

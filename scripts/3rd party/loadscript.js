@@ -11,12 +11,14 @@ $LAB
     .script("scripts/misc/popup.js").wait()
     .script("scripts/misc/logging.js").wait()
     .script("scripts/misc/achievementSystem.js").wait()
+    .script("scripts/misc/contextMenu.js").wait()
 
     .script("scripts/misc/menus/UI.js").wait()
     .script("scripts/misc/menus/mainMenu.js").wait()
     .script("scripts/misc/menus/playerstats.js").wait()
     .script("scripts/misc/menus/campaignMenu.js").wait()
     .script("scripts/misc/menus/tutorial.js").wait()
+
 
     //command patterns
     .script("scripts/misc/Commands/Command.js").wait()
@@ -28,8 +30,8 @@ $LAB
     .script("scripts/misc/Commands/Implementation/MoveNodeCommand.js").wait()
     .script("scripts/misc/Commands/Implementation/DeleteNodeCommand.js").wait()
     .script("scripts/misc/Commands/Implementation/AddEdgeCommand.js").wait()
-    
-    
+
+
     //canvas
     .script("scripts/canvas/states/canvasDefaultState.js").wait()
     .script("scripts/canvas/states/canvasEdgePendingState.js").wait()

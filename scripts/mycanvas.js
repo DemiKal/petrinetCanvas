@@ -37,10 +37,10 @@ jQuery(document).ready(function ($) {
     //global vars
     //collection of all clickable popups that should be all deleted at once at will
     $clickablePopups = [];
-
+    $contextMenu = null;
     //$currentPortfolio = null;   //db portfolio for level selection
     $username = "John";
-
+    $inputPopup = null;
     //the list of actions that should be written to a (database) file. 
     //Currently a huge string.
     $validateButton = null; //for tutorial purpose
@@ -103,7 +103,6 @@ jQuery(document).ready(function ($) {
     $canvas.bind("keydown", function (event) { $canvas.currentState.KeyDown(event); });
     $canvas.bind("keypress", function (event) { $canvas.currentState.KeyPress(event); });
     $canvas.bind("keyup", function (event) { $canvas.currentState.KeyUp(event); });
-
 
     createAchievements();
     initMainMenu();

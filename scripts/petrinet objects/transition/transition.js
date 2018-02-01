@@ -15,6 +15,8 @@ class Transition extends Node {
         this.executionState = new TransitionExecutionState(this);
         this.currentState = this.defaultState;
 
+        this.contextMenu = this.createContextMenu();
+
         this.selectionCircle = this.createSelectionCircle();
         this.initEventHandlers();
     }
@@ -74,7 +76,6 @@ class Transition extends Node {
         this.incomingEdges.forEach(function (edge) {
             var adj = edge.From;
             adj.tokens -= 1;
-            //adj.color = "red";
             adj.tokensPlate.fill = "red";
 
             var ball = $canvas.display.ellipse({
@@ -168,5 +169,51 @@ class Transition extends Node {
         transition.add();
 
         return transition;
+    }
+
+    createContextMenu() {
+        var height = 25;
+        var width = 100;
+        var newMenu = new ContextMenu(0, 0, height, width, this);
+        var actions = ["Remove", "Create edge", "Rename", "Clone"];
+
+        for (let i = 0; i < actions.length; i++) {
+            const act = actions[i];
+            const button = new Button(0,  i * height, width, height, act);
+            button.remove();
+            newMenu.addSubObj(button);
+            newMenu.height += height;
+
+            button.bindManual("mouseenter", function () { this.fill = "orange"; });
+            button.bindManual("mouseleave", function () { this.fill = "black"; });
+            button.placeref = this;
+        }
+
+        newMenu.children[0].drawObject.bind("click", function (event) {
+            var cmd = new DeleteNodeCommand(newMenu.objref);
+            cmd.Execute();
+            newMenu.remove();
+            event.stopPropagation();
+        });
+
+        newMenu.children[1].drawObject.bind("click", function (event) {
+            spawnPendingEdge();
+            newMenu.remove();
+            event.stopPropagation();
+        });
+
+        //rename
+        newMenu.children[2].drawObject.bind("click", function (event) {
+            //TODO: rename;
+            event.stopPropagation();
+        });
+
+        //clone
+        newMenu.children[3].drawObject.bind("click", function (event) {
+            //TODO: clone;
+            event.stopPropagation();
+        });
+
+        return newMenu;
     }
 }

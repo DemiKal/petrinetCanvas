@@ -13,6 +13,7 @@ class StateManager {
     SwitchToDefaultState() {
         this.allDrawObjects.forEach(function (element) { element.currentState = element.defaultState; });
         $currentState = "Default";
+        if ($contextMenu) $contextMenu.remove();
         console.log("switched to default");
     }
     SwitchToSelectionState() {

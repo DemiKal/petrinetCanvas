@@ -22,7 +22,7 @@ class canvasSelectionState {
 
         switch (key) {
             case "E":
-                this.spawnPendingEdge();
+                spawnPendingEdge();
                 break;
             case ".":   //delete button
                 var cmd = new DeleteNodeCommand($selected);
@@ -38,17 +38,6 @@ class canvasSelectionState {
     KeyPress(event) { }
     KeyUp(event) { }
 
-    spawnPendingEdge() {
-        var line = $canvas.display.line({
-            start: $selected.center,
-            end: { x: $canvas.mouse.x, y: $canvas.mouse.y },
-            stroke: $colorSettings.edge.stroke,
-            cap: "round"
-        }).add();
 
-        edgePending = line;
-
-        $stateManager.SwitchToEdgePendingState();
-    }
 }
 

@@ -16,6 +16,17 @@ class Node extends DrawingObject {
     //     this.namePlate.text = newName;
     //     this.redraw();
     // }
+
+    activateContextMenu() {
+        var { x, y } = mousePos();
+        this.contextMenu.activate(x, y);
+    }
+
+    deactivateContextMenu() {
+        this.contextMenu.remove();
+    }
+
+    
     get sameNodes() {
 
     }
@@ -45,7 +56,7 @@ class Node extends DrawingObject {
         }
 
         else {
-            edge.children.forEach(e => this.removeTransButtons(e),this);
+            edge.children.forEach(e => this.removeTransButtons(e), this);
         }
     }
     //remove this object
@@ -110,7 +121,11 @@ class Node extends DrawingObject {
     }
 
     get selected() { return this.selectionCircle.opacity > 0; }
-    set selected(bool) { bool ? this.selectionCircle.opacity = 1 : this.selectionCircle.opacity = 0; this.redraw(); }
+    set selected(bool) {
+        bool ? this.selectionCircle.opacity = 1 : this.selectionCircle.opacity = 0;
+        if (!bool) this.deactivateContextMenu();
+        this.redraw();
+    }
 
     get edges() { return this.outgoingEdges.concat(this.incomingEdges); }
 

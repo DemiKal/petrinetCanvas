@@ -481,7 +481,8 @@ class PetriNetState extends Node {
             width: width,
             height: height,
             stroke: $colorSettings.petrinetState.stroke,
-            zIndex: "back"
+            zIndex: "back",
+            shadow: "3 6 6px #aaa"
         }).add();
         obj.zIndex = "back";
         return obj;

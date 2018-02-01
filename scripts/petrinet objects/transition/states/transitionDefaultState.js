@@ -4,7 +4,11 @@ class TransitionDefaultState extends IEventHandler {
         this.parent.Select();
         event.stopPropagation();
 
-        
+        if (event.button == 2) {
+            this.parent.activateContextMenu();
+
+       }
+
 
 
     }

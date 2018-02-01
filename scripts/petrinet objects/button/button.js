@@ -11,7 +11,7 @@ class Button extends DrawingObject {
         if (this.namePlate) this.namePlate.text = newname;
         else this.text = newname;
     }
-  
+
     remove() {
         this.drawObject.remove();
     }
@@ -30,7 +30,6 @@ class Button extends DrawingObject {
         return popupMessage;
     }
 
-    
     createButton(x, y, width, height, text, font) {
         var button = $canvas.display.rectangle({
             x: x,
@@ -40,9 +39,9 @@ class Button extends DrawingObject {
             fill: "#000"
         }).add();
         var _font = "bold 10px sans-serif";
-        if(font) 
-        _font = fontToString(font);
-        
+        if (font)
+            _font = fontToString(font);
+
         var buttonText = $canvas.display.text({
             x: button.width / 2,
             y: button.height / 2,
@@ -51,7 +50,7 @@ class Button extends DrawingObject {
             text: text,
             fill: "white"
         });
-       
+
         this.namePlate = buttonText;
         button.addChild(buttonText);
         button.classPointer = null;
